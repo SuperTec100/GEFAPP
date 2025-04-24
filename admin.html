@@ -1,3 +1,19 @@
+<script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js"></script>
+<script>
+  const firebaseConfig = {
+    // cole aqui o mesmo config do index
+  };
+  firebase.initializeApp(firebaseConfig);
+
+  firebase.auth().onAuthStateChanged(user => {
+    if (!user || user.email !== "admin@gef.com") {
+      window.location.href = "index.html";
+    }
+  });
+</script>
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
