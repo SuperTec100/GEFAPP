@@ -25,20 +25,30 @@ const users = JSON.parse(localStorage.getItem("users")) || {
   }
 };
 
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+// Firebase SDK (não use "import" se estiver direto no HTML)
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY",
+  authDomain: "SEU_PROJETO.firebaseapp.com",
+  projectId: "SEU_PROJETO",
+  storageBucket: "SEU_PROJETO.appspot.com",
+  messagingSenderId: "SEU_SENDER_ID",
+  appId: "SUA_APP_ID"
+};
 
-const auth = getAuth();
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-// Login
+// LOGIN
 document.getElementById("loginForm").onsubmit = async (e) => {
   e.preventDefault();
   const email = document.getElementById("username").value;
   const password = document.getElementById("password").value;
 
   try {
-    await signInWithEmailAndPassword(auth, email, password);
-    const user = auth.currentUser;
-    // Você pode verificar se é admin por email
+    const userCredential = await auth.signInWithEmailAndPassword(email, password);
+    const user = userCredential.user;
+
+    // Verifica se é admin por email
     if (user.email === "admin@gef.com") {
       window.location.href = "admin.html";
     } else {
@@ -49,17 +59,24 @@ document.getElementById("loginForm").onsubmit = async (e) => {
   }
 };
 
-// Cadastro
+// CADASTRO
 document.getElementById("registerForm").onsubmit = async (e) => {
   e.preventDefault();
   const email = document.getElementById("newEmail").value;
   const password = document.getElementById("newPassword").value;
 
   try {
-    await createUserWithEmailAndPassword(auth, email, password);
-    alert("Cadastro realizado com sucesso!");
+    await auth.createUserWithEmailAndPassword(email, password);
+    alert("Cadastro realizado com sucesso! Faça login para continuar.");
     location.reload();
   } catch (error) {
     alert("Erro ao cadastrar: " + error.message);
   }
 };
+
+// LOGOUT opcional (em páginas protegidas, botão sair)
+function logout() {
+  auth.signOut().then(() => {
+    window.location.href = "index.html";
+  });
+}
