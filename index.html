@@ -260,6 +260,17 @@
     <div class="container">
         <h2>Gerador de Evolução Fisioterapêutica</h2>
 
+  <div style="margin-bottom: 30px; border: 1px solid #ccc; padding: 20px; border-radius: 10px;">
+      <h3>Área de Acesso</h3>
+      <input type="email" id="email" placeholder="E-mail" style="padding: 10px; width: 100%; margin-bottom: 10px;">
+      <input type="password" id="senha" placeholder="Senha" style="padding: 10px; width: 100%; margin-bottom: 10px;">
+      <div style="display: flex; gap: 10px;">
+        <button onclick="login()">Entrar</button>
+        <button onclick="cadastrar()">Cadastrar</button>
+      </div>
+    </div>
+
+        
         <!-- Seção de informações básicas -->
         <div class="expandable-section">
             <div class="section-header">📋 Informações Básicas</div>
@@ -3433,5 +3444,54 @@ texto = texto.replace("paciente encontrado", "paciente encontrada");
 }
 
     </script>
+    <!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js"></script>
+
+<script>
+  // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyAQy3h0_Xyh96D1RtJUX35SqCoSqQfAukk",
+    authDomain: "gefapp-7a178.firebaseapp.com",
+    projectId: "gefapp-7a178",
+    storageBucket: "gefapp-7a178.firebasestorage.app",
+    messagingSenderId: "34155139426",
+    appId: "1:34155139426:web:912281c5be7fb7716e1c3b",
+    measurementId: "G-VMW2JB0GYN"
+  };
+
+  // Inicializa Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  // Login
+  function login() {
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+
+    firebase.auth().signInWithEmailAndPassword(email, senha)
+      .then(() => {
+        alert("Login realizado com sucesso!");
+        // Redireciona ou mostra conteúdo restrito
+        window.location.href = "restrito.html";
+      })
+      .catch(error => {
+        alert("Erro no login: " + error.message);
+      });
+  }
+
+  // Cadastro
+  function cadastrar() {
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+
+    firebase.auth().createUserWithEmailAndPassword(email, senha)
+      .then(() => {
+        alert("Cadastro realizado com sucesso!");
+      })
+      .catch(error => {
+        alert("Erro no cadastro: " + error.message);
+      });
+  }
+</script>
 </body>
 </html>
