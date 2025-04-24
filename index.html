@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -45,22 +46,20 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
   <script>
     function mostrarCadastro() {
-    document.getElementById("loginForm").style.display = "none";
-    document.querySelector("div[style*='text-align:center']").style.display = "none";
-    document.getElementById("cadastroSection").classList.remove("hidden");
-  }
+      document.getElementById("loginForm").style.display = "none";
+      document.querySelector("div[style*='text-align:center']").style.display = "none";
+      document.getElementById("cadastroSection").classList.remove("hidden");
+    }
 
-  function mostrarLogin() {
-    document.getElementById("loginForm").style.display = "block";
-    document.querySelector("div[style*='text-align:center']").style.display = "block";
-    document.getElementById("cadastroSection").classList.add("hidden");
-
-    // limpa os campos do cadastro ao voltar para login
-    document.getElementById("registerForm").reset();
-  }
+    function mostrarLogin() {
+      document.getElementById("loginForm").style.display = "block";
+      document.querySelector("div[style*='text-align:center']").style.display = "block";
+      document.getElementById("cadastroSection").classList.add("hidden");
+      document.getElementById("registerForm").reset();
+    }
   </script>
 </body>
 </html>
