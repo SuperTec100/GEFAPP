@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>GEF - Login</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .title-container { text-align: center; margin-bottom: 40px; }
+    .title-container h1 { font-size: 72px; color: #2c3e50; margin: 0; }
+    .title-container h2 { font-size: 24px; color: #34495e; margin-top: 10px; }
+    .form-group { margin-bottom: 20px; }
+    .hidden { display: none; }
+    .top-right { text-align: right; margin-bottom: 20px; }
+    .top-right a { color: #3498db; text-decoration: none; font-weight: bold; }
+    .top-right a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="title-container">
+      <h1>GEF</h1>
+      <h2>GERADOR DE EVOLUÇÃO FISIOTERAPÊUTICA</h2>
+    </div>
+
+    <form id="loginForm">
+      <div class="form-group"><input type="text" id="username" placeholder="Usuário" required></div>
+      <div class="form-group"><input type="password" id="password" placeholder="Senha" required></div>
+      <button type="submit">Entrar</button>
+    </form>
+
+    <div style="text-align:center; margin-top: 20px;">
+      <a href="#" onclick="mostrarCadastro()">Clique aqui para se registrar</a>
+    </div>
+
+    <div id="cadastroSection" class="hidden">
+      <div class="top-right"><a href="#" onclick="mostrarLogin()">Já tem conta? Entrar</a></div>
+      <form id="registerForm">
+        <div class="form-group"><input type="text" id="newName" placeholder="Nome completo" required></div>
+        <div class="form-group"><input type="email" id="newEmail" placeholder="Email" required></div>
+        <div class="form-group"><input type="tel" id="newPhone" placeholder="Telefone" required></div>
+        <div class="form-group"><input type="text" id="newUsername" placeholder="Usuário desejado" required></div>
+        <div class="form-group"><input type="password" id="newPassword" placeholder="Senha desejada" required></div>
+        <button type="submit">Cadastrar</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    function mostrarCadastro() {
+    document.getElementById("loginForm").style.display = "none";
+    document.querySelector("div[style*='text-align:center']").style.display = "none";
+    document.getElementById("cadastroSection").classList.remove("hidden");
+  }
+
+  function mostrarLogin() {
+    document.getElementById("loginForm").style.display = "block";
+    document.querySelector("div[style*='text-align:center']").style.display = "block";
+    document.getElementById("cadastroSection").classList.add("hidden");
+
+    // limpa os campos do cadastro ao voltar para login
+    document.getElementById("registerForm").reset();
+  }
+  </script>
+</body>
+</html>

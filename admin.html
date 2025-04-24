@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel Administrativo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="login-container">
+    <h2>Painel Administrativo - GEF</h2>
+    <table border="1" style="width:100%; margin-top:20px; text-align:left;">
+      <thead>
+        <tr>
+          <th>Usuário</th>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Telefone</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody id="usersTable"></tbody>
+    </table>
+  </div>
+  <script>
+    if (localStorage.getItem("loggedUser") !== "admin") {
+      window.location.href = "index.html";
+    }
+
+    const users = JSON.parse(localStorage.getItem("users")) || {};
+    const tbody = document.getElementById("usersTable");
+
+    for (const [user, data] of Object.entries(users)) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${user}</td>
+        <td>${data.nome || ''}</td>
+        <td>${data.email || ''}</td>
+        <td>${data.telefone || ''}</td>
+        <td>
+          ${user !== "admin" ? `<button onclick="removeUser('${user}')">Remover</button>` : 'Admin'}
+        </td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    function removeUser(username) {
+      if (confirm("Deseja realmente remover o usuário " + username + "?")) {
+        delete users[username];
+        localStorage.setItem("users", JSON.stringify(users));
+        location.reload();
+      }
+    }
+  </script>
+</body>
+</html>
