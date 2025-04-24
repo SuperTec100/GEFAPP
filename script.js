@@ -1,22 +1,18 @@
-// Importa as funções necessárias do SDK
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 
-// Configuração do Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyC-VBHoQW0b5y0lmxRkIAj-ciAbuwF3YW8",
   authDomain: "gef-app1.firebaseapp.com",
   projectId: "gef-app1",
-  storageBucket: "gef-app1.firebasestorage.app",
+  storageBucket: "gef-app1.appspot.com",
   messagingSenderId: "625530882269",
   appId: "1:625530882269:web:c47d79aa16508cb855b334"
 };
 
-// Inicializa o Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Login
 const loginForm = document.getElementById("loginForm");
 if (loginForm) {
   loginForm.onsubmit = async (e) => {
@@ -38,7 +34,6 @@ if (loginForm) {
   };
 }
 
-// Cadastro
 const registerForm = document.getElementById("registerForm");
 if (registerForm) {
   registerForm.onsubmit = async (e) => {
@@ -56,7 +51,6 @@ if (registerForm) {
   };
 }
 
-// Função de logout
 export function logoutUser() {
   signOut(auth).then(() => {
     window.location.href = "index.html";
@@ -65,7 +59,6 @@ export function logoutUser() {
   });
 }
 
-// Verificação de autenticação (para páginas protegidas)
 onAuthStateChanged(auth, (user) => {
   const isAdminPage = window.location.pathname.includes("admin.html");
   if (!user) {
@@ -77,4 +70,3 @@ onAuthStateChanged(auth, (user) => {
     window.location.href = "index.html";
   }
 });
-
