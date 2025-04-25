@@ -95,26 +95,23 @@ async function loadSection(section) {
       
     case 'gerador-evolucao':
       try {
-        // Carrega o conteúdo do gef.html via fetch
+        console.log('Carregando GEF...');
         const response = await fetch('./gef.html');
-        if (!response.ok) throw new Error('Arquivo não encontrado');
-        const html = await response.text();
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         
-        // Extrai apenas o conteúdo necessário (dentro do body)
+        const html = await response.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
         const gefContainer = doc.querySelector('.container');
         
-        if (!gefContainer) throw new Error('Estrutura do GEF não encontrada');
+        if (!gefContainer) throw new Error('Estrutura do GEF não encontrada no arquivo');
         
-        // Cria um novo container para o GEF no dashboard
         gefContent.innerHTML = '';
         const gefWrapper = document.createElement('div');
         gefWrapper.className = 'gef-wrapper';
         gefWrapper.appendChild(gefContainer.cloneNode(true));
         gefContent.appendChild(gefWrapper);
         
-        // Aplica estilos específicos para o GEF no dashboard
         const style = document.createElement('style');
         style.textContent = `
           .gef-wrapper {
@@ -132,12 +129,13 @@ async function loadSection(section) {
         
         gefContent.style.display = 'block';
         
-        // Inicializa os scripts do GEF
+        // Inicializa os scripts do GEF se existirem
         if (typeof initGEF === 'function') {
           initGEF();
+        } else {
+          console.warn('Função initGEF não encontrada');
         }
         
-        // Rola para a seção do GEF
         gefContent.scrollIntoView({ behavior: 'smooth' });
         
       } catch (error) {
@@ -146,29 +144,7 @@ async function loadSection(section) {
           <div style="color: red; padding: 20px; text-align: center;">
             <h3>Erro ao carregar o Gerador de Evolução</h3>
             <p>${error.message}</p>
-          </div>
-        `;
-        gefContent.style.display = 'block';
-      }
-      break;
-      
-    default:
-      dashboardContent.style.display = 'block';
-      break;
-  }
-}
-        
-        // Se houver scripts específicos do GEF, podemos carregá-los aqui
-        if (typeof initGEF === 'function') {
-          initGEF();
-        }
-      } catch (error) {
-        console.error('Erro ao carregar o GEF:', error);
-        gefContent.innerHTML = `
-          <div style="color: red; padding: 20px; text-align: center;">
-            <h3>Erro ao carregar o Gerador de Evolução</h3>
-            <p>${error.message}</p>
-            <p>Verifique se o arquivo partial-gef.html existe no diretório correto.</p>
+            <p>Verifique se o arquivo gef.html existe no diretório correto.</p>
           </div>
         `;
         gefContent.style.display = 'block';
