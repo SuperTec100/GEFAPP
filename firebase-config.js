@@ -2,8 +2,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebas
 import { 
   getAuth, 
   setPersistence, 
-  browserSessionPersistence 
+  browserSessionPersistence,
+  browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC-VBHoQW0b5y0lmxRkIAj-ciAbuwF3YW8",
@@ -11,19 +13,17 @@ const firebaseConfig = {
   projectId: "gef-app1",
   storageBucket: "gef-app1.appspot.com",
   messagingSenderId: "625530882269",
-  appId: "1:625530882269:web:c47d79aa16508cb855b334",
-  secure: true
+  appId: "1:625530882269:web:c47d79aa16508cb855b334"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
 auth.useDeviceLanguage();
-auth.settings.appVerificationDisabledForTesting = false;
-auth.settings.forceRecaptchaFlow = true;
 
-setPersistence(auth, browserSessionPersistence)
-  .then(() => console.log("Persistência de sessão configurada"))
+setPersistence(auth, browserLocalPersistence)
+  .then(() => console.log("Persistência configurada"))
   .catch((error) => console.error("Erro na persistência:", error));
 
-export { auth };
+export { auth, db };
