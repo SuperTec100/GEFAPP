@@ -1,93 +1,76 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html><html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GEF - Gerador de Evolução</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h2>Selecionar Local de Atendimento e Paciente</h2>
+    <h2>Selecionar Local de Atendimento e Paciente</h2><div class="sub-section">
+  <label>Tipo de atendimento:</label>
+  <select id="localAtendimento" onchange="carregarHospitais()">
+    <option value="" disabled selected>Selecione</option>
+    <option value="Hospital">Hospital</option>
+    <option value="Ambulatório">Ambulatório</option>
+    <option value="Domiciliar">Domiciliar</option>
+  </select>
+</div>
 
-    <!-- Local de atendimento -->
-    <div class="sub-section">
-      <label>Tipo de atendimento:</label>
-      <select id="localAtendimento" onchange="carregarHospitais()">
-        <option value="" disabled selected>Selecione</option>
-        <option value="Hospital">Hospital</option>
-        <option value="Ambulatório">Ambulatório</option>
-        <option value="Domiciliar">Domiciliar</option>
-      </select>
-    </div>
+<div id="hospitalContainer" class="sub-section" style="display:none;">
+  <label>Hospital:</label>
+  <select id="hospital" onchange="carregarLeitos()">
+    <option value="" disabled selected>Selecione</option>
+    <option value="HGRS">HGRS</option>
+    <option value="HGE">HGE</option>
+    <option value="HUPES">HUPES</option>
+  </select>
+</div>
 
-    <!-- Hospital -->
-    <div id="hospitalContainer" class="sub-section" style="display:none;">
-      <label>Hospital:</label>
-      <select id="hospital" onchange="carregarLeitos()">
-        <option value="" disabled selected>Selecione</option>
-        <option value="HGRS">HGRS</option>
-        <option value="HGE">HGE</option>
-        <option value="HUPES">HUPES</option>
-      </select>
-    </div>
+<div id="leitosContainer" class="sub-section" style="display:none;">
+  <label>Leitos com pacientes:</label>
+  <ul id="listaLeitos"></ul>
+  <button onclick="mostrarCadastroPaciente()">Cadastrar Novo Paciente</button>
+</div>
 
-    <!-- Leitos e Pacientes -->
-    <div id="leitosContainer" class="sub-section" style="display:none;">
-      <label>Leitos com pacientes:</label>
-      <ul id="listaLeitos"></ul>
-      <button onclick="mostrarCadastroPaciente()">Cadastrar Novo Paciente</button>
-    </div>
+<div id="cadastroPaciente" class="sub-section" style="display:none;">
+  <label>Número do Leito:</label>
+  <input type="text" id="leitoPaciente" placeholder="Ex: 101">
+  <label>Nome do Paciente:</label>
+  <input type="text" id="nomePaciente" placeholder="Ex: João da Silva">
+  <button onclick="cadastrarPaciente()">Salvar</button>
+</div>
 
-    <!-- Cadastro de paciente -->
-    <div id="cadastroPaciente" class="sub-section" style="display:none;">
-      <label>Número do Leito:</label>
-      <input type="text" id="leitoPaciente" placeholder="Ex: 101" />
-      <label>Nome do Paciente:</label>
-      <input type="text" id="nomePaciente" placeholder="Ex: João da Silva" />
-      <button onclick="cadastrarPaciente()">Salvar</button>
-    </div>
-  </div>
-
-  <hr />
-
-  <!-- Formulário de evolução -->
-  <div id="formularioEvolucao" style="display: none;">
+  </div>  <hr />  <div id="formularioEvolucao" style="display: none;">
     <div class="container">
       <h2>Gerador de Evolução Fisioterapêutica</h2>
       <form id="formEvolucao">
         <div class="form-group">
           <label for="diagnostico">Diagnóstico:</label>
           <input type="text" id="diagnostico" />
-        </div>
-
-        <div class="form-group">
-          <label for="condicao">Condição Atual:</label>
-          <textarea id="condicao" rows="4"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="conduta">Conduta Fisioterapêutica:</label>
-          <textarea id="conduta" rows="4"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="observacoes">Observações:</label>
-          <textarea id="observacoes" rows="3"></textarea>
-        </div>
-
-        <button type="submit">Salvar Evolução</button>
-      </form>
-
-      <!-- Espaço reservado para exibir a evolução gerada -->
-      <div id="resultadoEvolucao" class="form-group" style="margin-top: 30px;">
-        <h3>Evolução Final:</h3>
-        <div id="textoEvolucaoFinal" style="border: 1px solid #ccc; padding: 10px;"></div>
-      </div>
+        </div><div class="form-group">
+      <label for="condicao">Condição Atual:</label>
+      <textarea id="condicao" rows="4"></textarea>
     </div>
-  </div>
 
-  <!-- Script que carrega tudo -->
-  <script type="module" src="script-gef.js"></script>
-</body>
+    <div class="form-group">
+      <label for="conduta">Conduta Fisioterapêutica:</label>
+      <textarea id="conduta" rows="4"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="observacoes">Observações:</label>
+      <textarea id="observacoes" rows="3"></textarea>
+    </div>
+
+    <button type="submit">Salvar Evolução</button>
+  </form>
+
+  <div id="resultadoEvolucao" class="form-group" style="margin-top: 30px;">
+    <h3>Evolução Final:</h3>
+    <div id="textoEvolucaoFinal" style="border: 1px solid #ccc; padding: 10px;"></div>
+  </div>
+</div>
+
+  </div>  <script type="module" src="script-gef.js"></script></body>
 </html>
