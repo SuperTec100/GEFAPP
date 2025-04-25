@@ -16,16 +16,16 @@ setPersistence(auth, browserSessionPersistence)
 let lastActivityTime = new Date().getTime();
 const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutos
 
-// Atualizar atividade do usuário
 function updateActivity() {
   lastActivityTime = new Date().getTime();
 }
 
-document.addEventListener('mousemove', updateActivity);
-document.addEventListener('keypress', updateActivity);
-document.addEventListener('click', updateActivity);
+// Eventos de atividade do usuário
+['mousemove', 'keypress', 'click'].forEach(event => {
+  document.addEventListener(event, updateActivity);
+});
 
-// Verificar inatividade periodicamente
+// Verificar inatividade
 setInterval(() => {
   const currentTime = new Date().getTime();
   if (currentTime - lastActivityTime > SESSION_TIMEOUT) {
@@ -33,16 +33,15 @@ setInterval(() => {
       window.location.href = "index.html";
     });
   }
-}, 60000); // Verificar a cada minuto
+}, 60000);
 
-// Verificar autenticação ao carregar
+// Verificar autenticação
 onAuthStateChanged(auth, (user) => {
   if (!user) {
     window.location.href = "index.html";
   } else {
     document.getElementById('userEmail').textContent = user.email;
     
-    // Mostrar link para admin se for o usuário admin
     if (user.email === "admin@gef.com") {
       document.getElementById('adminLink').style.display = 'block';
     }
@@ -54,9 +53,10 @@ const userMenuToggle = document.getElementById('userMenuToggle');
 const userMenu = document.getElementById('userMenu');
 
 userMenuToggle.addEventListener('click', () => {
-  userMenu.style.display = userMenu.style.display === 'block' ? 'none' : 'block';
+  const isVisible = userMenu.style.display === 'block';
+  userMenu.style.display = isVisible ? 'none' : 'block';
   userMenuToggle.querySelector('i:last-child').style.transform = 
-    userMenu.style.display === 'block' ? 'rotate(180deg)' : 'rotate(0)';
+    isVisible ? 'rotate(0)' : 'rotate(180deg)';
 });
 
 // Logout
@@ -72,21 +72,18 @@ document.querySelectorAll('.main-menu li').forEach(item => {
   item.addEventListener('click', function() {
     document.querySelector('.main-menu li.active').classList.remove('active');
     this.classList.add('active');
-    
-    const section = this.getAttribute('data-section');
-    loadSection(section);
+    loadSection(this.getAttribute('data-section'));
   });
 });
 
-// Função para carregar seções dinamicamente
+// Função para carregar seções
 async function loadSection(section) {
-  const contentContainer = document.getElementById('content-container');
   const dashboardContent = document.getElementById('dashboard-content');
-  const gefContent = document.getElementById('gef-content');
+  const gefIframe = document.getElementById('gef-iframe');
   
-  // Esconder todos os conteúdos primeiro
+  // Esconder todos os conteúdos
   dashboardContent.style.display = 'none';
-  gefContent.style.display = 'none';
+  gefIframe.style.display = 'none';
   
   switch(section) {
     case 'dashboard':
@@ -95,59 +92,19 @@ async function loadSection(section) {
       
     case 'gerador-evolucao':
       try {
-        console.log('Carregando GEF...');
-        const response = await fetch('./gef.html');
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        
-        const html = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const gefContainer = doc.querySelector('.container');
-        
-        if (!gefContainer) throw new Error('Estrutura do GEF não encontrada no arquivo');
-        
-        gefContent.innerHTML = '';
-        const gefWrapper = document.createElement('div');
-        gefWrapper.className = 'gef-wrapper';
-        gefWrapper.appendChild(gefContainer.cloneNode(true));
-        gefContent.appendChild(gefWrapper);
-        
-        const style = document.createElement('style');
-        style.textContent = `
-          .gef-wrapper {
-            padding: 20px;
-            max-width: 1000px;
-            margin: 0 auto;
-          }
-          .gef-wrapper .container {
-            box-shadow: none;
-            border-radius: 0;
-            padding: 0;
-          }
-        `;
-        gefContent.appendChild(style);
-        
-        gefContent.style.display = 'block';
-        
-        // Inicializa os scripts do GEF se existirem
-        if (typeof initGEF === 'function') {
-          initGEF();
-        } else {
-          console.warn('Função initGEF não encontrada');
-        }
-        
-        gefContent.scrollIntoView({ behavior: 'smooth' });
-        
+        const repoName = window.location.pathname.split('/')[1] || '';
+        const basePath = repoName ? `/${repoName}` : '';
+        gefIframe.src = `${basePath}/gef.html`;
+        gefIframe.style.display = 'block';
       } catch (error) {
-        console.error('Erro ao carregar o GEF:', error);
-        gefContent.innerHTML = `
+        console.error('Erro ao carregar:', error);
+        dashboardContent.innerHTML = `
           <div style="color: red; padding: 20px; text-align: center;">
-            <h3>Erro ao carregar o Gerador de Evolução</h3>
+            <h3>Erro ao carregar o conteúdo</h3>
             <p>${error.message}</p>
-            <p>Verifique se o arquivo gef.html existe no diretório correto.</p>
           </div>
         `;
-        gefContent.style.display = 'block';
+        dashboardContent.style.display = 'block';
       }
       break;
       
@@ -165,7 +122,7 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// Limpar sessão ao fechar a página
+// Limpar sessão ao fechar
 window.addEventListener('beforeunload', () => {
   sessionStorage.removeItem('users');
   sessionStorage.removeItem('loggedUser');
