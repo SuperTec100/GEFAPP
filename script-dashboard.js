@@ -1,3 +1,4 @@
+async function loadSection(section) {
 [file name]: script-dashboard.js
 [file content begin]
 import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
@@ -95,3 +96,21 @@ document.addEventListener('click', (e) => {
   }
 });
 [file content end]
+
+  case 'gerador-evolucao':
+    try {
+      const response = await fetch('partial-gef.html');
+      const html = await response.text();
+      gefContent.innerHTML = html;
+      gefContent.style.display = 'block';
+      
+      // Rola a página para o topo do GEF
+      gefContent.scrollIntoView();
+      
+    } catch (error) {
+      console.error('Erro:', error);
+      gefContent.innerHTML = 'Erro ao carregar o GEF';
+      gefContent.style.display = 'block';
+    }
+    break;
+}
