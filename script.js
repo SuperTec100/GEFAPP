@@ -1,4 +1,4 @@
-import { auth } from "https://yourdomain.com/firebase-config.js";
+import { auth } from "https://gefapp.com.br/firebase-config.js";
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword,
@@ -7,7 +7,7 @@ import {
 
 // Verificar protocolo seguro
 if (window.location.protocol !== 'https:') {
-  window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+  window.location.href = 'https://gefapp.com.br' + window.location.pathname;
 }
 
 onAuthStateChanged(auth, (user) => {
@@ -17,13 +17,13 @@ onAuthStateChanged(auth, (user) => {
     sessionStorage.setItem("loggedUser", user.email);
     
     if (currentPage !== 'dashboard.html') {
-      window.location.href = "https://yourdomain.com/dashboard.html";
+      window.location.href = "https://gefapp.com.br/dashboard.html";
     }
   } else {
     sessionStorage.removeItem("loggedUser");
     
     if (currentPage !== 'index.html') {
-      window.location.href = "https://yourdomain.com/index.html";
+      window.location.href = "https://gefapp.com.br/index.html";
     }
   }
 });
