@@ -18,7 +18,9 @@ import {
   updateDoc,
   collection,
   getDocs,
-  deleteDoc
+  deleteDoc,
+  arrayUnion,
+  arrayRemove
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 // Configuração do Firebase
@@ -58,5 +60,7 @@ export {
   updateDoc,
   collection,
   getDocs,
-  deleteDoc
+  deleteDoc,
+  arrayUnion,
+  arrayRemove
 };
