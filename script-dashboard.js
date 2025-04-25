@@ -1,7 +1,5 @@
-import { getAuth, signOut, onAuthStateChanged, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-import { app } from "./script.js";
-
-const auth = getAuth(app);
+import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import { app, auth } from "./script.js" assert { type: 'module' };
 
 // Configurar persistência como SESSION
 setPersistence(auth, browserSessionPersistence)
@@ -12,7 +10,7 @@ setPersistence(auth, browserSessionPersistence)
     console.error("Erro ao configurar persistência:", error);
   });
 
-// Verificar autenticação e monitorar atividade
+/ Verificar autenticação e monitorar atividade
 let lastActivityTime = new Date().getTime();
 const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutos
 
@@ -20,12 +18,10 @@ function updateActivity() {
   lastActivityTime = new Date().getTime();
 }
 
-// Eventos de atividade do usuário
 ['mousemove', 'keypress', 'click'].forEach(event => {
   document.addEventListener(event, updateActivity);
 });
 
-// Verificar inatividade
 setInterval(() => {
   const currentTime = new Date().getTime();
   if (currentTime - lastActivityTime > SESSION_TIMEOUT) {
@@ -81,7 +77,6 @@ async function loadSection(section) {
   const dashboardContent = document.getElementById('dashboard-content');
   const gefIframe = document.getElementById('gef-iframe');
   
-  // Esconder todos os conteúdos
   dashboardContent.style.display = 'none';
   gefIframe.style.display = 'none';
   
@@ -92,30 +87,23 @@ async function loadSection(section) {
       
     case 'gerador-evolucao':
       try {
-        console.log('Tentando carregar GEF...');
+        console.log('Carregando GEF...');
         gefIframe.src = 'gef.html';
         gefIframe.style.display = 'block';
         
-        // Adicionando listeners para debug
         gefIframe.onload = () => console.log('GEF carregado com sucesso');
         gefIframe.onerror = (e) => {
-          console.error('Erro ao carregar GEF:', e);
+          console.error('Erro no iframe:', e);
           dashboardContent.innerHTML = `
             <div style="color: red; padding: 20px; text-align: center;">
               <h3>Erro ao carregar o Gerador de Evolução</h3>
-              <p>O arquivo não pôde ser carregado. Verifique se gef.html existe no diretório.</p>
+              <p>${e.message}</p>
             </div>
           `;
           dashboardContent.style.display = 'block';
         };
       } catch (error) {
-        console.error('Erro ao carregar:', error);
-        dashboardContent.innerHTML = `
-          <div style="color: red; padding: 20px; text-align: center;">
-            <h3>Erro ao carregar o conteúdo</h3>
-            <p>${error.message}</p>
-          </div>
-        `;
+        console.error('Erro:', error);
         dashboardContent.style.display = 'block';
       }
       break;
