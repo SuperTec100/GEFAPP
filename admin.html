@@ -1,31 +1,47 @@
-<script type="module">
-  import { auth } from "./firebase-config.js";
-  import { 
-    onAuthStateChanged,
-    signOut,
-    setPersistence,
-    browserSessionPersistence
-  } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>GEF - Área Administrativa</title>
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+</head>
+<body>
+  <script type="module">
+    import { auth } from "https://yourdomain.com/firebase-config.js";
+    import { 
+      onAuthStateChanged,
+      signOut,
+      setPersistence,
+      browserSessionPersistence
+    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
-  onAuthStateChanged(auth, (user) => {
-    if (!user || user.email !== "admin@gef.com") {
-      window.location.href = "index.html";
+    if (window.location.protocol !== 'https:') {
+      window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
     }
-  });
 
-  window.removeUser = function(username) {
-    if (confirm("Deseja realmente remover o usuário " + username + "?")) {
-      const users = JSON.parse(sessionStorage.getItem("users")) || {};
-      delete users[username];
-      sessionStorage.setItem("users", JSON.stringify(users));
-      location.reload();
-    }
-  };
-
-  window.logout = function() {
-    signOut(auth).then(() => {
-      sessionStorage.clear();
-      window.location.href = "index.html";
+    onAuthStateChanged(auth, (user) => {
+      if (!user || user.email !== "admin@gef.com") {
+        window.location.href = "https://yourdomain.com/index.html";
+      }
     });
-  };
-</script>
+
+    window.removeUser = function(username) {
+      if (confirm("Deseja realmente remover o usuário " + username + "?")) {
+        const users = JSON.parse(sessionStorage.getItem("users")) || {};
+        delete users[username];
+        sessionStorage.setItem("users", JSON.stringify(users));
+        location.reload();
+      }
+    };
+
+    window.logout = function() {
+      signOut(auth).then(() => {
+        sessionStorage.clear();
+        window.location.href = "https://yourdomain.com/index.html";
+      });
+    };
+  </script>
+  
+  <!-- Conteúdo administrativo aqui -->
+</body>
+</html>
