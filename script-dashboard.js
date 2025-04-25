@@ -1,9 +1,9 @@
-import { auth } from "https://yourdomain.com/firebase-config.js";
+import { auth } from "https://gefapp.com.br/firebase-config.js";
 import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
 // Verificar protocolo seguro
 if (window.location.protocol !== 'https:') {
-  window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+  window.location.href = 'https://gefapp.com.br/dashboard.html';
 }
 
 let lastActivityTime = Date.now();
@@ -21,14 +21,14 @@ setInterval(() => {
   if (Date.now() - lastActivityTime > SESSION_TIMEOUT) {
     signOut(auth).then(() => {
       sessionStorage.clear();
-      window.location.href = "https://yourdomain.com/index.html";
+      window.location.href = "https://gefapp.com.br/index.html";
     });
   }
 }, 5000);
 
 onAuthStateChanged(auth, (user) => {
   if (!user) {
-    window.location.href = "https://yourdomain.com/index.html";
+    window.location.href = "https://gefapp.com.br/index.html";
     return;
   }
   document.getElementById('userEmail').textContent = user.email;
@@ -47,7 +47,7 @@ userMenuToggle.addEventListener('click', () => {
 document.getElementById('logoutBtn').addEventListener('click', () => {
   signOut(auth).then(() => {
     sessionStorage.clear();
-    window.location.href = "https://yourdomain.com/index.html";
+    window.location.href = "https://gefapp.com.br/index.html";
   });
 });
 
@@ -76,7 +76,7 @@ async function loadSection(section) {
         
       case 'gerador-evolucao':
         console.log('Tentando carregar gef.html');
-        const gefUrl = 'https://yourdomain.com/gef.html';
+        const gefUrl = 'https://gefapp.com.br/gef.html';
         
         const response = await fetch(gefUrl, { method: 'HEAD' });
         if (!response.ok) {
