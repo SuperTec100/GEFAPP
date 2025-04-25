@@ -1,12 +1,41 @@
-async function loadSection(section) {
-[file name]: script-dashboard.js
-[file content begin]
-import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import { getAuth, signOut, onAuthStateChanged, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 import { app } from "./script.js";
 
 const auth = getAuth(app);
 
-// Verificar autenticação e carregar dados do usuário
+// Configurar persistência como SESSION
+setPersistence(auth, browserSessionPersistence)
+  .then(() => {
+    console.log("Persistência configurada no dashboard");
+  })
+  .catch((error) => {
+    console.error("Erro ao configurar persistência:", error);
+  });
+
+// Verificar autenticação e monitorar atividade
+let lastActivityTime = new Date().getTime();
+const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutos
+
+// Atualizar atividade do usuário
+function updateActivity() {
+  lastActivityTime = new Date().getTime();
+}
+
+document.addEventListener('mousemove', updateActivity);
+document.addEventListener('keypress', updateActivity);
+document.addEventListener('click', updateActivity);
+
+// Verificar inatividade periodicamente
+setInterval(() => {
+  const currentTime = new Date().getTime();
+  if (currentTime - lastActivityTime > SESSION_TIMEOUT) {
+    signOut(auth).then(() => {
+      window.location.href = "index.html";
+    });
+  }
+}, 60000); // Verificar a cada minuto
+
+// Verificar autenticação ao carregar
 onAuthStateChanged(auth, (user) => {
   if (!user) {
     window.location.href = "index.html";
@@ -20,7 +49,7 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// Menu do usuário (mantido igual)
+// Menu do usuário
 const userMenuToggle = document.getElementById('userMenuToggle');
 const userMenu = document.getElementById('userMenu');
 
@@ -30,14 +59,15 @@ userMenuToggle.addEventListener('click', () => {
     userMenu.style.display === 'block' ? 'rotate(180deg)' : 'rotate(0)';
 });
 
-// Logout (mantido igual)
+// Logout
 document.getElementById('logoutBtn').addEventListener('click', () => {
   signOut(auth).then(() => {
+    sessionStorage.clear();
     window.location.href = "index.html";
   });
 });
 
-// Navegação do menu - Modificada para carregar conteúdo dinâmico
+// Navegação do menu
 document.querySelectorAll('.main-menu li').forEach(item => {
   item.addEventListener('click', function() {
     document.querySelector('.main-menu li.active').classList.remove('active');
@@ -67,9 +97,7 @@ async function loadSection(section) {
       try {
         // Carrega o conteúdo do partial-gef.html via fetch
         const response = await fetch('partial-gef.html');
-        if (!response.ok) {
-          throw new Error('Arquivo não encontrado');
-        }
+        if (!response.ok) throw new Error('Arquivo não encontrado');
         const html = await response.text();
         gefContent.innerHTML = html;
         gefContent.style.display = 'block';
@@ -83,7 +111,13 @@ async function loadSection(section) {
         }
       } catch (error) {
         console.error('Erro ao carregar o GEF:', error);
-        gefContent.innerHTML = '<p>Erro ao carregar o Gerador de Evolução. Verifique se o arquivo partial-gef.html existe.</p>';
+        gefContent.innerHTML = `
+          <div style="color: red; padding: 20px; text-align: center;">
+            <h3>Erro ao carregar o Gerador de Evolução</h3>
+            <p>${error.message}</p>
+            <p>Verifique se o arquivo partial-gef.html existe no diretório correto.</p>
+          </div>
+        `;
         gefContent.style.display = 'block';
       }
       break;
@@ -94,29 +128,16 @@ async function loadSection(section) {
   }
 }
 
-// Fechar menu ao clicar fora (mantido igual)
+// Fechar menu ao clicar fora
 document.addEventListener('click', (e) => {
   if (!userMenu.contains(e.target) && e.target !== userMenuToggle) {
     userMenu.style.display = 'none';
     userMenuToggle.querySelector('i:last-child').style.transform = 'rotate(0)';
   }
 });
-[file content end]
 
-  case 'gerador-evolucao':
-    try {
-      const response = await fetch('partial-gef.html');
-      const html = await response.text();
-      gefContent.innerHTML = html;
-      gefContent.style.display = 'block';
-      
-      // Rola a página para o topo do GEF
-      gefContent.scrollIntoView();
-      
-    } catch (error) {
-      console.error('Erro:', error);
-      gefContent.innerHTML = 'Erro ao carregar o GEF';
-      gefContent.style.display = 'block';
-    }
-    break;
-}
+// Limpar sessão ao fechar a página
+window.addEventListener('beforeunload', () => {
+  sessionStorage.removeItem('users');
+  sessionStorage.removeItem('loggedUser');
+});
