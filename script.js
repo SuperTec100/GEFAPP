@@ -25,7 +25,7 @@ const auth = getAuth(app);
 onAuthStateChanged(auth, (user) => {
   if (user) {
     localStorage.setItem("loggedUser", user.email);
-    window.location.href = "gef.html";
+    window.location.href = "dashboard.html"; // Alterado de gef.html para dashboard.html
   }
 });
 
