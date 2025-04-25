@@ -46,6 +46,13 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
   });
 });
 
+document.getElementById('logoutBtnTop').addEventListener('click', () => {
+  signOut(auth).then(() => {
+    sessionStorage.clear();
+    window.location.href = "index.html";
+  });
+});
+
 document.querySelectorAll('.main-menu li').forEach(item => {
   item.addEventListener('click', function() {
     document.querySelector('.main-menu li.active').classList.remove('active');
