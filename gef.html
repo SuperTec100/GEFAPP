@@ -160,10 +160,28 @@
       border-bottom: 1px solid #eee;
       color: #2c3e50;
     }
+
+    .back-button {
+      background-color: #95a5a6;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+
+    .back-button:hover {
+      background-color: #7f8c8d;
+    }
   </style>
 </head>
 <body>
   <div class="gef-container">
+    <button class="back-button" id="backToDashboard">
+      <i class="fas fa-arrow-left"></i> Voltar ao Painel
+    </button>
+    
     <h2><i class="fas fa-file-medical"></i> Gerador de Evolução Fisioterapêutica</h2>
     
     <div class="selection-container">
@@ -171,10 +189,7 @@
         <label for="localAtendimento">Local de Atendimento:</label>
         <select id="localAtendimento">
           <option value="" disabled selected>Selecione</option>
-          <option value="Hospital">Hospital</option>
-          <option value="Ambulatório">Ambulatório</option>
-          <option value="Clínica">Clínica</option>
-          <option value="Domiciliar">Domiciliar</option>
+          <!-- Opções serão carregadas dinamicamente -->
         </select>
       </div>
       
@@ -182,9 +197,7 @@
         <label for="hospital">Hospital:</label>
         <select id="hospital">
           <option value="" disabled selected>Selecione</option>
-          <option value="HGRS">HGRS</option>
-          <option value="HGE">HGE</option>
-          <option value="HUPES">HUPES</option>
+          <!-- Opções serão carregadas dinamicamente -->
         </select>
       </div>
       
@@ -192,6 +205,7 @@
         <label for="unidade">Unidade:</label>
         <select id="unidade">
           <option value="" disabled selected>Selecione</option>
+          <!-- Opções serão carregadas dinamicamente -->
         </select>
       </div>
       
@@ -219,13 +233,29 @@
     <div id="formEvolucao">
       <div class="paciente-info" id="infoPaciente"></div>
       
-      <!-- Espaço reservado para o código de geração da evolução -->
-      <div id="areaEvolucao">
-        <!-- O código para gerar a evolução será inserido aqui posteriormente -->
-        <p style="text-align: center; color: #7f8c8d; padding: 20px;">
-          <i class="fas fa-code fa-2x"></i><br>
-          Área reservada para o código de geração da evolução
-        </p>
+      <div class="form-row">
+        <label for="dataAtendimento">Data do Atendimento:</label>
+        <input type="date" id="dataAtendimento">
+      </div>
+      
+      <div class="form-row">
+        <label for="queixaPrincipal">Queixa Principal:</label>
+        <textarea id="queixaPrincipal"></textarea>
+      </div>
+      
+      <div class="form-row">
+        <label for="procedimentos">Procedimentos Realizados:</label>
+        <textarea id="procedimentos"></textarea>
+      </div>
+      
+      <div class="form-row">
+        <label for="evolucao">Evolução:</label>
+        <textarea id="evolucao"></textarea>
+      </div>
+      
+      <div class="form-row">
+        <label for="observacoes">Observações:</label>
+        <textarea id="observacoes"></textarea>
       </div>
       
       <button id="salvarEvolucao"><i class="fas fa-save"></i> Salvar Evolução</button>
@@ -233,7 +263,7 @@
   </div>
 
   <script type="module">
-    import { app } from './firebase-config.js';
+    import { app, auth } from './firebase-config.js';
     import { 
       getFirestore, 
       doc, 
@@ -244,8 +274,10 @@
       getDocs, 
       deleteDoc 
     } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
     const db = getFirestore(app);
+    let userConfig = {};
 
     // Elementos do DOM
     const localAtendimento = document.getElementById('localAtendimento');
@@ -261,8 +293,47 @@
     const btnSalvarPaciente = document.getElementById('btnSalvarPaciente');
     const btnCancelarCadastro = document.getElementById('btnCancelarCadastro');
     const salvarEvolucaoBtn = document.getElementById('salvarEvolucao');
+    const backToDashboard = document.getElementById('backToDashboard');
 
     // Event Listeners
+    backToDashboard.addEventListener('click', () => {
+      window.parent.postMessage({ type: 'NAVIGATE_TO', section: 'dashboard' }, '*');
+    });
+
+    // Carrega configurações do usuário
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        
+        if (userSnap.exists() && userSnap.data().config) {
+          userConfig = userSnap.data().config;
+          setupLocaisAtendimento();
+        }
+      }
+    });
+
+    // Configura os locais de atendimento baseado nas configurações do usuário
+    function setupLocaisAtendimento() {
+      localAtendimento.innerHTML = '<option value="" disabled selected>Selecione</option>';
+      
+      if (userConfig.locaisAtendimento) {
+        userConfig.locaisAtendimento.forEach(local => {
+          const option = document.createElement('option');
+          option.value = local;
+          option.textContent = local;
+          localAtendimento.appendChild(option);
+        });
+        
+        // Seleciona automaticamente se houver apenas uma opção
+        if (userConfig.locaisAtendimento.length === 1) {
+          localAtendimento.value = userConfig.locaisAtendimento[0];
+          localAtendimento.dispatchEvent(new Event('change'));
+        }
+      }
+    }
+
+    // Event Listeners continuam...
     localAtendimento.addEventListener('change', carregarHospitais);
     hospitalSelect.addEventListener('change', carregarUnidades);
     unidadeSelect.addEventListener('change', carregarLeitos);
@@ -273,10 +344,28 @@
     });
     salvarEvolucaoBtn.addEventListener('click', salvarEvolucao);
 
-    // Funções
+    // Funções atualizadas para usar as configurações do usuário
     function carregarHospitais() {
       const local = localAtendimento.value;
       hospitalContainer.style.display = local === "Hospital" ? "block" : "none";
+      
+      if (local === "Hospital" && userConfig.hospitais) {
+        hospitalSelect.innerHTML = '<option value="" disabled selected>Selecione</option>';
+        
+        userConfig.hospitais.forEach(hospital => {
+          const option = document.createElement('option');
+          option.value = hospital;
+          option.textContent = hospital;
+          hospitalSelect.appendChild(option);
+        });
+        
+        // Seleciona automaticamente se houver apenas um hospital
+        if (userConfig.hospitais.length === 1) {
+          hospitalSelect.value = userConfig.hospitais[0];
+          hospitalSelect.dispatchEvent(new Event('change'));
+        }
+      }
+      
       unidadeContainer.style.display = "none";
       leitosContainer.style.display = "none";
       formEvolucao.style.display = "none";
@@ -287,54 +376,51 @@
       unidadeContainer.style.display = "block";
       unidadeSelect.innerHTML = '<option value="" disabled selected>Selecione</option>';
       
-      if (hospital === "HGRS") {
-        unidadeSelect.innerHTML += `
-          <option value="UTI">UTI</option>
-          <option value="Enfermaria">Enfermaria</option>
-        `;
-      } else if (hospital === "HGE") {
-        unidadeSelect.innerHTML += `
-          <option value="UTI">UTI</option>
-          <option value="Enfermaria">Enfermaria</option>
-        `;
-      } else if (hospital === "HUPES") {
-        unidadeSelect.innerHTML += `
-          <option value="UTI">UTI</option>
-          <option value="Enfermaria">Enfermaria</option>
-        `;
+      if (userConfig.unidades && userConfig.unidades[hospital]) {
+        // Agrupa por setor (UTI ou Enfermaria)
+        const unidadesPorSetor = {};
+        
+        userConfig.unidades[hospital].forEach(unidade => {
+          const setor = unidade.includes('UTI') ? 'UTI' : 'Enfermaria';
+          if (!unidadesPorSetor[setor]) {
+            unidadesPorSetor[setor] = [];
+          }
+          unidadesPorSetor[setor].push(unidade);
+        });
+        
+        // Adiciona ao select organizado por setor
+        for (const [setor, unidades] of Object.entries(unidadesPorSetor)) {
+          const optgroup = document.createElement('optgroup');
+          optgroup.label = setor;
+          
+          unidades.forEach(unidade => {
+            const option = document.createElement('option');
+            option.value = unidade;
+            option.textContent = unidade;
+            optgroup.appendChild(option);
+          });
+          
+          unidadeSelect.appendChild(optgroup);
+        }
+        
+        // Seleciona automaticamente se houver apenas uma unidade
+        if (userConfig.unidades[hospital].length === 1) {
+          unidadeSelect.value = userConfig.unidades[hospital][0];
+          unidadeSelect.dispatchEvent(new Event('change'));
+        }
       }
       
       leitosContainer.style.display = "none";
       formEvolucao.style.display = "none";
     }
 
-    function carregarLeitos() {
+    // ... (restante das funções permanecem iguais ao original)
+    async function carregarLeitos() {
       const hospital = hospitalSelect.value;
       const unidade = unidadeSelect.value;
       
-      if (unidade === "UTI") {
-        unidadeSelect.innerHTML = '<option value="" disabled selected>Selecione</option>';
-        
-        if (hospital === "HGRS") {
-          unidadeSelect.innerHTML += `
-            <option value="UTI_GERAL_1">UTI Geral 1</option>
-            <option value="UTI_GERAL_2">UTI Geral 2</option>
-            <option value="UTI_NEURO">UTI Neuro</option>
-            <option value="UTI_PEDI">UTI Pedi</option>
-            <option value="UTI_CARDIO">UTI Cardiovascular</option>
-            <option value="UTI_NEO">UTI Neo</option>
-          `;
-        } else {
-          unidadeSelect.innerHTML += `
-            <option value="UTI_GERAL_1">UTI Geral 1</option>
-            <option value="UTI_GERAL_2">UTI Geral 2</option>
-          `;
-        }
-      } else {
-        leitosContainer.style.display = "block";
-        atualizarListaPacientes();
-      }
-      
+      leitosContainer.style.display = "block";
+      await atualizarListaPacientes();
       formEvolucao.style.display = "none";
     }
 
@@ -461,13 +547,20 @@
         formEvolucao.dataset.unidade = unidade;
         formEvolucao.dataset.leito = leito;
         
+        // Preenche os campos se já existirem dados
         if (dados.evolucao) {
-          for (const [campo, valor] of Object.entries(dados.evolucao)) {
-            const elemento = document.getElementById(campo);
-            if (elemento) {
-              elemento.value = valor;
-            }
-          }
+          document.getElementById("dataAtendimento").value = dados.evolucao.dataAtendimento || '';
+          document.getElementById("queixaPrincipal").value = dados.evolucao.queixaPrincipal || '';
+          document.getElementById("procedimentos").value = dados.evolucao.procedimentos || '';
+          document.getElementById("evolucao").value = dados.evolucao.evolucao || '';
+          document.getElementById("observacoes").value = dados.evolucao.observacoes || '';
+        } else {
+          // Limpa os campos se não houver dados
+          document.getElementById("dataAtendimento").value = '';
+          document.getElementById("queixaPrincipal").value = '';
+          document.getElementById("procedimentos").value = '';
+          document.getElementById("evolucao").value = '';
+          document.getElementById("observacoes").value = '';
         }
         
         formEvolucao.scrollIntoView({ behavior: 'smooth' });
@@ -489,8 +582,12 @@
       
       try {
         const evolucao = {
-          data: new Date().toLocaleDateString(),
-          // Adicione outros campos conforme necessário
+          dataAtendimento: document.getElementById("dataAtendimento").value,
+          queixaPrincipal: document.getElementById("queixaPrincipal").value,
+          procedimentos: document.getElementById("procedimentos").value,
+          evolucao: document.getElementById("evolucao").value,
+          observacoes: document.getElementById("observacoes").value,
+          dataRegistro: new Date().toISOString()
         };
         
         const docRef = doc(db, "hospitais", hospital, "unidades", unidade, "leitos", leito);
