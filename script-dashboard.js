@@ -22,9 +22,14 @@ setInterval(() => {
 }, 5000);
 
 onAuthStateChanged(auth, (user) => {
-  if (!user) window.location.href = "index.html";
+  if (!user) {
+    window.location.href = "index.html";
+    return;
+  }
   document.getElementById('userEmail').textContent = user.email;
-  if (user.email === "admin@gef.com") document.getElementById('adminLink').style.display = 'block';
+  if (user.email === "admin@gef.com") {
+    document.getElementById('adminLink').style.display = 'block';
+  }
 });
 
 const userMenuToggle = document.getElementById('userMenuToggle');
@@ -57,25 +62,54 @@ async function loadSection(section) {
   gefIframe.style.display = 'none';
 
   try {
+    console.log(`Carregando seção: ${section}`);
+    
     switch(section) {
       case 'dashboard':
         dashboardContent.style.display = 'block';
         break;
         
       case 'gerador-evolucao':
-        gefIframe.src = `${window.location.origin}/gef.html`;
+        console.log('Tentando carregar gef.html');
+        const gefUrl = 'gef.html';
+        
+        // Verifica se o arquivo existe
+        const response = await fetch(gefUrl, { method: 'HEAD' });
+        if (!response.ok) {
+          throw new Error(`Arquivo ${gefUrl} não encontrado (${response.status})`);
+        }
+        
+        gefIframe.src = gefUrl;
         gefIframe.style.display = 'block';
+        
+        // Adiciona listener para erros no iframe
+        gefIframe.onload = () => {
+          console.log('Iframe carregado com sucesso');
+        };
+        
+        gefIframe.onerror = (e) => {
+          console.error('Erro ao carregar iframe:', e);
+          dashboardContent.innerHTML = `
+            <div style="color:red; padding:20px; text-align:center">
+              <h3>Erro ao carregar o Gerador de Evolução</h3>
+              <p>O arquivo ${gefUrl} não pôde ser carregado.</p>
+              <p>Verifique se o arquivo existe no servidor.</p>
+              <p>Status: ${e.message}</p>
+            </div>`;
+          dashboardContent.style.display = 'block';
+        };
         break;
         
       default:
         dashboardContent.style.display = 'block';
     }
   } catch (error) {
-    console.error(error);
+    console.error('Erro ao carregar seção:', error);
     dashboardContent.innerHTML = `
       <div style="color:red; padding:20px; text-align:center">
         <h3>Erro ao carregar conteúdo</h3>
         <p>${error.message}</p>
+        <p>Detalhes técnicos no console</p>
       </div>`;
     dashboardContent.style.display = 'block';
   }
@@ -85,4 +119,9 @@ document.addEventListener('click', (e) => {
   if (!userMenu.contains(e.target) && e.target !== userMenuToggle) {
     userMenu.style.display = 'none';
   }
+});
+
+// Inicializa a seção dashboard por padrão
+document.addEventListener('DOMContentLoaded', () => {
+  loadSection('dashboard');
 });
