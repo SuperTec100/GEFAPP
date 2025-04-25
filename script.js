@@ -1,8 +1,13 @@
-// Importações corretas para Firebase v9 (compat mode)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js";
+// Importações corretas para Firebase v9 (modular)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import { 
+  getAuth, 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
-// Configuração do Firebase
+// Configuração do Firebase (mantenha a mesma)
 const firebaseConfig = {
   apiKey: "AIzaSyC-VBHoQW0b5y0lmxRkIAj-ciAbuwF3YW8",
   authDomain: "gef-app1.firebaseapp.com",
@@ -12,18 +17,19 @@ const firebaseConfig = {
   appId: "1:625530882269:web:c47d79aa16508cb855b334"
 };
 
-// Inicialização do Firebase
+// Inicialização
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 // Verificação de estado de autenticação
 onAuthStateChanged(auth, (user) => {
   if (user) {
+    localStorage.setItem("loggedUser", user.email);
     window.location.href = "gef.html";
   }
 });
 
-// Funções de UI (precisa ser acessível globalmente)
+// Funções de UI (mantenha as mesmas)
 window.mostrarCadastro = function() {
   document.getElementById("loginForm").style.display = "none";
   document.querySelector("div[style*='text-align:center']").style.display = "none";
@@ -44,12 +50,12 @@ document.getElementById("loginForm").addEventListener("submit", (e) => {
   const password = document.getElementById("password").value;
 
   signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      localStorage.setItem("loggedUser", userCredential.user.email);
-      window.location.href = "gef.html";
+    .then(() => {
+      // O redirecionamento será tratado pelo onAuthStateChanged
     })
     .catch((error) => {
       alert("Erro no login: " + error.message);
+      console.error("Login error:", error);
     });
 });
 
@@ -63,19 +69,16 @@ document.getElementById("registerForm").addEventListener("submit", (e) => {
 
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
+      // Armazena informações adicionais no localStorage
       const users = JSON.parse(localStorage.getItem("users")) || {};
-      users[userCredential.user.email] = {
-        nome: name,
-        email: userCredential.user.email,
-        telefone: phone
-      };
+      users[email] = { nome: name, email, telefone: phone };
       localStorage.setItem("users", JSON.stringify(users));
       
-      alert("Usuário cadastrado com sucesso!");
-      document.getElementById("registerForm").reset();
+      alert("Cadastro realizado com sucesso! Faça login para continuar.");
       mostrarLogin();
     })
     .catch((error) => {
       alert("Erro no cadastro: " + error.message);
+      console.error("Registration error:", error);
     });
 });
