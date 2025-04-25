@@ -20,28 +20,28 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Configurar persistência como SESSION
 setPersistence(auth, browserSessionPersistence)
-  .then(() => {
-    console.log("Persistência de autenticação configurada como sessão");
-  })
-  .catch((error) => {
-    console.error("Erro ao configurar persistência:", error);
-  });
+  .then(() => console.log("Persistência de sessão configurada"))
+  .catch((error) => console.error("Erro na persistência:", error));
 
-// Exportações necessárias
-export { app, auth }
-
-// Verificação de estado de autenticação
 onAuthStateChanged(auth, (user) => {
+  const currentPage = window.location.pathname.split('/').pop();
+  
   if (user) {
-    // Não armazenar em localStorage para sessão temporária
     sessionStorage.setItem("loggedUser", user.email);
-    window.location.href = "dashboard.html";
+    
+    if (currentPage !== 'dashboard.html') {
+      window.location.href = "dashboard.html";
+    }
+  } else {
+    sessionStorage.removeItem("loggedUser");
+    
+    if (currentPage !== 'index.html') {
+      window.location.href = "index.html";
+    }
   }
 });
 
-// Funções de UI
 window.mostrarCadastro = function() {
   document.getElementById("loginForm").style.display = "none";
   document.querySelector("div[style*='text-align:center']").style.display = "none";
@@ -55,23 +55,15 @@ window.mostrarLogin = function() {
   document.getElementById("registerForm").reset();
 };
 
-// Login
 document.getElementById("loginForm").addEventListener("submit", (e) => {
   e.preventDefault();
   const email = document.getElementById("username").value;
   const password = document.getElementById("password").value;
 
   signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      // O redirecionamento será tratado pelo onAuthStateChanged
-    })
-    .catch((error) => {
-      alert("Erro no login: " + error.message);
-      console.error("Login error:", error);
-    });
+    .catch((error) => alert("Erro no login: " + error.message));
 });
 
-// Cadastro
 document.getElementById("registerForm").addEventListener("submit", (e) => {
   e.preventDefault();
   const email = document.getElementById("newEmail").value;
@@ -80,17 +72,12 @@ document.getElementById("registerForm").addEventListener("submit", (e) => {
   const phone = document.getElementById("newPhone").value;
 
   createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // Armazena informações adicionais no sessionStorage
+    .then(() => {
       const users = JSON.parse(sessionStorage.getItem("users")) || {};
       users[email] = { nome: name, email, telefone: phone };
       sessionStorage.setItem("users", JSON.stringify(users));
-      
-      alert("Cadastro realizado com sucesso! Faça login para continuar.");
+      alert("Cadastro realizado! Faça login.");
       mostrarLogin();
     })
-    .catch((error) => {
-      alert("Erro no cadastro: " + error.message);
-      console.error("Registration error:", error);
-    });
+    .catch((error) => alert("Erro no cadastro: " + error.message));
 });
