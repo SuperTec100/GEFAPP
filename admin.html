@@ -3,45 +3,174 @@
 <head>
   <meta charset="UTF-8">
   <title>GEF - Área Administrativa</title>
+  <link rel="stylesheet" href="https://gefapp.com.br/style-dashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 </head>
 <body>
+  <div class="app-container">
+    <div class="sidebar">
+      <div class="logo-container">
+        <h1>GEF Admin</h1>
+        <p>Área Administrativa</p>
+      </div>
+      
+      <nav class="main-menu">
+        <ul>
+          <li class="active" data-section="dashboard">
+            <i class="fas fa-home"></i>
+            <span>Início</span>
+          </li>
+          <li data-section="gerenciar-usuarios">
+            <i class="fas fa-users-cog"></i>
+            <span>Gerenciar Usuários</span>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="main-content">
+      <header class="top-bar">
+        <div class="user-info" id="userMenuToggle">
+          <i class="fas fa-user-circle"></i>
+          <span id="userEmail">admin@gef.com</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+      </header>
+
+      <div class="user-menu" id="userMenu">
+        <ul>
+          <li id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sair</li>
+        </ul>
+      </div>
+
+      <div id="content-container">
+        <div class="welcome-message" id="dashboard-content">
+          <h2>Bem-vindo à Área Administrativa</h2>
+          <p>Selecione uma opção no menu ao lado para gerenciar o sistema</p>
+          
+          <div id="users-list" style="margin-top: 30px; text-align: left; display: none;">
+            <h3>Usuários Cadastrados</h3>
+            <div id="users-container" style="max-height: 500px; overflow-y: auto;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script type="module">
-    import { auth } from "https://gefapp.com.br/firebase-config.js";
+    import { auth, db } from "https://gefapp.com.br/firebase-config.js";
     import { 
       onAuthStateChanged,
-      signOut,
-      setPersistence,
-      browserSessionPersistence
+      signOut
     } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import { 
+      collection, 
+      getDocs,
+      deleteDoc,
+      doc
+    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-    if (window.location.protocol !== 'https:') {
-      window.location.href = 'https://gefapp.com.br/admin.html';
+    // Verificação de segurança
+    if (window.location.protocol !== 'https:' && !window.location.hostname.includes('localhost')) {
+      window.location.href = 'https://' + window.location.hostname + window.location.pathname;
     }
 
+    // Controle de acesso
     onAuthStateChanged(auth, (user) => {
       if (!user || user.email !== "admin@gef.com") {
         window.location.href = "https://gefapp.com.br/index.html";
+      } else {
+        document.getElementById('userEmail').textContent = user.email;
+        loadUsers();
       }
     });
 
-    window.removeUser = function(username) {
-      if (confirm("Deseja realmente remover o usuário " + username + "?")) {
-        const users = JSON.parse(sessionStorage.getItem("users")) || {};
-        delete users[username];
-        sessionStorage.setItem("users", JSON.stringify(users));
-        location.reload();
-      }
-    };
+    // Menu do usuário
+    const userMenuToggle = document.getElementById('userMenuToggle');
+    const userMenu = document.getElementById('userMenu');
 
-    window.logout = function() {
+    userMenuToggle.addEventListener('click', () => {
+      userMenu.style.display = userMenu.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
       signOut(auth).then(() => {
-        sessionStorage.clear();
         window.location.href = "https://gefapp.com.br/index.html";
       });
+    });
+
+    // Navegação
+    document.querySelectorAll('.main-menu li').forEach(item => {
+      item.addEventListener('click', function() {
+        document.querySelector('.main-menu li.active').classList.remove('active');
+        this.classList.add('active');
+        
+        if (this.dataset.section === 'gerenciar-usuarios') {
+          document.getElementById('users-list').style.display = 'block';
+          loadUsers();
+        } else {
+          document.getElementById('users-list').style.display = 'none';
+        }
+      });
+    });
+
+    // Carregar usuários
+    async function loadUsers() {
+      const usersContainer = document.getElementById('users-container');
+      usersContainer.innerHTML = '<p>Carregando usuários...</p>';
+      
+      try {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        if (querySnapshot.empty) {
+          usersContainer.innerHTML = '<p>Nenhum usuário cadastrado.</p>';
+          return;
+        }
+
+        let usersHTML = '<table style="width:100%; border-collapse:collapse;">';
+        usersHTML += `
+          <tr style="background-color:#f1f1f1;">
+            <th style="padding:10px; text-align:left;">Nome</th>
+            <th style="padding:10px; text-align:left;">Email</th>
+            <th style="padding:10px; text-align:left;">Telefone</th>
+            <th style="padding:10px; text-align:left;">Ações</th>
+          </tr>`;
+        
+        querySnapshot.forEach((doc) => {
+          const user = doc.data();
+          usersHTML += `
+            <tr style="border-bottom:1px solid #ddd;">
+              <td style="padding:10px;">${user.nome || '-'}</td>
+              <td style="padding:10px;">${user.email}</td>
+              <td style="padding:10px;">${user.telefone || '-'}</td>
+              <td style="padding:10px;">
+                <button onclick="removeUser('${doc.id}', '${user.email}')" 
+                        style="background-color:#e74c3c; color:white; border:none; padding:5px 10px; cursor:pointer;">
+                  Remover
+                </button>
+              </td>
+            </tr>`;
+        });
+        
+        usersHTML += '</table>';
+        usersContainer.innerHTML = usersHTML;
+      } catch (error) {
+        usersContainer.innerHTML = `<p style="color:red;">Erro ao carregar usuários: ${error.message}</p>`;
+      }
+    }
+
+    // Função global para remover usuário
+    window.removeUser = async function(userId, userEmail) {
+      if (!confirm(`Tem certeza que deseja remover o usuário ${userEmail}?`)) return;
+      
+      try {
+        await deleteDoc(doc(db, "users", userId));
+        alert('Usuário removido com sucesso!');
+        loadUsers();
+      } catch (error) {
+        alert(`Erro ao remover usuário: ${error.message}`);
+      }
     };
   </script>
-  
-  <!-- Conteúdo administrativo aqui -->
 </body>
 </html>
