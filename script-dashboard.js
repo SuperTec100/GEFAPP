@@ -92,9 +92,8 @@ async function loadSection(section) {
       
     case 'gerador-evolucao':
       try {
-        const repoName = window.location.pathname.split('/')[1] || '';
-        const basePath = repoName ? `/${repoName}` : '';
-        gefIframe.src = `${basePath}/gef.html`;
+        // Usar caminho relativo simples
+        gefIframe.src = 'gef.html';
         gefIframe.style.display = 'block';
       } catch (error) {
         console.error('Erro ao carregar:', error);
