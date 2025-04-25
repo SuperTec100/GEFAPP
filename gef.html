@@ -1,31 +1,43 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-
+  <meta charset="UTF-8">
+  <title>GEF - Sistema</title>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-<script>
-  // Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyC-VBHoQW0b5y0lmxRkIAj-ciAbuwF3YW8",
-  authDomain: "gef-app1.firebaseapp.com",
-  projectId: "gef-app1",
-  storageBucket: "gef-app1.firebasestorage.app",
-  messagingSenderId: "625530882269",
-  appId: "1:625530882269:web:c47d79aa16508cb855b334"
-};
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script>
+    // Configuração do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyC-VBHoQW0b5y0lmxRkIAj-ciAbuwF3YW8",
+      authDomain: "gef-app1.firebaseapp.com",
+      projectId: "gef-app1",
+      storageBucket: "gef-app1.appspot.com",
+      messagingSenderId: "625530882269",
+      appId: "1:625530882269:web:c47d79aa16508cb855b334"
+    };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-  
-  // Verifica se o usuário está logado
-  firebase.auth().onAuthStateChanged(user => {
-    if (!user) {
-      // Se não estiver logado, redireciona para index.html
-      window.location.href = "index.html";
+    // Inicialização
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.getAuth(app);
+
+    // Verificação de autenticação
+    firebase.onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+      }
+    });
+
+    // Função de logout
+    function logout() {
+      firebase.signOut(auth).then(() => {
+        window.location.href = "index.html";
+      });
     }
-  });
-</script>
+  </script>
+</head>
+<body>
+  <h1>Bem-vindo ao GEF</h1>
+  <button onclick="logout()">Sair</button>
   
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
