@@ -1,3 +1,5 @@
+[file name]: dashboard.html
+[file content begin]
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -9,7 +11,7 @@
 </head>
 <body>
   <div class="app-container">
-    <!-- Sidebar -->
+    <!-- Sidebar (mantido igual) -->
     <div class="sidebar">
       <div class="logo-container">
         <h1>GEF</h1>
@@ -18,7 +20,11 @@
       
       <nav class="main-menu">
         <ul>
-          <li class="active" data-section="gerador-evolucao">
+          <li class="active" data-section="dashboard">
+            <i class="fas fa-home"></i>
+            <span>Início</span>
+          </li>
+          <li data-section="gerador-evolucao">
             <i class="fas fa-file-medical"></i>
             <span>Gerador de Evolução</span>
           </li>
@@ -44,7 +50,7 @@
         </div>
       </header>
 
-      <!-- User Menu Dropdown -->
+      <!-- User Menu Dropdown (mantido igual) -->
       <div class="user-menu" id="userMenu">
         <ul>
           <li><i class="fas fa-user-cog"></i> Minha Conta</li>
@@ -54,12 +60,19 @@
         </ul>
       </div>
 
-      <!-- Content Sections -->
-      <div class="welcome-message">
-        <h2>Bem-vindo ao GEF</h2>
-        <p>Selecione uma opção no menu ao lado para começar</p>
+      <!-- Content Sections - Agora dinâmico -->
+      <div id="content-container">
+        <!-- Conteúdo inicial -->
+        <div class="welcome-message" id="dashboard-content">
+          <h2>Bem-vindo ao GEF</h2>
+          <p>Selecione uma opção no menu ao lado para começar</p>
+        </div>
+        
+        <!-- Conteúdo do GEF será carregado aqui -->
+        <div id="gef-content" style="display:none; padding:20px;"></div>
       </div>
     </div>
   </div>
 </body>
 </html>
+[file content end]
