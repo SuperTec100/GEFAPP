@@ -76,7 +76,7 @@ document.querySelectorAll('.main-menu li').forEach(item => {
   });
 });
 
-// Função para carregar seções
+// Função para carregar seções (modificada)
 async function loadSection(section) {
   const dashboardContent = document.getElementById('dashboard-content');
   const gefIframe = document.getElementById('gef-iframe');
@@ -92,9 +92,22 @@ async function loadSection(section) {
       
     case 'gerador-evolucao':
       try {
-        // Usar caminho relativo simples
+        console.log('Tentando carregar GEF...');
         gefIframe.src = 'gef.html';
         gefIframe.style.display = 'block';
+        
+        // Adicionando listeners para debug
+        gefIframe.onload = () => console.log('GEF carregado com sucesso');
+        gefIframe.onerror = (e) => {
+          console.error('Erro ao carregar GEF:', e);
+          dashboardContent.innerHTML = `
+            <div style="color: red; padding: 20px; text-align: center;">
+              <h3>Erro ao carregar o Gerador de Evolução</h3>
+              <p>O arquivo não pôde ser carregado. Verifique se gef.html existe no diretório.</p>
+            </div>
+          `;
+          dashboardContent.style.display = 'block';
+        };
       } catch (error) {
         console.error('Erro ao carregar:', error);
         dashboardContent.innerHTML = `
