@@ -96,7 +96,7 @@ async function loadSection(section) {
     case 'gerador-evolucao':
       try {
         // Carrega o conteúdo do gef.html via fetch
-        const response = await fetch('gef.html');
+        const response = await fetch('./gef.html');
         if (!response.ok) throw new Error('Arquivo não encontrado');
         const html = await response.text();
         
