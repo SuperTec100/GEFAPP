@@ -1,9 +1,14 @@
-import { auth } from "./firebase-config.js";
+import { auth } from "https://yourdomain.com/firebase-config.js";
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+// Verificar protocolo seguro
+if (window.location.protocol !== 'https:') {
+  window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+}
 
 onAuthStateChanged(auth, (user) => {
   const currentPage = window.location.pathname.split('/').pop();
@@ -12,13 +17,13 @@ onAuthStateChanged(auth, (user) => {
     sessionStorage.setItem("loggedUser", user.email);
     
     if (currentPage !== 'dashboard.html') {
-      window.location.href = "dashboard.html";
+      window.location.href = "https://yourdomain.com/dashboard.html";
     }
   } else {
     sessionStorage.removeItem("loggedUser");
     
     if (currentPage !== 'index.html') {
-      window.location.href = "index.html";
+      window.location.href = "https://yourdomain.com/index.html";
     }
   }
 });
