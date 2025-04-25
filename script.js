@@ -1,4 +1,3 @@
-// Importações corretas para Firebase v9 (modular)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import { 
   getAuth, 
@@ -9,7 +8,6 @@ import {
   browserSessionPersistence
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
-// Configuração do Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyC-VBHoQW0b5y0lmxRkIAj-ciAbuwF3YW8",
   authDomain: "gef-app1.firebaseapp.com",
@@ -19,7 +17,6 @@ const firebaseConfig = {
   appId: "1:625530882269:web:c47d79aa16508cb855b334"
 };
 
-// Inicialização
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
@@ -31,6 +28,9 @@ setPersistence(auth, browserSessionPersistence)
   .catch((error) => {
     console.error("Erro ao configurar persistência:", error);
   });
+
+// Exportações necessárias
+export { app, auth }
 
 // Verificação de estado de autenticação
 onAuthStateChanged(auth, (user) => {
