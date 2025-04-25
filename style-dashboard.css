@@ -1,3 +1,5 @@
+[file name]: style-dashboard.css
+[file content begin]
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -147,3 +149,60 @@ body {
   font-size: 16px;
   color: #7f8c8d;
 }
+
+/* Estilos para o conteúdo do GEF */
+.gef-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.gef-container h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.gef-container .form-group {
+  margin-bottom: 15px;
+}
+
+.gef-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.gef-container input[type="text"],
+.gef-container input[type="date"],
+.gef-container textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.gef-container textarea {
+  resize: vertical;
+}
+
+.gef-container button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.gef-container button:hover {
+  background-color: #2980b9;
+}
+
+#resultado-evolucao {
+  background-color: white;
+  padding: 15px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+[file content end]
