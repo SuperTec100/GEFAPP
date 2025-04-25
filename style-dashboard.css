@@ -67,6 +67,8 @@ body {
 .main-content {
   flex: 1;
   background-color: #ecf0f1;
+  display: flex;
+  flex-direction: column;
 }
 
 .top-bar {
@@ -136,6 +138,11 @@ body {
   padding: 40px;
   text-align: center;
   color: #2c3e50;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .welcome-message h2 {
@@ -148,32 +155,15 @@ body {
   color: #7f8c8d;
 }
 
-/* Estilos para o conteúdo do GEF */
-#gef-content {
-  padding: 20px;
-  overflow-y: auto;
-  height: calc(100vh - 120px);
+#content-container {
+  flex: 1;
+  position: relative;
 }
 
-#gef-content .container {
-  background: white;
-  padding: 25px;
-  border-radius: 6px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-#gef-content .section-header {
-  cursor: pointer;
-  padding: 12px 15px;
-  background-color: #2c3e50;
-  color: white;
-  margin: 10px 0;
-  border-radius: 4px;
-}
-
-#gef-content .section-content {
-  padding: 15px;
-  display: none;
+#gef-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
