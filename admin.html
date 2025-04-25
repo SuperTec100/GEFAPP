@@ -1,89 +1,47 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Painel Administrativo</title>
-  <link rel="stylesheet" href="style.css">
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { 
-      getAuth, 
-      onAuthStateChanged,
-      signOut 
-    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+  import { 
+    getAuth, 
+    onAuthStateChanged,
+    signOut,
+    setPersistence,
+    browserSessionPersistence
+  } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyC-VBHoQW0b5y0lmxRkIAj-ciAbuwF3YW8",
-      authDomain: "gef-app1.firebaseapp.com",
-      projectId: "gef-app1",
-      storageBucket: "gef-app1.appspot.com",
-      messagingSenderId: "625530882269",
-      appId: "1:625530882269:web:c47d79aa16508cb855b334"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyC-VBHoQW0b5y0lmxRkIAj-ciAbuwF3YW8",
+    authDomain: "gef-app1.firebaseapp.com",
+    projectId: "gef-app1",
+    storageBucket: "gef-app1.appspot.com",
+    messagingSenderId: "625530882269",
+    appId: "1:625530882269:web:c47d79aa16508cb855b334"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
-    onAuthStateChanged(auth, (user) => {
-      if (!user || user.email !== "admin@gef.com") {
-        window.location.href = "index.html";
-      }
+  // Configurar persistência como SESSION
+  setPersistence(auth, browserSessionPersistence);
+
+  onAuthStateChanged(auth, (user) => {
+    if (!user || user.email !== "admin@gef.com") {
+      window.location.href = "index.html";
+    }
+  });
+
+  window.removeUser = function(username) {
+    if (confirm("Deseja realmente remover o usuário " + username + "?")) {
+      const users = JSON.parse(sessionStorage.getItem("users")) || {};
+      delete users[username];
+      sessionStorage.setItem("users", JSON.stringify(users));
+      location.reload();
+    }
+  };
+
+  window.logout = function() {
+    signOut(auth).then(() => {
+      sessionStorage.clear();
+      window.location.href = "index.html";
     });
-
-    window.removeUser = function(username) {
-      if (confirm("Deseja realmente remover o usuário " + username + "?")) {
-        const users = JSON.parse(localStorage.getItem("users")) || {};
-        delete users[username];
-        localStorage.setItem("users", JSON.stringify(users));
-        location.reload();
-      }
-    };
-
-    window.logout = function() {
-      signOut(auth).then(() => {
-        window.location.href = "index.html";
-      });
-    };
-  </script>
-</head>
-<body>
-  <div class="login-container">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h2>Painel Administrativo - GEF</h2>
-      <button onclick="logout()">Sair</button>
-    </div>
-    <table border="1" style="width:100%; margin-top:20px; text-align:left;">
-      <thead>
-        <tr>
-          <th>Usuário</th>
-          <th>Nome</th>
-          <th>Email</th>
-          <th>Telefone</th>
-          <th>Ação</th>
-        </tr>
-      </thead>
-      <tbody id="usersTable"></tbody>
-    </table>
-  </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const users = JSON.parse(localStorage.getItem("users")) || {};
-      const tbody = document.getElementById("usersTable");
-
-      for (const [user, data] of Object.entries(users)) {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${user}</td>
-          <td>${data.nome || ''}</td>
-          <td>${data.email || ''}</td>
-          <td>${data.telefone || ''}</td>
-          <td>
-            ${user !== "admin@gef.com" ? `<button onclick="removeUser('${user}')">Remover</button>` : 'Admin'}
-          </td>
-        `;
-        tbody.appendChild(tr);
-      }
-    });
-  </script>
-</body>
-</html>
+  };
+</script>
