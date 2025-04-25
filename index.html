@@ -19,7 +19,8 @@
     </form>
 
     <div style="text-align:center; margin-top: 20px;">
-      <a href="#" onclick="mostrarCadastro()">Clique aqui para se registrar</a>
+      <a href="#" onclick="mostrarCadastro()">Clique aqui para se registrar</a><br>
+      <a href="#" onclick="mostrarRecuperacaoSenha()">Esqueceu a senha?</a>
     </div>
 
     <div id="cadastroSection" class="hidden">
@@ -32,9 +33,18 @@
         <button type="submit">Cadastrar</button>
       </form>
     </div>
+
+    <div id="recuperacaoSenhaSection" class="hidden">
+      <div class="top-right"><a href="#" onclick="mostrarLogin()">Voltar para login</a></div>
+      <form id="recuperarSenhaForm">
+        <div class="form-group">
+          <input type="email" id="resetEmail" placeholder="Seu email" required>
+        </div>
+        <button type="submit">Recuperar Senha</button>
+      </form>
+    </div>
   </div>
 
   <script type="module" src="script.js"></script>
 </body>
 </html>
-
