@@ -62,3 +62,21 @@ document.getElementById("registerForm").addEventListener("submit", (e) => {
     })
     .catch((error) => alert("Erro no cadastro: " + error.message));
 });
+
+import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+window.mostrarRecuperacaoSenha = function () {
+  document.getElementById("loginForm").style.display = "none";
+  document.querySelector("div[style*='text-align:center']").style.display = "none";
+  document.getElementById("cadastroSection").classList.add("hidden");
+  document.getElementById("recuperacaoSenhaSection").classList.remove("hidden");
+};
+
+document.getElementById("recuperarSenhaForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const email = document.getElementById("resetEmail").value;
+
+  sendPasswordResetEmail(auth, email)
+    .then(() => alert("Email de recuperação enviado! Verifique sua caixa de entrada."))
+    .catch((error) => alert("Erro ao enviar email: " + error.message));
+});
