@@ -34,27 +34,7 @@
     </div>
   </div>
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-
-  <!-- Script principal -->
   <script type="module" src="script.js"></script>
-
-  <script>
-    function mostrarCadastro() {
-      document.getElementById("loginForm").style.display = "none";
-      document.querySelector("div[style*='text-align:center']").style.display = "none";
-      document.getElementById("cadastroSection").classList.remove("hidden");
-    }
-
-    function mostrarLogin() {
-      document.getElementById("loginForm").style.display = "block";
-      document.querySelector("div[style*='text-align:center']").style.display = "block";
-      document.getElementById("cadastroSection").classList.add("hidden");
-      document.getElementById("registerForm").reset();
-    }
-  </script>
 </body>
 </html>
 
