@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GEF - Gerador de Evolução</title>
+  <link rel="stylesheet" href="style-dashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    .gef-container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .selection-container {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .selection-group {
+      margin-bottom: 15px;
+    }
+    
+    .selection-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    
+    .selection-group select, 
+    .selection-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    
+    .selection-group button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    
+    .selection-group button:hover {
+      background-color: #2980b9;
+    }
+    
+    #listaPacientes {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    #listaPacientes li {
+      background: white;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    #listaPacientes li button {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    
+    #listaPacientes li button:hover {
+      background-color: #c0392b;
+    }
+    
+    #listaPacientes li button.selecionar {
+      background-color: #2ecc71;
+    }
+    
+    #listaPacientes li button.selecionar:hover {
+      background-color: #27ae60;
+    }
+    
+    #cadastroPaciente {
+      display: none;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    #formEvolucao {
+      display: none;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .form-row {
+      margin-bottom: 15px;
+    }
+    
+    .form-row label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    
+    .form-row input,
+    .form-row textarea,
+    .form-row select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    
+    .form-row textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    #salvarEvolucao {
+      background-color: #2ecc71;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    
+    #salvarEvolucao:hover {
+      background-color: #27ae60;
+    }
+    
+    .paciente-info {
+      font-weight: bold;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+      color: #2c3e50;
+    }
+  </style>
+</head>
+<body>
+  <div class="gef-container">
+    <h2><i class="fas fa-file-medical"></i> Gerador de Evolução Fisioterapêutica</h2>
+    
+    <div class="selection-container">
+      <div class="selection-group">
+        <label for="localAtendimento">Local de Atendimento:</label>
+        <select id="localAtendimento" onchange="carregarHospitais()">
+          <option value="" disabled selected>Selecione</option>
+          <option value="Hospital">Hospital</option>
+          <option value="Ambulatório">Ambulatório</option>
+          <option value="Clínica">Clínica</option>
+          <option value="Domiciliar">Domiciliar</option>
+        </select>
+      </div>
+      
+      <div id="hospitalContainer" class="selection-group" style="display:none;">
+        <label for="hospital">Hospital:</label>
+        <select id="hospital" onchange="carregarUnidades()">
+          <option value="" disabled selected>Selecione</option>
+          <option value="HGRS">HGRS</option>
+          <option value="HGE">HGE</option>
+          <option value="HUPES">HUPES</option>
+        </select>
+      </div>
+      
+      <div id="unidadeContainer" class="selection-group" style="display:none;">
+        <label for="unidade">Unidade:</label>
+        <select id="unidade" onchange="carregarLeitos()">
+          <option value="" disabled selected>Selecione</option>
+        </select>
+      </div>
+      
+      <div id="leitosContainer" class="selection-group" style="display:none;">
+        <button onclick="mostrarCadastroPaciente()"><i class="fas fa-plus"></i> Adicionar Paciente</button>
+        <h3>Pacientes:</h3>
+        <ul id="listaPacientes"></ul>
+      </div>
+    </div>
+    
+    <div id="cadastroPaciente" class="selection-container">
+      <h3>Cadastrar Novo Paciente</h3>
+      <div class="selection-group">
+        <label for="leitoPaciente">Número do Leito:</label>
+        <input type="text" id="leitoPaciente" placeholder="Ex: 101">
+      </div>
+      <div class="selection-group">
+        <label for="nomePaciente">Nome do Paciente:</label>
+        <input type="text" id="nomePaciente" placeholder="Nome completo">
+      </div>
+      <button onclick="cadastrarPaciente()"><i class="fas fa-save"></i> Salvar</button>
+      <button onclick="document.getElementById('cadastroPaciente').style.display='none'" style="background-color: #95a5a6; margin-left: 10px;"><i class="fas fa-times"></i> Cancelar</button>
+    </div>
+    
+    <div id="formEvolucao">
+      <div class="paciente-info" id="infoPaciente"></div>
+      
+      <!-- Espaço reservado para o código de geração da evolução -->
+      <div id="areaEvolucao">
+        <!-- O código para gerar a evolução será inserido aqui posteriormente -->
+        <p style="text-align: center; color: #7f8c8d; padding: 20px;">
+          <i class="fas fa-code fa-2x"></i><br>
+          Área reservada para o código de geração da evolução
+        </p>
+      </div>
+      
+      <button id="salvarEvolucao" onclick="salvarEvolucao()"><i class="fas fa-save"></i> Salvar Evolução</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { app } from "./firebase-config.js";
+    import { 
+      getFirestore, 
+      doc, 
+      getDoc, 
+      setDoc, 
+      updateDoc, 
+      collection, 
+      getDocs, 
+      deleteDoc 
+    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    const db = getFirestore(app);
+
+    window.carregarHospitais = function() {
+      const local = document.getElementById("localAtendimento").value;
+      document.getElementById("hospitalContainer").style.display = local === "Hospital" ? "block" : "none";
+      document.getElementById("unidadeContainer").style.display = "none";
+      document.getElementById("leitosContainer").style.display = "none";
+      document.getElementById("formEvolucao").style.display = "none";
+    };
+
+    window.carregarUnidades = function() {
+      const hospital = document.getElementById("hospital").value;
+      document.getElementById("unidadeContainer").style.display = "block";
+      const unidade = document.getElementById("unidade");
+      unidade.innerHTML = '<option value="" disabled selected>Selecione</option>';
+      
+      if (hospital === "HGRS") {
+        unidade.innerHTML += `
+          <option value="UTI">UTI</option>
+          <option value="Enfermaria">Enfermaria</option>
+        `;
+      } else if (hospital === "HGE") {
+        unidade.innerHTML += `
+          <option value="UTI">UTI</option>
+          <option value="Enfermaria">Enfermaria</option>
+        `;
+      } else if (hospital === "HUPES") {
+        unidade.innerHTML += `
+          <option value="UTI">UTI</option>
+          <option value="Enfermaria">Enfermaria</option>
+        `;
+      }
+      
+      document.getElementById("leitosContainer").style.display = "none";
+      document.getElementById("formEvolucao").style.display = "none";
+    };
+
+    window.carregarLeitos = function() {
+      const hospital = document.getElementById("hospital").value;
+      const unidade = document.getElementById("unidade").value;
+      
+      if (unidade === "UTI") {
+        const unidadeSelect = document.getElementById("unidade");
+        unidadeSelect.innerHTML = '<option value="" disabled selected>Selecione</option>';
+        
+        if (hospital === "HGRS") {
+          unidadeSelect.innerHTML += `
+            <option value="UTI_GERAL_1">UTI Geral 1</option>
+            <option value="UTI_GERAL_2">UTI Geral 2</option>
+            <option value="UTI_NEURO">UTI Neuro</option>
+            <option value="UTI_PEDI">UTI Pedi</option>
+            <option value="UTI_CARDIO">UTI Cardiovascular</option>
+            <option value="UTI_NEO">UTI Neo</option>
+          `;
+        } else {
+          unidadeSelect.innerHTML += `
+            <option value="UTI_GERAL_1">UTI Geral 1</option>
+            <option value="UTI_GERAL_2">UTI Geral 2</option>
+          `;
+        }
+      } else {
+        document.getElementById("leitosContainer").style.display = "block";
+        atualizarListaPacientes();
+      }
+      
+      document.getElementById("formEvolucao").style.display = "none";
+    };
+
+    window.atualizarListaPacientes = async function() {
+      const hospital = document.getElementById("hospital").value;
+      const unidade = document.getElementById("unidade").value;
+      const lista = document.getElementById("listaPacientes");
+      lista.innerHTML = "";
+      
+      try {
+        const leitosRef = collection(db, "hospitais", hospital, "unidades", unidade, "leitos");
+        const leitosSnap = await getDocs(leitosRef);
+        
+        if (leitosSnap.empty) {
+          lista.innerHTML = "<li>Nenhum paciente cadastrado nesta unidade</li>";
+          return;
+        }
+        
+        leitosSnap.forEach((docSnap) => {
+          const dados = docSnap.data();
+          const li = document.createElement("li");
+          li.innerHTML = `
+            <span><strong>Leito ${docSnap.id}</strong>: ${dados.nome || 'Sem nome'}</span>
+            <div>
+              <button class="selecionar" onclick="carregarEvolucao('${hospital}', '${unidade}', '${docSnap.id}')">
+                <i class="fas fa-edit"></i> Editar
+              </button>
+              <button onclick="removerPaciente('${hospital}', '${unidade}', '${docSnap.id}')">
+                <i class="fas fa-trash"></i> Excluir
+              </button>
+            </div>
+          `;
+          lista.appendChild(li);
+        });
+      } catch (error) {
+        console.error("Erro ao carregar pacientes:", error);
+        lista.innerHTML = "<li>Erro ao carregar lista de pacientes</li>";
+      }
+    };
+
+    window.mostrarCadastroPaciente = function() {
+      document.getElementById("cadastroPaciente").style.display = "block";
+      document.getElementById("leitoPaciente").value = "";
+      document.getElementById("nomePaciente").value = "";
+    };
+
+    window.cadastrarPaciente = async function() {
+      const hospital = document.getElementById("hospital").value;
+      const unidade = document.getElementById("unidade").value;
+      const leito = document.getElementById("leitoPaciente").value;
+      const nome = document.getElementById("nomePaciente").value;
+
+      if (!leito || !nome) {
+        alert("Preencha todos os campos.");
+        return;
+      }
+
+      try {
+        const docRef = doc(db, "hospitais", hospital, "unidades", unidade, "leitos", leito);
+        await setDoc(docRef, { 
+          nome,
+          evolucao: {} 
+        });
+        
+        alert("Paciente cadastrado com sucesso!");
+        document.getElementById("cadastroPaciente").style.display = "none";
+        atualizarListaPacientes();
+      } catch (error) {
+        console.error("Erro ao cadastrar paciente:", error);
+        alert("Erro ao cadastrar paciente. Tente novamente.");
+      }
+    };
+
+    window.removerPaciente = async function(hospital, unidade, leito) {
+      if (!confirm(`Deseja realmente remover o paciente do leito ${leito}?`)) {
+        return;
+      }
+
+      try {
+        const docRef = doc(db, "hospitais", hospital, "unidades", unidade, "leitos", leito);
+        await deleteDoc(docRef);
+        atualizarListaPacientes();
+      } catch (error) {
+        console.error("Erro ao remover paciente:", error);
+        alert("Erro ao remover paciente. Tente novamente.");
+      }
+    };
+
+    window.carregarEvolucao = async function(hospital, unidade, leito) {
+      try {
+        const docRef = doc(db, "hospitais", hospital, "unidades", unidade, "leitos", leito);
+        const docSnap = await getDoc(docRef);
+        
+        if (!docSnap.exists()) {
+          alert("Paciente não encontrado.");
+          return;
+        }
+        
+        const dados = docSnap.data();
+        document.getElementById("infoPaciente").innerHTML = `
+          <i class="fas fa-procedures"></i> Paciente: <strong>${dados.nome || 'Sem nome'}</strong> | 
+          <i class="fas fa-hospital"></i> Hospital: <strong>${hospital}</strong> | 
+          <i class="fas fa-door-open"></i> Unidade: <strong>${unidade}</strong> | 
+          <i class="fas fa-bed"></i> Leito: <strong>${leito}</strong>
+        `;
+        
+        document.getElementById("formEvolucao").style.display = "block";
+        
+        // Aqui você pode preencher os campos da evolução se já existirem
+        if (dados.evolucao) {
+          for (const [campo, valor] of Object.entries(dados.evolucao)) {
+            const elemento = document.getElementById(campo);
+            if (elemento) {
+              elemento.value = valor;
+            }
+          }
+        }
+        
+        // Armazena as informações do paciente para salvar depois
+        document.getElementById("formEvolucao").dataset.hospital = hospital;
+        document.getElementById("formEvolucao").dataset.unidade = unidade;
+        document.getElementById("formEvolucao").dataset.leito = leito;
+        
+        // Rolagem para o formulário de evolução
+        document.getElementById("formEvolucao").scrollIntoView({ behavior: 'smooth' });
+      } catch (error) {
+        console.error("Erro ao carregar evolução:", error);
+        alert("Erro ao carregar dados do paciente. Tente novamente.");
+      }
+    };
+
+    window.salvarEvolucao = async function() {
+      const form = document.getElementById("formEvolucao");
+      const hospital = form.dataset.hospital;
+      const unidade = form.dataset.unidade;
+      const leito = form.dataset.leito;
+      
+      if (!hospital || !unidade || !leito) {
+        alert("Selecione um paciente antes de salvar.");
+        return;
+      }
+      
+      try {
+        // Aqui você pode coletar os dados do formulário de evolução
+        const evolucao = {
+          // Exemplo - você adicionará os campos específicos aqui posteriormente
+          data: new Date().toLocaleDateString(),
+          // Adicione outros campos conforme necessário
+        };
+        
+        const docRef = doc(db, "hospitais", hospital, "unidades", unidade, "leitos", leito);
+        await updateDoc(docRef, { evolucao });
+        
+        alert("Evolução salva com sucesso!");
+      } catch (error) {
+        console.error("Erro ao salvar evolução:", error);
+        alert("Erro ao salvar evolução. Tente novamente.");
+      }
+    };
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', () => {
+      // Configura o evento de submit do formulário para evitar recarregamento da página
+      const forms = document.querySelectorAll('form');
+      forms.forEach(form => {
+        form.addEventListener('submit', (e) => e.preventDefault());
+      });
+    });
+  </script>
+</body>
+</html>
