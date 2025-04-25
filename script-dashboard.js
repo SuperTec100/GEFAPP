@@ -1,5 +1,5 @@
-import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-import { app, auth } from "./script.js" assert { type: 'module' };
+import { getAuth, signOut, onAuthStateChanged, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import { app, auth } from "./script.js";
 
 // Configurar persistência como SESSION
 setPersistence(auth, browserSessionPersistence)
@@ -10,7 +10,7 @@ setPersistence(auth, browserSessionPersistence)
     console.error("Erro ao configurar persistência:", error);
   });
 
-/ Verificar autenticação e monitorar atividade
+// Verificar autenticação e monitorar atividade
 let lastActivityTime = new Date().getTime();
 const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutos
 
@@ -88,7 +88,10 @@ async function loadSection(section) {
     case 'gerador-evolucao':
       try {
         console.log('Carregando GEF...');
-        gefIframe.src = 'gef.html';
+        // Garante que o caminho seja absoluto
+        gefIframe.src = window.location.pathname.includes('dashboard.html') 
+          ? 'gef.html' 
+          : window.location.pathname.replace('dashboard.html', '') + 'gef.html';
         gefIframe.style.display = 'block';
         
         gefIframe.onload = () => console.log('GEF carregado com sucesso');
@@ -98,6 +101,7 @@ async function loadSection(section) {
             <div style="color: red; padding: 20px; text-align: center;">
               <h3>Erro ao carregar o Gerador de Evolução</h3>
               <p>${e.message}</p>
+              <p>Verifique se o arquivo gef.html existe no diretório correto.</p>
             </div>
           `;
           dashboardContent.style.display = 'block';
