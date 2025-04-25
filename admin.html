@@ -7,7 +7,7 @@
 </head>
 <body>
   <script type="module">
-    import { auth } from "https://yourdomain.com/firebase-config.js";
+    import { auth } from "https://gefapp.com.br/firebase-config.js";
     import { 
       onAuthStateChanged,
       signOut,
@@ -16,12 +16,12 @@
     } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
     if (window.location.protocol !== 'https:') {
-      window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+      window.location.href = 'https://gefapp.com.br/admin.html';
     }
 
     onAuthStateChanged(auth, (user) => {
       if (!user || user.email !== "admin@gef.com") {
-        window.location.href = "https://yourdomain.com/index.html";
+        window.location.href = "https://gefapp.com.br/index.html";
       }
     });
 
@@ -37,7 +37,7 @@
     window.logout = function() {
       signOut(auth).then(() => {
         sessionStorage.clear();
-        window.location.href = "https://yourdomain.com/index.html";
+        window.location.href = "https://gefapp.com.br/index.html";
       });
     };
   </script>
