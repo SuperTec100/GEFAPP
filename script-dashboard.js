@@ -1,5 +1,5 @@
-import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-import { auth } from "./script.js";
+import { auth } from "./firebase-config.js";
+import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
 let lastActivityTime = Date.now();
 const SESSION_TIMEOUT = 30 * 60 * 1000;
@@ -73,7 +73,6 @@ async function loadSection(section) {
         console.log('Tentando carregar gef.html');
         const gefUrl = 'gef.html';
         
-        // Verifica se o arquivo existe
         const response = await fetch(gefUrl, { method: 'HEAD' });
         if (!response.ok) {
           throw new Error(`Arquivo ${gefUrl} não encontrado (${response.status})`);
@@ -82,7 +81,6 @@ async function loadSection(section) {
         gefIframe.src = gefUrl;
         gefIframe.style.display = 'block';
         
-        // Adiciona listener para erros no iframe
         gefIframe.onload = () => {
           console.log('Iframe carregado com sucesso');
         };
@@ -93,7 +91,6 @@ async function loadSection(section) {
             <div style="color:red; padding:20px; text-align:center">
               <h3>Erro ao carregar o Gerador de Evolução</h3>
               <p>O arquivo ${gefUrl} não pôde ser carregado.</p>
-              <p>Verifique se o arquivo existe no servidor.</p>
               <p>Status: ${e.message}</p>
             </div>`;
           dashboardContent.style.display = 'block';
@@ -109,7 +106,6 @@ async function loadSection(section) {
       <div style="color:red; padding:20px; text-align:center">
         <h3>Erro ao carregar conteúdo</h3>
         <p>${error.message}</p>
-        <p>Detalhes técnicos no console</p>
       </div>`;
     dashboardContent.style.display = 'block';
   }
@@ -121,7 +117,6 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// Inicializa a seção dashboard por padrão
 document.addEventListener('DOMContentLoaded', () => {
   loadSection('dashboard');
 });
