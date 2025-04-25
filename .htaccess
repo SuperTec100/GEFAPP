@@ -1,7 +1,0 @@
-RewriteEngine On
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://gefapp.com.br/$1 [L,R=301]
-
-# Proteção adicional
-Header always set Content-Security-Policy "upgrade-insecure-requests"
-Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
