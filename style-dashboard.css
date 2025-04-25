@@ -167,3 +167,52 @@ body {
   right: 0;
   bottom: 0;
 }
+
+/* Adicionar estas regras ao arquivo existente */
+
+.error-message {
+  color: #e74c3c;
+  padding: 20px;
+  background-color: #fdecea;
+  border-radius: 5px;
+  margin: 20px;
+}
+
+#loading-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  color: #3498db;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th {
+  background-color: #3498db;
+  color: white;
+  text-align: left;
+  padding: 12px;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+  background-color: #f5f5f5;
+}
+
+button {
+  transition: all 0.3s;
+}
+
+button:hover {
+  opacity: 0.8;
+}
