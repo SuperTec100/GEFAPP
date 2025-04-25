@@ -273,11 +273,18 @@
 
   <div id="hospitalContainer" class="sub-section" style="display:none;">
     <label>Hospital:</label>
-    <select id="hospital" onchange="carregarUnidades()">
+    <select id="hospital" onchange="carregarSetores()">
       <option value="" disabled selected>Selecione</option>
       <option value="HGRS">HGRS</option>
       <option value="HGE">HGE</option>
       <option value="HUPES">HUPES</option>
+    </select>
+  </div>
+
+  <div id="setorContainer" class="sub-section" style="display:none;">
+    <label>Setor:</label>
+    <select id="setor" onchange="carregarUnidades()">
+      <option value="" disabled selected>Selecione</option>
     </select>
   </div>
 
@@ -3476,6 +3483,35 @@ texto = texto.replace("paciente encontrado", "paciente encontrada");
     }
     return texto;
 }
+
+        <div id="formularioEvolucao" style="display: none;">
+  <div class="container">
+    <h2>Gerador de Evolução Fisioterapêutica</h2>
+    <form id="formEvolucao">
+      <div class="form-group">
+        <label for="diagnostico">Diagnóstico:</label>
+        <input type="text" id="diagnostico" placeholder="Ex: Pneumonia, AVE, Fratura...">
+      </div>
+
+      <div class="form-group">
+        <label for="condicao">Condição Atual:</label>
+        <textarea id="condicao" rows="4" placeholder="Descreva a condição clínica atual..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="conduta">Conduta Fisioterapêutica:</label>
+        <textarea id="conduta" rows="4" placeholder="Descreva as intervenções realizadas..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="observacoes">Observações:</label>
+        <textarea id="observacoes" rows="3" placeholder="Observações adicionais..."></textarea>
+      </div>
+
+      <button type="submit">Salvar Evolução</button>
+    </form>
+  </div>
+</div>
 
     </script>
 
