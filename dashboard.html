@@ -56,14 +56,17 @@
         </ul>
       </div>
 
-      <div id="content-container">
+        <div id="content-container">
         <div class="welcome-message" id="dashboard-content">
           <h2>Bem-vindo ao GEF</h2>
           <p>Selecione uma opção no menu ao lado para começar</p>
         </div>
         
-        <!-- Iframe modificado para garantir carregamento -->
-        <iframe id="gef-iframe" style="display:none; width:100%; height:calc(100vh - 120px); border:none;"
+        <!-- Iframe corrigido -->
+        <iframe id="gef-iframe" 
+                style="display:none; width:100%; height:calc(100vh - 120px); border:none;"
+                sandbox="allow-scripts allow-forms"
+                loading="eager"></iframe>
       </div>
     </div>
   </div>
