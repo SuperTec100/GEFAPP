@@ -257,6 +257,51 @@
     </style>
 </head>
 <body>
+
+<div class="container">
+  <h2>Selecionar Local de Atendimento e Paciente</h2>
+
+  <div class="sub-section">
+    <label>Tipo de atendimento:</label>
+    <select id="localAtendimento" onchange="carregarHospitais()">
+      <option value="" disabled selected>Selecione</option>
+      <option value="Hospital">Hospital</option>
+      <option value="Clínica">Clínica</option>
+      <option value="Domicílio">Domicílio</option>
+    </select>
+  </div>
+
+  <div id="hospitalContainer" class="sub-section" style="display:none;">
+    <label>Hospital:</label>
+    <select id="hospital" onchange="carregarUnidades()">
+      <option value="" disabled selected>Selecione</option>
+      <option value="HGRS">HGRS</option>
+      <option value="HGE">HGE</option>
+      <option value="HUPES">HUPES</option>
+    </select>
+  </div>
+
+  <div id="unidadeContainer" class="sub-section" style="display:none;">
+    <label>Unidade:</label>
+    <select id="unidade" onchange="carregarLeitos()"></select>
+  </div>
+
+  <div id="leitosContainer" class="sub-section" style="display:none;">
+    <label>Leitos com pacientes:</label>
+    <ul id="listaLeitos"></ul>
+    <button onclick="mostrarCadastroPaciente()">Cadastrar Novo Paciente</button>
+  </div>
+
+  <div id="cadastroPaciente" class="sub-section" style="display:none;">
+    <label>Número do Leito:</label>
+    <input type="text" id="leitoPaciente" placeholder="Ex: 101">
+    <label>Nome do Paciente:</label>
+    <input type="text" id="nomePaciente" placeholder="Ex: João da Silva">
+    <button onclick="cadastrarPaciente()">Salvar</button>
+  </div>
+</div>
+<hr>
+    
     <div class="container">
         <h2>Gerador de Evolução Fisioterapêutica</h2>
 
@@ -3433,5 +3478,9 @@ texto = texto.replace("paciente encontrado", "paciente encontrada");
 }
 
     </script>
+
+<script type="module" src="script-gef.js"></script>
+        
 </body>
 </html>
+
