@@ -11,11 +11,16 @@ const firebaseConfig = {
   projectId: "gef-app1",
   storageBucket: "gef-app1.appspot.com",
   messagingSenderId: "625530882269",
-  appId: "1:625530882269:web:c47d79aa16508cb855b334"
+  appId: "1:625530882269:web:c47d79aa16508cb855b334",
+  secure: true
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+
+auth.useDeviceLanguage();
+auth.settings.appVerificationDisabledForTesting = false;
+auth.settings.forceRecaptchaFlow = true;
 
 setPersistence(auth, browserSessionPersistence)
   .then(() => console.log("Persistência de sessão configurada"))
