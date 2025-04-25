@@ -1,10 +1,18 @@
 <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js"></script>
 <script>
-  const firebaseConfig = {
-    // cole aqui o mesmo config do index
-  };
-  firebase.initializeApp(firebaseConfig);
+ // Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyC-VBHoQW0b5y0lmxRkIAj-ciAbuwF3YW8",
+  authDomain: "gef-app1.firebaseapp.com",
+  projectId: "gef-app1",
+  storageBucket: "gef-app1.firebasestorage.app",
+  messagingSenderId: "625530882269",
+  appId: "1:625530882269:web:c47d79aa16508cb855b334"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
   firebase.auth().onAuthStateChanged(user => {
     if (!user || user.email !== "admin@gef.com") {
