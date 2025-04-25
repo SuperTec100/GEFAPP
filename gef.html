@@ -169,7 +169,7 @@
     <div class="selection-container">
       <div class="selection-group">
         <label for="localAtendimento">Local de Atendimento:</label>
-        <select id="localAtendimento" onchange="carregarHospitais()">
+        <select id="localAtendimento">
           <option value="" disabled selected>Selecione</option>
           <option value="Hospital">Hospital</option>
           <option value="Ambulatório">Ambulatório</option>
@@ -180,7 +180,7 @@
       
       <div id="hospitalContainer" class="selection-group" style="display:none;">
         <label for="hospital">Hospital:</label>
-        <select id="hospital" onchange="carregarUnidades()">
+        <select id="hospital">
           <option value="" disabled selected>Selecione</option>
           <option value="HGRS">HGRS</option>
           <option value="HGE">HGE</option>
@@ -190,13 +190,13 @@
       
       <div id="unidadeContainer" class="selection-group" style="display:none;">
         <label for="unidade">Unidade:</label>
-        <select id="unidade" onchange="carregarLeitos()">
+        <select id="unidade">
           <option value="" disabled selected>Selecione</option>
         </select>
       </div>
       
       <div id="leitosContainer" class="selection-group" style="display:none;">
-        <button onclick="mostrarCadastroPaciente()"><i class="fas fa-plus"></i> Adicionar Paciente</button>
+        <button id="btnAdicionarPaciente"><i class="fas fa-plus"></i> Adicionar Paciente</button>
         <h3>Pacientes:</h3>
         <ul id="listaPacientes"></ul>
       </div>
@@ -212,8 +212,8 @@
         <label for="nomePaciente">Nome do Paciente:</label>
         <input type="text" id="nomePaciente" placeholder="Nome completo">
       </div>
-      <button onclick="cadastrarPaciente()"><i class="fas fa-save"></i> Salvar</button>
-      <button onclick="document.getElementById('cadastroPaciente').style.display='none'" style="background-color: #95a5a6; margin-left: 10px;"><i class="fas fa-times"></i> Cancelar</button>
+      <button id="btnSalvarPaciente"><i class="fas fa-save"></i> Salvar</button>
+      <button id="btnCancelarCadastro" style="background-color: #95a5a6; margin-left: 10px;"><i class="fas fa-times"></i> Cancelar</button>
     </div>
     
     <div id="formEvolucao">
@@ -228,12 +228,12 @@
         </p>
       </div>
       
-      <button id="salvarEvolucao" onclick="salvarEvolucao()"><i class="fas fa-save"></i> Salvar Evolução</button>
+      <button id="salvarEvolucao"><i class="fas fa-save"></i> Salvar Evolução</button>
     </div>
   </div>
 
   <script type="module">
-    import { app } from "./firebase-config.js";
+    import { app } from './firebase-config.js';
     import { 
       getFirestore, 
       doc, 
@@ -247,47 +247,72 @@
 
     const db = getFirestore(app);
 
-    window.carregarHospitais = function() {
-      const local = document.getElementById("localAtendimento").value;
-      document.getElementById("hospitalContainer").style.display = local === "Hospital" ? "block" : "none";
-      document.getElementById("unidadeContainer").style.display = "none";
-      document.getElementById("leitosContainer").style.display = "none";
-      document.getElementById("formEvolucao").style.display = "none";
-    };
+    // Elementos do DOM
+    const localAtendimento = document.getElementById('localAtendimento');
+    const hospitalContainer = document.getElementById('hospitalContainer');
+    const hospitalSelect = document.getElementById('hospital');
+    const unidadeContainer = document.getElementById('unidadeContainer');
+    const unidadeSelect = document.getElementById('unidade');
+    const leitosContainer = document.getElementById('leitosContainer');
+    const listaPacientes = document.getElementById('listaPacientes');
+    const cadastroPaciente = document.getElementById('cadastroPaciente');
+    const formEvolucao = document.getElementById('formEvolucao');
+    const btnAdicionarPaciente = document.getElementById('btnAdicionarPaciente');
+    const btnSalvarPaciente = document.getElementById('btnSalvarPaciente');
+    const btnCancelarCadastro = document.getElementById('btnCancelarCadastro');
+    const salvarEvolucaoBtn = document.getElementById('salvarEvolucao');
 
-    window.carregarUnidades = function() {
-      const hospital = document.getElementById("hospital").value;
-      document.getElementById("unidadeContainer").style.display = "block";
-      const unidade = document.getElementById("unidade");
-      unidade.innerHTML = '<option value="" disabled selected>Selecione</option>';
+    // Event Listeners
+    localAtendimento.addEventListener('change', carregarHospitais);
+    hospitalSelect.addEventListener('change', carregarUnidades);
+    unidadeSelect.addEventListener('change', carregarLeitos);
+    btnAdicionarPaciente.addEventListener('click', mostrarCadastroPaciente);
+    btnSalvarPaciente.addEventListener('click', cadastrarPaciente);
+    btnCancelarCadastro.addEventListener('click', () => {
+      cadastroPaciente.style.display = 'none';
+    });
+    salvarEvolucaoBtn.addEventListener('click', salvarEvolucao);
+
+    // Funções
+    function carregarHospitais() {
+      const local = localAtendimento.value;
+      hospitalContainer.style.display = local === "Hospital" ? "block" : "none";
+      unidadeContainer.style.display = "none";
+      leitosContainer.style.display = "none";
+      formEvolucao.style.display = "none";
+    }
+
+    function carregarUnidades() {
+      const hospital = hospitalSelect.value;
+      unidadeContainer.style.display = "block";
+      unidadeSelect.innerHTML = '<option value="" disabled selected>Selecione</option>';
       
       if (hospital === "HGRS") {
-        unidade.innerHTML += `
+        unidadeSelect.innerHTML += `
           <option value="UTI">UTI</option>
           <option value="Enfermaria">Enfermaria</option>
         `;
       } else if (hospital === "HGE") {
-        unidade.innerHTML += `
+        unidadeSelect.innerHTML += `
           <option value="UTI">UTI</option>
           <option value="Enfermaria">Enfermaria</option>
         `;
       } else if (hospital === "HUPES") {
-        unidade.innerHTML += `
+        unidadeSelect.innerHTML += `
           <option value="UTI">UTI</option>
           <option value="Enfermaria">Enfermaria</option>
         `;
       }
       
-      document.getElementById("leitosContainer").style.display = "none";
-      document.getElementById("formEvolucao").style.display = "none";
-    };
+      leitosContainer.style.display = "none";
+      formEvolucao.style.display = "none";
+    }
 
-    window.carregarLeitos = function() {
-      const hospital = document.getElementById("hospital").value;
-      const unidade = document.getElementById("unidade").value;
+    function carregarLeitos() {
+      const hospital = hospitalSelect.value;
+      const unidade = unidadeSelect.value;
       
       if (unidade === "UTI") {
-        const unidadeSelect = document.getElementById("unidade");
         unidadeSelect.innerHTML = '<option value="" disabled selected>Selecione</option>';
         
         if (hospital === "HGRS") {
@@ -306,25 +331,24 @@
           `;
         }
       } else {
-        document.getElementById("leitosContainer").style.display = "block";
+        leitosContainer.style.display = "block";
         atualizarListaPacientes();
       }
       
-      document.getElementById("formEvolucao").style.display = "none";
-    };
+      formEvolucao.style.display = "none";
+    }
 
-    window.atualizarListaPacientes = async function() {
-      const hospital = document.getElementById("hospital").value;
-      const unidade = document.getElementById("unidade").value;
-      const lista = document.getElementById("listaPacientes");
-      lista.innerHTML = "";
+    async function atualizarListaPacientes() {
+      const hospital = hospitalSelect.value;
+      const unidade = unidadeSelect.value;
+      listaPacientes.innerHTML = "";
       
       try {
         const leitosRef = collection(db, "hospitais", hospital, "unidades", unidade, "leitos");
         const leitosSnap = await getDocs(leitosRef);
         
         if (leitosSnap.empty) {
-          lista.innerHTML = "<li>Nenhum paciente cadastrado nesta unidade</li>";
+          listaPacientes.innerHTML = "<li>Nenhum paciente cadastrado nesta unidade</li>";
           return;
         }
         
@@ -334,31 +358,47 @@
           li.innerHTML = `
             <span><strong>Leito ${docSnap.id}</strong>: ${dados.nome || 'Sem nome'}</span>
             <div>
-              <button class="selecionar" onclick="carregarEvolucao('${hospital}', '${unidade}', '${docSnap.id}')">
+              <button class="selecionar" data-hospital="${hospital}" data-unidade="${unidade}" data-leito="${docSnap.id}">
                 <i class="fas fa-edit"></i> Editar
               </button>
-              <button onclick="removerPaciente('${hospital}', '${unidade}', '${docSnap.id}')">
+              <button class="excluir" data-hospital="${hospital}" data-unidade="${unidade}" data-leito="${docSnap.id}">
                 <i class="fas fa-trash"></i> Excluir
               </button>
             </div>
           `;
-          lista.appendChild(li);
+          listaPacientes.appendChild(li);
         });
+
+        // Adiciona event listeners aos novos botões
+        document.querySelectorAll('.selecionar').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const { hospital, unidade, leito } = e.target.dataset;
+            carregarEvolucao(hospital, unidade, leito);
+          });
+        });
+
+        document.querySelectorAll('.excluir').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const { hospital, unidade, leito } = e.target.dataset;
+            removerPaciente(hospital, unidade, leito);
+          });
+        });
+
       } catch (error) {
         console.error("Erro ao carregar pacientes:", error);
-        lista.innerHTML = "<li>Erro ao carregar lista de pacientes</li>";
+        listaPacientes.innerHTML = "<li>Erro ao carregar lista de pacientes</li>";
       }
-    };
+    }
 
-    window.mostrarCadastroPaciente = function() {
-      document.getElementById("cadastroPaciente").style.display = "block";
+    function mostrarCadastroPaciente() {
+      cadastroPaciente.style.display = "block";
       document.getElementById("leitoPaciente").value = "";
       document.getElementById("nomePaciente").value = "";
-    };
+    }
 
-    window.cadastrarPaciente = async function() {
-      const hospital = document.getElementById("hospital").value;
-      const unidade = document.getElementById("unidade").value;
+    async function cadastrarPaciente() {
+      const hospital = hospitalSelect.value;
+      const unidade = unidadeSelect.value;
       const leito = document.getElementById("leitoPaciente").value;
       const nome = document.getElementById("nomePaciente").value;
 
@@ -375,15 +415,15 @@
         });
         
         alert("Paciente cadastrado com sucesso!");
-        document.getElementById("cadastroPaciente").style.display = "none";
-        atualizarListaPacientes();
+        cadastroPaciente.style.display = "none";
+        await atualizarListaPacientes();
       } catch (error) {
         console.error("Erro ao cadastrar paciente:", error);
         alert("Erro ao cadastrar paciente. Tente novamente.");
       }
-    };
+    }
 
-    window.removerPaciente = async function(hospital, unidade, leito) {
+    async function removerPaciente(hospital, unidade, leito) {
       if (!confirm(`Deseja realmente remover o paciente do leito ${leito}?`)) {
         return;
       }
@@ -391,14 +431,14 @@
       try {
         const docRef = doc(db, "hospitais", hospital, "unidades", unidade, "leitos", leito);
         await deleteDoc(docRef);
-        atualizarListaPacientes();
+        await atualizarListaPacientes();
       } catch (error) {
         console.error("Erro ao remover paciente:", error);
         alert("Erro ao remover paciente. Tente novamente.");
       }
-    };
+    }
 
-    window.carregarEvolucao = async function(hospital, unidade, leito) {
+    async function carregarEvolucao(hospital, unidade, leito) {
       try {
         const docRef = doc(db, "hospitais", hospital, "unidades", unidade, "leitos", leito);
         const docSnap = await getDoc(docRef);
@@ -416,9 +456,11 @@
           <i class="fas fa-bed"></i> Leito: <strong>${leito}</strong>
         `;
         
-        document.getElementById("formEvolucao").style.display = "block";
+        formEvolucao.style.display = "block";
+        formEvolucao.dataset.hospital = hospital;
+        formEvolucao.dataset.unidade = unidade;
+        formEvolucao.dataset.leito = leito;
         
-        // Aqui você pode preencher os campos da evolução se já existirem
         if (dados.evolucao) {
           for (const [campo, valor] of Object.entries(dados.evolucao)) {
             const elemento = document.getElementById(campo);
@@ -428,24 +470,17 @@
           }
         }
         
-        // Armazena as informações do paciente para salvar depois
-        document.getElementById("formEvolucao").dataset.hospital = hospital;
-        document.getElementById("formEvolucao").dataset.unidade = unidade;
-        document.getElementById("formEvolucao").dataset.leito = leito;
-        
-        // Rolagem para o formulário de evolução
-        document.getElementById("formEvolucao").scrollIntoView({ behavior: 'smooth' });
+        formEvolucao.scrollIntoView({ behavior: 'smooth' });
       } catch (error) {
         console.error("Erro ao carregar evolução:", error);
         alert("Erro ao carregar dados do paciente. Tente novamente.");
       }
-    };
+    }
 
-    window.salvarEvolucao = async function() {
-      const form = document.getElementById("formEvolucao");
-      const hospital = form.dataset.hospital;
-      const unidade = form.dataset.unidade;
-      const leito = form.dataset.leito;
+    async function salvarEvolucao() {
+      const hospital = formEvolucao.dataset.hospital;
+      const unidade = formEvolucao.dataset.unidade;
+      const leito = formEvolucao.dataset.leito;
       
       if (!hospital || !unidade || !leito) {
         alert("Selecione um paciente antes de salvar.");
@@ -453,9 +488,7 @@
       }
       
       try {
-        // Aqui você pode coletar os dados do formulário de evolução
         const evolucao = {
-          // Exemplo - você adicionará os campos específicos aqui posteriormente
           data: new Date().toLocaleDateString(),
           // Adicione outros campos conforme necessário
         };
@@ -468,7 +501,7 @@
         console.error("Erro ao salvar evolução:", error);
         alert("Erro ao salvar evolução. Tente novamente.");
       }
-    };
+    }
 
     // Inicialização
     document.addEventListener('DOMContentLoaded', () => {
