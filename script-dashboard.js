@@ -65,11 +65,17 @@ async function loadSection(section) {
       
     case 'gerador-evolucao':
       try {
-        // Carrega o conteúdo do GEF.html via fetch
-        const response = await fetch('gef.html');
+        // Carrega o conteúdo do partial-gef.html via fetch
+        const response = await fetch('partial-gef.html');
+        if (!response.ok) {
+          throw new Error('Arquivo não encontrado');
+        }
         const html = await response.text();
         gefContent.innerHTML = html;
         gefContent.style.display = 'block';
+        
+        // Rola a página para o topo do GEF
+        gefContent.scrollIntoView({ behavior: 'smooth' });
         
         // Se houver scripts específicos do GEF, podemos carregá-los aqui
         if (typeof initGEF === 'function') {
@@ -77,7 +83,7 @@ async function loadSection(section) {
         }
       } catch (error) {
         console.error('Erro ao carregar o GEF:', error);
-        gefContent.innerHTML = '<p>Erro ao carregar o Gerador de Evolução</p>';
+        gefContent.innerHTML = '<p>Erro ao carregar o Gerador de Evolução. Verifique se o arquivo partial-gef.html existe.</p>';
         gefContent.style.display = 'block';
       }
       break;
