@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>GEF - Gerador de Evolução</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    select, input, textarea, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .accordion {
+      background: #f1f1f1;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      padding: 15px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .accordion:hover {
+      background: #e2e6ea;
+    }
+    .panel {
+      display: none;
+      background: #fff;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Gerador de Evolução Fisioterapêutica</h1>
+
+  <h2>Selecionar Local e Unidade</h2>
+  <select id="localAtendimento" disabled></select>
+  <select id="hospital" disabled></select>
+  <select id="unidade" disabled></select>
+
+  <h2>Pacientes</h2>
+  <div id="listaPacientes"></div>
+
+  <div id="formEvolucao" class="hidden">
+    <h2>Formulário de Evolução</h2>
+    <form id="evolucaoForm">
+      <input id="dataAtendimento" type="date" required>
+      <textarea id="queixaPrincipal" placeholder="Queixa Principal" required></textarea>
+      <textarea id="procedimentos" placeholder="Procedimentos Realizados" required></textarea>
+      <textarea id="evolucao" placeholder="Evolução do Paciente" required></textarea>
+      <textarea id="observacoes" placeholder="Observações Finais"></textarea>
+      <button type="submit">Salvar Evolução</button>
+    </form>
+  </div>
+</div>
+
+<script type="module" src="Script-gef.js"></script>
+</body>
+</html>
