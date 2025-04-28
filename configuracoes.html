@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Configurações Profissionais</title>
+  <link rel="stylesheet" href="style-dashboard.css">
+</head>
+<body>
+  <div class="config-container">
+    <h2><i class="fas fa-cog"></i> Configurações Profissionais</h2>
+
+    <div class="config-section">
+      <h3>Locais de Atendimento</h3>
+      <div class="checkbox-group">
+        <div class="checkbox-item">
+          <input type="checkbox" id="local-hospital" value="Hospital">
+          <label for="local-hospital">Hospital</label>
+        </div>
+        <div class="sub-options" id="hospital-options" style="display:none;">
+          <div class="checkbox-item">
+            <input type="checkbox" id="hospital-hgrs" value="HGRS">
+            <label for="hospital-hgrs">HGRS</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="hospital-hge" value="HGE">
+            <label for="hospital-hge">HGE</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="hospital-hupes" value="HUPES">
+            <label for="hospital-hupes">HUPES</label>
+          </div>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="local-ambulatorio" value="Ambulatório">
+          <label for="local-ambulatorio">Ambulatório</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="local-clinica" value="Clínica">
+          <label for="local-clinica">Clínica</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="local-domiciliar" value="Domiciliar">
+          <label for="local-domiciliar">Domiciliar</label>
+        </div>
+      </div>
+    </div>
+
+    <button id="saveConfig" class="save-btn">Salvar Configurações</button>
+  </div>
+
+  <script type="module">
+    import { auth, db, doc, setDoc, getDoc } from './firebase-config.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+    const saveBtn = document.getElementById('saveConfig');
+    const localHospital = document.getElementById('local-hospital');
+    const hospitalOptions = document.getElementById('hospital-options');
+
+    localHospital.addEventListener('change', function() {
+      hospitalOptions.style.display = this.checked ? 'block' : 'none';
+    });
+
+    saveBtn.addEventListener('click', async () => {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      const locais = Array.from(document.querySelectorAll('input[type="checkbox"][id^="local-"]:checked')).map(c => c.value);
+      const hospitais = Array.from(document.querySelectorAll('input[type="checkbox"][id^="hospital-"]:checked')).map(c => c.value);
+
+      const userRef = doc(db, "users", user.uid);
+      await setDoc(userRef, {
+        config: {
+          locaisAtendimento: locais,
+          hospitais: hospitais
+        }
+      }, { merge: true });
+
+      alert("Configurações salvas com sucesso!");
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists() && userSnap.data().config) {
+          const config = userSnap.data().config;
+          if (config.locaisAtendimento && config.locaisAtendimento.includes('Hospital')) {
+            hospitalOptions.style.display = 'block';
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
