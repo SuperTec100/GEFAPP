@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>GEF - Evolução</title>
+</head>
+<body>
+  <select id="localAtendimento" onchange="carregarHospitais()">
+    <option value="">Selecione o Local</option>
+    <option value="Hospital">Hospital</option>
+  </select>
+
+  <div id="hospitalContainer" style="display:none;">
+    <select id="hospital" onchange="carregarUnidades()">
+      <option value="">Selecione o Hospital</option>
+      <option value="HGRS">HGRS</option>
+      <option value="HGE">HGE</option>
+      <option value="HUPES">HUPES</option>
+    </select>
+  </div>
+
+  <div id="unidadeContainer" style="display:none;">
+    <select id="unidade" onchange="carregarLeitos()"></select>
+  </div>
+
+  <div id="leitosContainer" style="display:none;">
+    <ul id="listaPacientes"></ul>
+    <button onclick="mostrarCadastroPaciente()">Adicionar Paciente</button>
+    <div id="cadastroPaciente" style="display:none;">
+      <input id="leitoPaciente" placeholder="Leito">
+      <input id="nomePaciente" placeholder="Nome do Paciente">
+      <button onclick="cadastrarPaciente()">Salvar Paciente</button>
+    </div>
+    <form id="formEvolucao" style="display:none;">
+      <input id="dataAtendimento" placeholder="Data de Atendimento">
+      <textarea id="queixaPrincipal" placeholder="Queixa Principal"></textarea>
+      <textarea id="procedimentos" placeholder="Procedimentos"></textarea>
+      <textarea id="evolucao" placeholder="Evolução"></textarea>
+      <textarea id="observacoes" placeholder="Observações"></textarea>
+      <button type="submit">Salvar Evolução</button>
+    </form>
+  </div>
+
+<script type="module" src="Script-gef.js"></script>
+</body>
+</html>
