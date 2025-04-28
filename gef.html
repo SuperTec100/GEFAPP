@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GEF - Gerador de Evolução</title>
+  <link rel="stylesheet" href="style-dashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="gef-container">
+    <button class="back-button" id="backToDashboard">
+      <i class="fas fa-arrow-left"></i> Voltar ao Painel
+    </button>
+    
+    <h2><i class="fas fa-file-medical"></i> Gerador de Evolução Fisioterapêutica</h2>
+
+    <div class="selection-container">
+      <div class="selection-group">
+        <label for="localAtendimento">Local de Atendimento:</label>
+        <select id="localAtendimento">
+          <option value="" disabled selected>Selecione</option>
+        </select>
+      </div>
+
+      <div id="hospitalContainer" class="selection-group" style="display:none;">
+        <label for="hospital">Hospital:</label>
+        <select id="hospital">
+          <option value="" disabled selected>Selecione</option>
+        </select>
+      </div>
+
+      <div id="unidadeContainer" class="selection-group" style="display:none;">
+        <label for="unidade">Unidade:</label>
+        <select id="unidade">
+          <option value="" disabled selected>Selecione</option>
+        </select>
+      </div>
+
+      <div id="leitosContainer" class="selection-group" style="display:none;">
+        <button id="btnAdicionarPaciente"><i class="fas fa-plus"></i> Adicionar Paciente</button>
+        <h3>Pacientes:</h3>
+        <ul id="listaPacientes"></ul>
+      </div>
+    </div>
+
+    <div id="cadastroPaciente" class="selection-container" style="display:none;">
+      <h3>Cadastrar Novo Paciente</h3>
+      <div class="selection-group">
+        <label for="leitoPaciente">Número do Leito:</label>
+        <input type="text" id="leitoPaciente" placeholder="Ex: 101">
+      </div>
+      <div class="selection-group">
+        <label for="nomePaciente">Nome do Paciente:</label>
+        <input type="text" id="nomePaciente" placeholder="Nome completo">
+      </div>
+      <button id="btnSalvarPaciente"><i class="fas fa-save"></i> Salvar</button>
+      <button id="btnCancelarCadastro" style="background-color: #95a5a6; margin-left: 10px;"><i class="fas fa-times"></i> Cancelar</button>
+    </div>
+
+    <div id="formEvolucao" style="display:none;">
+      <div class="paciente-info" id="infoPaciente"></div>
+
+      <div class="form-row">
+        <label for="dataAtendimento">Data do Atendimento:</label>
+        <input type="date" id="dataAtendimento">
+      </div>
+
+      <div class="form-row">
+        <label for="queixaPrincipal">Queixa Principal:</label>
+        <textarea id="queixaPrincipal"></textarea>
+      </div>
+
+      <div class="form-row">
+        <label for="procedimentos">Procedimentos Realizados:</label>
+        <textarea id="procedimentos"></textarea>
+      </div>
+
+      <div class="form-row">
+        <label for="evolucao">Evolução:</label>
+        <textarea id="evolucao"></textarea>
+      </div>
+
+      <div class="form-row">
+        <label for="observacoes">Observações:</label>
+        <textarea id="observacoes"></textarea>
+      </div>
+
+      <button id="salvarEvolucao"><i class="fas fa-save"></i> Salvar Evolução</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { app, auth } from './firebase-config.js';
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+    const db = getFirestore(app);
+    let userConfig = {};
+
+    const localAtendimento = document.getElementById('localAtendimento');
+    const hospitalContainer = document.getElementById('hospitalContainer');
+    const hospitalSelect = document.getElementById('hospital');
+    const unidadeContainer = document.getElementById('unidadeContainer');
+    const unidadeSelect = document.getElementById('unidade');
+    const leitosContainer = document.getElementById('leitosContainer');
+    const listaPacientes = document.getElementById('listaPacientes');
+    const cadastroPaciente = document.getElementById('cadastroPaciente');
+    const formEvolucao = document.getElementById('formEvolucao');
+
+    document.getElementById('backToDashboard').addEventListener('click', () => {
+      window.parent.postMessage({ type: 'NAVIGATE_TO', section: 'dashboard' }, '*');
+    });
+
+    window.addEventListener('message', (event) => {
+      if (event.data.type === 'USER_CONFIG') {
+        userConfig = event.data.config;
+        setupLocaisAtendimento();
+      }
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists() && userSnap.data().config) {
+          userConfig = userSnap.data().config;
+          setupLocaisAtendimento();
+        }
+      }
+    });
+
+    function setupLocaisAtendimento() {
+      localAtendimento.innerHTML = '<option value="" disabled selected>Selecione</option>';
+      if (userConfig.locaisAtendimento) {
+        userConfig.locaisAtendimento.forEach(local => {
+          const option = document.createElement('option');
+          option.value = local;
+          option.textContent = local;
+          localAtendimento.appendChild(option);
+        });
+      }
+    }
+  </script>
+</body>
+</html>
