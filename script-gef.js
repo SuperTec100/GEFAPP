@@ -128,8 +128,8 @@ async function carregarPacientes() {
   listaPacientes.innerHTML = '';
   leitosContainer.style.display = 'block';
 
-  const hospital = hospitalSelect.value;
-  const unidade = unidadeSelect.value;
+  const hospital = hospitalSelect.value || sessionStorage.getItem('evolucao.hospital');
+const unidade = unidadeSelect.value || sessionStorage.getItem('evolucao.unidade');
   if (!hospital || !unidade) return;
 
   const leitosRef = collection(db, "hospitais", hospital, "unidades", unidade, "leitos");
@@ -160,8 +160,8 @@ listaPacientes.addEventListener('click', async (e) => {
   const excluirBtn = e.target.closest('.btn-excluir');
   if (excluirBtn) {
     const leito = excluirBtn.dataset.leito;
-    const hospital = hospitalSelect.value;
-    const unidade = unidadeSelect.value;
+    const hospital = hospitalSelect.value || sessionStorage.getItem('evolucao.hospital');
+const unidade = unidadeSelect.value || sessionStorage.getItem('evolucao.unidade');
     if (confirm(`Deseja realmente remover o paciente do Leito ${leito}?`)) {
       await deleteDoc(doc(db, "hospitais", hospital, "unidades", unidade, "leitos", leito));
       excluirBtn.closest('li').remove();
