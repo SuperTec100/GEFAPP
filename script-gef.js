@@ -43,7 +43,15 @@ function setupLocaisAtendimento() {
     localAtendimento.appendChild(option);
   });
   loading.style.display = 'none';
+  
   gefContent.style.display = 'block';
+  if (userConfig.locaisAtendimento.length > 1) {
+    localAtendimento.addEventListener('change', carregarHospitais);
+  }
+  if (userConfig.locaisAtendimento.length === 1) {
+    carregarHospitais();
+  }
+
 }
 
 function carregarHospitais() {
