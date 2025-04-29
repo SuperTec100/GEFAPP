@@ -206,20 +206,26 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener("DOMContentLoaded", () => {
   const btnSalvar = document.getElementById('btnSalvarPaciente');
   if (btnSalvar) {
+    console.log("Botão Salvar encontrado e listener configurado.");
     btnSalvar.addEventListener('click', async () => {
-      const leito = document.getElementById('leitoPaciente').value.trim();
-      const nome = document.getElementById('nomePaciente').value.trim();
-      const hospital = document.getElementById('hospital').value;
-      const unidade = document.getElementById('unidade').value;
+      const leito = document.getElementById('leitoPaciente')?.value.trim();
+      const nome = document.getElementById('nomePaciente')?.value.trim();
+      const hospital = document.getElementById('hospital')?.value;
+      const unidade = document.getElementById('unidade')?.value;
+
+      console.log("Tentando salvar paciente com dados:");
+      console.log("Leito:", leito, "Nome:", nome, "Hospital:", hospital, "Unidade:", unidade);
 
       if (!hospital || !unidade || !leito || !nome) {
         alert('Preencha todos os campos corretamente.');
+        console.warn("Campos obrigatórios não preenchidos.");
         return;
       }
 
       try {
         const leitoRef = doc(db, "hospitais", hospital, "unidades", unidade, "leitos", leito);
         await setDoc(leitoRef, { nome });
+        console.log("Paciente salvo com sucesso!");
         alert("Paciente salvo com sucesso!");
         document.getElementById("cadastroPaciente").style.display = "none";
         carregarPacientes();
@@ -228,5 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Erro ao salvar paciente. Verifique o console.");
       }
     });
+  } else {
+    console.error("Botão #btnSalvarPaciente não encontrado no DOM.");
   }
 });
