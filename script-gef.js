@@ -17,8 +17,6 @@ const leitosContainer = document.getElementById('leitosContainer');
 const listaPacientes = document.getElementById('listaPacientes');
 const cadastroPaciente = document.getElementById('cadastroPaciente');
 
-// Removido o código do botão backToDashboard
-
 window.addEventListener('message', (event) => {
   if (event.data.type === 'USER_CONFIG') {
     userConfig = event.data.config;
@@ -40,7 +38,16 @@ onAuthStateChanged(auth, async (user) => {
 function setupLocaisAtendimento() {
   localAtendimento.innerHTML = '';
   if (userConfig && userConfig.locaisAtendimento) {
+    
+    if (userConfig.locaisAtendimento.length > 1) {
+      const option = document.createElement('option');
+      option.disabled = true;
+      option.selected = true;
+      option.textContent = 'Selecione uma opção';
+      localAtendimento.appendChild(option);
+    }
     userConfig.locaisAtendimento.forEach(local => {
+    
       const option = document.createElement('option');
       option.value = local;
       option.textContent = local;
@@ -63,8 +70,17 @@ function carregarHospitais() {
   unidadeContainer.style.display = 'none';
   leitosContainer.style.display = 'none';
 
-  if (localAtendimento.value === 'Hospital' && userConfig.hospitais) {
+  if (userConfig.hospitais && localAtendimento.value === 'Hospital') {
+    
+    if (userConfig.hospitais.length > 1) {
+      const option = document.createElement('option');
+      option.disabled = true;
+      option.selected = true;
+      option.textContent = 'Selecione um hospital';
+      hospitalSelect.appendChild(option);
+    }
     userConfig.hospitais.forEach(hospital => {
+    
       const option = document.createElement('option');
       option.value = hospital;
       option.textContent = hospital;
@@ -86,7 +102,16 @@ function carregarUnidades() {
 
   const hospital = hospitalSelect.value;
   if (userConfig.unidades && userConfig.unidades[hospital]) {
+    
+    if (userConfig.unidades[hospital].length > 1) {
+      const option = document.createElement('option');
+      option.disabled = true;
+      option.selected = true;
+      option.textContent = 'Selecione uma unidade';
+      unidadeSelect.appendChild(option);
+    }
     userConfig.unidades[hospital].forEach(unidade => {
+    
       const option = document.createElement('option');
       option.value = unidade;
       option.textContent = unidade;
@@ -150,31 +175,6 @@ listaPacientes.addEventListener('click', async (e) => {
     console.log("Iniciar geração de evolução para Leito:", leito);
     window.open('evolucao.html', '_blank');
   }
-});
-
-document.getElementById('btnAdicionarPaciente').addEventListener('click', () => {
-  cadastroPaciente.style.display = 'block';
-});
-
-document.getElementById('btnCancelarCadastro').addEventListener('click', () => {
-  cadastroPaciente.style.display = 'none';
-});
-
-document.getElementById('btnSalvarPaciente').addEventListener('click', async () => {
-  const leito = document.getElementById('leitoPaciente').value.trim();
-  const nome = document.getElementById('nomePaciente').value.trim();
-  const hospital = hospitalSelect.value;
-  const unidade = unidadeSelect.value;
-
-  if (!hospital || !unidade || !leito || !nome) {
-    alert('Preencha todos os campos corretamente.');
-    return;
-  }
-
-  const leitoRef = doc(db, "hospitais", hospital, "unidades", unidade, "leitos", leito);
-  await setDoc(leitoRef, { nome });
-  cadastroPaciente.style.display = 'none';
-  carregarPacientes();
 });
 
 localAtendimento.addEventListener('change', carregarHospitais);
