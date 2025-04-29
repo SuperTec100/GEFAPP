@@ -10,25 +10,19 @@
   <div class="config-container">
     <h2>Configurações do Usuário</h2>
     <form id="configForm">
-      <div class="panel" id="panel-locais">
-        <div class="panel-header">Locais de Atendimento</div>
-        <div class="panel-content form-group">
-          <select id="localAtendimentoSelect" multiple></select>
-        </div>
+      <div class="form-group">
+        <label for="localAtendimentoSelect">Locais de Atendimento</label>
+        <select id="localAtendimentoSelect" multiple></select>
       </div>
 
-      <div class="panel" id="panel-hospitais">
-        <div class="panel-header">Hospitais</div>
-        <div class="panel-content form-group">
-          <select id="hospitaisSelect" multiple></select>
-        </div>
+      <div class="form-group">
+        <label for="hospitaisSelect">Hospitais</label>
+        <select id="hospitaisSelect" multiple></select>
       </div>
 
-      <div class="panel" id="panel-unidades">
-        <div class="panel-header">Unidades</div>
-        <div class="panel-content form-group">
-          <select id="unidadesSelect" multiple></select>
-        </div>
+      <div class="form-group">
+        <label>Unidades por Hospital</label>
+        <div id="unidadesContainer"></div>
       </div>
 
       <div class="form-actions">
@@ -36,13 +30,5 @@
       </div>
     </form>
   </div>
-
-  <script>
-    document.querySelectorAll('.panel-header').forEach(header => {
-      header.addEventListener('click', () => {
-        header.parentElement.classList.toggle('open');
-      });
-    });
-  </script>
 </body>
 </html>
