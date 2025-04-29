@@ -2,11 +2,6 @@
 import { auth, db, doc, getDoc, setDoc } from './firebase-config.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
-const form = document.getElementById('configForm');
-const localAtendimentoSelect = document.getElementById('localAtendimentoSelect');
-const hospitaisSelect = document.getElementById('hospitaisSelect');
-const unidadesContainer = document.getElementById('unidadesContainer');
-
 const locaisFixos = ['Hospital', 'Ambulatório', 'Clínica', 'Domiciliar'];
 const hospitaisFixos = ['HGRS', 'HGE', 'HUPES'];
 const unidadesPorHospital = {
@@ -15,37 +10,50 @@ const unidadesPorHospital = {
   HUPES: ['CLÍNICA MÉDICA', 'CLÍNICA CIRÚRGICA']
 };
 
+const locaisContainer = document.getElementById('locaisCheckboxes');
+const hospitaisContainer = document.getElementById('hospitaisCheckboxes');
+const unidadesContainer = document.getElementById('unidadesCheckboxes');
+const form = document.getElementById('configForm');
+
 let userId;
 
-function criarSelectUnidades(hospital, selecionadas = []) {
-  const div = document.createElement('div');
+function criarCheckbox(nome, idBase, checked = false) {
   const label = document.createElement('label');
-  label.textContent = hospital;
-  const select = document.createElement('select');
-  select.multiple = true;
-  select.dataset.hospital = hospital;
-
-  (unidadesPorHospital[hospital] || []).forEach(unidade => {
-    const option = document.createElement('option');
-    option.value = unidade;
-    option.textContent = unidade;
-    if (selecionadas.includes(unidade)) option.selected = true;
-    select.appendChild(option);
-  });
-
-  div.appendChild(label);
-  div.appendChild(select);
-  unidadesContainer.appendChild(div);
+  label.className = 'checkbox-item';
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.name = idBase;
+  checkbox.value = nome;
+  if (checked) checkbox.checked = true;
+  label.appendChild(checkbox);
+  label.appendChild(document.createTextNode(' ' + nome));
+  return label;
 }
 
-function preencherSelect(selectElement, valores, selecionados = []) {
-  selectElement.innerHTML = '';
-  valores.forEach(valor => {
-    const option = document.createElement('option');
-    option.value = valor;
-    option.textContent = valor;
-    if (selecionados.includes(valor)) option.selected = true;
-    selectElement.appendChild(option);
+function renderCheckboxes(container, lista, selecionados, name) {
+  container.innerHTML = '';
+  lista.forEach(item => {
+    const cb = criarCheckbox(item, name, selecionados.includes(item));
+    container.appendChild(cb);
+  });
+}
+
+function renderUnidadesCheckboxes(config) {
+  unidadesContainer.innerHTML = '';
+  Object.entries(unidadesPorHospital).forEach(([hospital, unidades]) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'unidade-group';
+    const title = document.createElement('h4');
+    title.textContent = hospital;
+    wrapper.appendChild(title);
+
+    unidades.forEach(unidade => {
+      const selecionados = config.unidades?.[hospital] || [];
+      const cb = criarCheckbox(unidade, `unidade-${hospital}`, selecionados.includes(unidade));
+      wrapper.appendChild(cb);
+    });
+
+    unidadesContainer.appendChild(wrapper);
   });
 }
 
@@ -53,36 +61,29 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     userId = user.uid;
     const userRef = doc(db, "users", userId);
-    const userSnap = await getDoc(userRef);
-    const config = userSnap.exists() ? (userSnap.data().config || {}) : {};
-
-    preencherSelect(localAtendimentoSelect, locaisFixos, config.locaisAtendimento || []);
-    preencherSelect(hospitaisSelect, hospitaisFixos, config.hospitais || []);
-
-    unidadesContainer.innerHTML = '';
-    hospitaisFixos.forEach(hospital => {
-      const unidadesSelecionadas = config.unidades?.[hospital] || [];
-      criarSelectUnidades(hospital, unidadesSelecionadas);
-    });
+    const snap = await getDoc(userRef);
+    const config = snap.exists() ? (snap.data().config || {}) : {};
+    renderCheckboxes(locaisContainer, locaisFixos, config.locaisAtendimento || [], 'local');
+    renderCheckboxes(hospitaisContainer, hospitaisFixos, config.hospitais || [], 'hospital');
+    renderUnidadesCheckboxes(config);
   }
 });
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const locaisAtendimento = Array.from(localAtendimentoSelect.selectedOptions).map(opt => opt.value);
-  const hospitais = Array.from(hospitaisSelect.selectedOptions).map(opt => opt.value);
-
-  const selects = unidadesContainer.querySelectorAll('select');
+  const locaisAtendimento = Array.from(document.querySelectorAll('input[name="local"]:checked')).map(i => i.value);
+  const hospitais = Array.from(document.querySelectorAll('input[name="hospital"]:checked')).map(i => i.value);
   const unidades = {};
-  selects.forEach(select => {
-    const hospital = select.dataset.hospital;
-    const selecionadas = Array.from(select.selectedOptions).map(opt => opt.value);
+
+  hospitais.forEach(hospital => {
+    const selecionadas = Array.from(document.querySelectorAll(`input[name="unidade-${hospital}"]:checked`)).map(i => i.value);
     if (selecionadas.length > 0) unidades[hospital] = selecionadas;
   });
 
-  const userRef = doc(db, "users", userId);
-  await setDoc(userRef, { config: { locaisAtendimento, hospitais, unidades } }, { merge: true });
+  await setDoc(doc(db, "users", userId), {
+    config: { locaisAtendimento, hospitais, unidades }
+  }, { merge: true });
 
   alert("Configurações salvas com sucesso!");
 });
