@@ -43,15 +43,11 @@ function setupLocaisAtendimento() {
     localAtendimento.appendChild(option);
   });
   loading.style.display = 'none';
-  
   gefContent.style.display = 'block';
-  if (userConfig.locaisAtendimento.length > 1) {
-    localAtendimento.addEventListener('change', carregarHospitais);
-  }
   if (userConfig.locaisAtendimento.length === 1) {
+    localAtendimento.value = userConfig.locaisAtendimento[0];
     carregarHospitais();
   }
-
 }
 
 function carregarHospitais() {
@@ -63,6 +59,7 @@ function carregarHospitais() {
   leitosContainer.style.display = 'none';
 
   if (userConfig.hospitais && localAtendimento.value === 'Hospital') {
+    hospitalContainer.style.display = 'block';
     if (userConfig.hospitais.length > 1) {
       const option = document.createElement('option');
       option.disabled = true;
@@ -76,7 +73,15 @@ function carregarHospitais() {
       option.textContent = hospital;
       hospitalSelect.appendChild(option);
     });
-    hospitalContainer.style.display = 'block';
+
+    const storedHospital = sessionStorage.getItem('evolucao.hospital');
+    if (storedHospital && userConfig.hospitais.includes(storedHospital)) {
+      hospitalSelect.value = storedHospital;
+      carregarUnidades();
+    } else if (userConfig.hospitais.length === 1) {
+      hospitalSelect.value = userConfig.hospitais[0];
+      carregarUnidades();
+    }
   }
 }
 
@@ -88,6 +93,7 @@ function carregarUnidades() {
 
   const hospital = hospitalSelect.value;
   if (userConfig.unidades && userConfig.unidades[hospital]) {
+    unidadeContainer.style.display = 'block';
     if (userConfig.unidades[hospital].length > 1) {
       const option = document.createElement('option');
       option.disabled = true;
@@ -101,7 +107,15 @@ function carregarUnidades() {
       option.textContent = unidade;
       unidadeSelect.appendChild(option);
     });
-    unidadeContainer.style.display = 'block';
+
+    const storedUnidade = sessionStorage.getItem('evolucao.unidade');
+    if (storedUnidade && userConfig.unidades[hospital].includes(storedUnidade)) {
+      unidadeSelect.value = storedUnidade;
+      carregarPacientes();
+    } else if (userConfig.unidades[hospital].length === 1) {
+      unidadeSelect.value = userConfig.unidades[hospital][0];
+      carregarPacientes();
+    }
   }
 }
 
