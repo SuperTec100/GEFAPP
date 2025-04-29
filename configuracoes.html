@@ -12,18 +12,18 @@
 
     <form id="configForm">
       <div class="form-group">
-        <label for="locaisAtendimento">Locais de Atendimento</label>
-        <input type="text" id="locaisAtendimento" placeholder="Ex: Hospital, Domicílio">
+        <label for="localAtendimentoSelect">Locais de Atendimento</label>
+        <select id="localAtendimentoSelect" multiple></select>
       </div>
 
       <div class="form-group">
-        <label for="hospitais">Hospitais (separados por vírgula)</label>
-        <input type="text" id="hospitais" placeholder="Ex: Hospital A, Hospital B">
+        <label for="hospitaisSelect">Hospitais</label>
+        <select id="hospitaisSelect" multiple></select>
       </div>
 
       <div class="form-group">
-        <label for="unidades">Unidades por Hospital (formato: Hospital:Unidade1;Unidade2)</label>
-        <textarea id="unidades" rows="4" placeholder="Ex: Hospital A: UTI;Enfermaria
+        <label for="unidadesTextarea">Unidades por Hospital</label>
+        <textarea id="unidadesTextarea" rows="4" placeholder="Ex: Hospital A: UTI;Enfermaria
 Hospital B: Clínica Médica"></textarea>
       </div>
 
