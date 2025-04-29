@@ -9,12 +9,10 @@ const unidadesPorHospital = {
   HGE: ['EMERGÊNCIA', 'UTI ADULTO'],
   HUPES: ['CLÍNICA MÉDICA', 'CLÍNICA CIRÚRGICA']
 };
-
 const locaisContainer = document.getElementById('locaisCheckboxes');
 const hospitaisContainer = document.getElementById('hospitaisCheckboxes');
 const unidadesContainer = document.getElementById('unidadesCheckboxes');
 const form = document.getElementById('configForm');
-
 let userId, config = {};
 
 function criarCheckbox(nome, grupo, checked = false) {
@@ -41,21 +39,17 @@ function renderCheckboxes(container, lista, selecionados, name) {
 function atualizarUnidades() {
   const hospitaisSelecionados = Array.from(document.querySelectorAll('input[name="hospital"]:checked')).map(cb => cb.value);
   unidadesContainer.innerHTML = '';
-
   hospitaisSelecionados.forEach(hospital => {
     const grupo = document.createElement('div');
     grupo.className = 'unidade-group';
-
     const titulo = document.createElement('h4');
     titulo.textContent = hospital;
     grupo.appendChild(titulo);
-
     (unidadesPorHospital[hospital] || []).forEach(unidade => {
       const selecionadas = config.unidades?.[hospital] || [];
       const cb = criarCheckbox(unidade, `unidade-${hospital}`, selecionadas.includes(unidade));
       grupo.appendChild(cb);
     });
-
     unidadesContainer.appendChild(grupo);
   });
 }
@@ -68,6 +62,8 @@ onAuthStateChanged(auth, async (user) => {
     renderCheckboxes(locaisContainer, locaisFixos, config.locaisAtendimento || [], 'local');
     renderCheckboxes(hospitaisContainer, hospitaisFixos, config.hospitais || [], 'hospital');
     atualizarUnidades();
+    document.querySelector('#loadingOverlay').style.display = 'none';
+    document.querySelector('.config-container').style.display = 'block';
   }
 });
 
@@ -78,12 +74,10 @@ form.addEventListener('submit', async (e) => {
   const locaisAtendimento = Array.from(document.querySelectorAll('input[name="local"]:checked')).map(i => i.value);
   const hospitais = Array.from(document.querySelectorAll('input[name="hospital"]:checked')).map(i => i.value);
   const unidades = {};
-
   hospitais.forEach(hospital => {
     const selecionadas = Array.from(document.querySelectorAll(`input[name="unidade-${hospital}"]:checked`)).map(i => i.value);
     if (selecionadas.length > 0) unidades[hospital] = selecionadas;
   });
-
   await setDoc(doc(db, "users", userId), { config: { locaisAtendimento, hospitais, unidades } }, { merge: true });
   alert("Configurações salvas com sucesso!");
 });
