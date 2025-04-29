@@ -180,20 +180,24 @@ hospitalSelect.addEventListener('change', carregarUnidades);
 unidadeSelect.addEventListener('change', carregarPacientes);
 
 
-document.addEventListener("DOMContentLoaded", () => {
-  const btnAdicionar = document.getElementById("btnAdicionarPaciente");
-  const formCadastro = document.getElementById("cadastroPaciente");
-  const btnCancelar = document.getElementById("btnCancelarCadastro");
+document.addEventListener('DOMContentLoaded', () => {
+  const btnSalvar = document.getElementById('btnSalvarPaciente');
+  if (btnSalvar) {
+    btnSalvar.addEventListener('click', async () => {
+      const leito = document.getElementById('leitoPaciente').value.trim();
+      const nome = document.getElementById('nomePaciente').value.trim();
+      const hospital = hospitalSelect.value;
+      const unidade = unidadeSelect.value;
 
-  if (btnAdicionar && formCadastro) {
-    btnAdicionar.addEventListener("click", () => {
-      formCadastro.style.display = "block";
-    });
-  }
+      if (!hospital || !unidade || !leito || !nome) {
+        alert('Preencha todos os campos corretamente.');
+        return;
+      }
 
-  if (btnCancelar && formCadastro) {
-    btnCancelar.addEventListener("click", () => {
-      formCadastro.style.display = "none";
+      const leitoRef = doc(db, "hospitais", hospital, "unidades", unidade, "leitos", leito);
+      await setDoc(leitoRef, { nome });
+      cadastroPaciente.style.display = 'none';
+      carregarPacientes();
     });
   }
 });
