@@ -1,165 +1,36 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Configurações Profissionais</title>
-  <link rel="stylesheet" href="style-dashboard.css">
+  <title>Configurações</title>
+  <link rel="stylesheet" href="style-configuracoes.css">
+  <script type="module" src="script-configuracoes.js"></script>
 </head>
 <body>
   <div class="config-container">
-    <h2>Configurações Profissionais</h2>
+    <h2>Configurações do Usuário</h2>
 
-    <div class="config-section">
-      <h3>Locais de Atendimento</h3>
-      <div class="checkbox-group">
-        <div class="checkbox-item">
-          <input type="checkbox" id="local-hospital" value="Hospital">
-          <label for="local-hospital">Hospital</label>
-        </div>
-        <div class="checkbox-item">
-          <input type="checkbox" id="local-ambulatorio" value="Ambulatório">
-          <label for="local-ambulatorio">Ambulatório</label>
-        </div>
-        <div class="checkbox-item">
-          <input type="checkbox" id="local-clinica" value="Clínica">
-          <label for="local-clinica">Clínica</label>
-        </div>
-        <div class="checkbox-item">
-          <input type="checkbox" id="local-domiciliar" value="Domiciliar">
-          <label for="local-domiciliar">Domiciliar</label>
-        </div>
+    <form id="configForm">
+      <div class="form-group">
+        <label for="locaisAtendimento">Locais de Atendimento</label>
+        <input type="text" id="locaisAtendimento" placeholder="Ex: Hospital, Domicílio">
       </div>
-    </div>
 
-    <div class="config-section" id="hospitalSection" style="display:none;">
-      <h3>Hospitais</h3>
-      <div class="checkbox-group" id="hospital-options">
-        <div class="checkbox-item">
-          <input type="checkbox" id="hospital-hgrs" value="HGRS">
-          <label for="hospital-hgrs">HGRS</label>
-        </div>
-        <div class="checkbox-item">
-          <input type="checkbox" id="hospital-hge" value="HGE">
-          <label for="hospital-hge">HGE</label>
-        </div>
-        <div class="checkbox-item">
-          <input type="checkbox" id="hospital-hupes" value="HUPES">
-          <label for="hospital-hupes">HUPES</label>
-        </div>
+      <div class="form-group">
+        <label for="hospitais">Hospitais (separados por vírgula)</label>
+        <input type="text" id="hospitais" placeholder="Ex: Hospital A, Hospital B">
       </div>
-    </div>
 
-    <div class="config-section" id="unidadesSection" style="display:none;">
-      <h3>Unidades dos Hospitais</h3>
-      <div id="unidades-container"></div>
-    </div>
+      <div class="form-group">
+        <label for="unidades">Unidades por Hospital (formato: Hospital:Unidade1;Unidade2)</label>
+        <textarea id="unidades" rows="4" placeholder="Ex: Hospital A: UTI;Enfermaria
+Hospital B: Clínica Médica"></textarea>
+      </div>
 
-    <button id="saveConfig" class="save-btn">Salvar Configurações</button>
+      <div class="form-actions">
+        <button type="submit" class="primary">Salvar Configurações</button>
+      </div>
+    </form>
   </div>
-
-<script type="module">
-import { auth, db, doc, setDoc, getDoc } from './firebase-config.js';
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-
-const localHospital = document.getElementById('local-hospital');
-const hospitalSection = document.getElementById('hospitalSection');
-const unidadesSection = document.getElementById('unidadesSection');
-const saveBtn = document.getElementById('saveConfig');
-
-localHospital.addEventListener('change', () => {
-  hospitalSection.style.display = localHospital.checked ? 'block' : 'none';
-  unidadesSection.style.display = localHospital.checked ? 'block' : 'none';
-});
-
-document.querySelectorAll('#hospital-options input[type="checkbox"]').forEach(hospitalCheckbox => {
-  hospitalCheckbox.addEventListener('change', renderUnidades);
-});
-
-function renderUnidades() {
-  const unidadesContainer = document.getElementById('unidades-container');
-  unidadesContainer.innerHTML = '';
-  document.querySelectorAll('#hospital-options input[type="checkbox"]:checked').forEach(hospitalCheckbox => {
-    const hospital = hospitalCheckbox.value;
-    const div = document.createElement('div');
-    div.innerHTML = `
-      <h4>${hospital}</h4>
-      <div class="checkbox-group">
-        <div class="checkbox-item"><input type="checkbox" id="${hospital}-uti-geral-1" value="UTI GERAL 1"><label for="${hospital}-uti-geral-1">UTI GERAL 1</label></div>
-        <div class="checkbox-item"><input type="checkbox" id="${hospital}-uti-geral-2" value="UTI GERAL 2"><label for="${hospital}-uti-geral-2">UTI GERAL 2</label></div>
-        <div class="checkbox-item"><input type="checkbox" id="${hospital}-enfermaria" value="Enfermaria"><label for="${hospital}-enfermaria">Enfermaria</label></div>
-      </div>
-    `;
-    unidadesContainer.appendChild(div);
-  });
-}
-
-saveBtn.addEventListener('click', async () => {
-  const user = auth.currentUser;
-  if (!user) return;
-
-  const locaisAtendimento = Array.from(document.querySelectorAll('input[id^="local-"]:checked')).map(el => el.value);
-  const hospitais = Array.from(document.querySelectorAll('input[id^="hospital-"]:checked')).map(el => el.value);
-
-  const unidades = {};
-  hospitais.forEach(hospital => {
-    const selecionados = Array.from(document.querySelectorAll(`#unidades-container input[id^="${hospital}-"]:checked`)).map(el => el.value);
-    if (selecionados.length > 0) {
-      unidades[hospital] = selecionados;
-    }
-  });
-
-  const userRef = doc(db, "users", user.uid);
-  await setDoc(userRef, {
-    config: {
-      locaisAtendimento,
-      hospitais,
-      unidades
-    }
-  }, { merge: true });
-
-  alert("Configurações salvas com sucesso!");
-});
-
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    const userRef = doc(db, "users", user.uid);
-    const userSnap = await getDoc(userRef);
-    if (userSnap.exists() && userSnap.data().config) {
-      const config = userSnap.data().config;
-
-      if (config.locaisAtendimento) {
-        config.locaisAtendimento.forEach(local => {
-          const checkbox = document.getElementById(`local-${local.toLowerCase()}`);
-          if (checkbox) checkbox.checked = true;
-        });
-        if (config.locaisAtendimento.includes("Hospital")) {
-          hospitalSection.style.display = 'block';
-          unidadesSection.style.display = 'block';
-        }
-      }
-
-      if (config.hospitais) {
-        config.hospitais.forEach(hospital => {
-          const checkbox = document.getElementById(`hospital-${hospital.toLowerCase()}`);
-          if (checkbox) checkbox.checked = true;
-        });
-        renderUnidades();
-      }
-
-      if (config.unidades) {
-        Object.keys(config.unidades).forEach(hospital => {
-          config.unidades[hospital].forEach(unidade => {
-            const id = `${hospital}-${unidade.toLowerCase().replace(/\s/g, '-').replace('ã', 'a')}`;
-            const checkbox = document.getElementById(id);
-            if (checkbox) checkbox.checked = true;
-          });
-        });
-      }
-    }
-  }
-});
-</script>
-
 </body>
 </html>
