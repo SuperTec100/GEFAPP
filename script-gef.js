@@ -197,3 +197,41 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => {
+    const btnSalvar = document.getElementById('btnSalvarPaciente');
+    const nomeEl = document.getElementById('nomePaciente');
+    const leitoEl = document.getElementById('leitoPaciente');
+
+    if (!btnSalvar) {
+      console.error("❌ Botão Salvar Paciente (#btnSalvarPaciente) não encontrado no DOM.");
+      return;
+    }
+
+    btnSalvar.addEventListener("click", async () => {
+      const leito = leitoEl?.value.trim();
+      const nome = nomeEl?.value.trim();
+      const hospital = document.getElementById('hospital')?.value || sessionStorage.getItem('evolucao.hospital');
+      const unidade = document.getElementById('unidade')?.value || sessionStorage.getItem('evolucao.unidade');
+
+      console.log("🧪 Dados coletados:", { leito, nome, hospital, unidade });
+
+      if (!hospital || !unidade || !leito || !nome) {
+        alert("Preencha todos os campos corretamente.");
+        return;
+      }
+
+      try {
+        const ref = doc(db, "hospitais", hospital, "unidades", unidade, "leitos", leito);
+        await setDoc(ref, { nome });
+        alert("Paciente salvo!");
+        document.getElementById('cadastroPaciente').style.display = 'none';
+        carregarPacientes();
+      } catch (e) {
+        console.error("Erro ao salvar:", e);
+        alert("Erro ao salvar paciente.");
+      }
+    });
+  }, 100);
+});
