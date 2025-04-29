@@ -268,7 +268,7 @@
 
         <!-- Seção de informações básicas -->
         <div class="expandable-section">
-            <div class="section-header"> Informações Básicas</div>
+            <div class="section-header">📋 Informações Básicas</div>
             <div class="section-content">
                 <div class="tipo-evolucao">
                     <label class="required-field">Tipo:</label>
@@ -278,8 +278,8 @@
                     </select>
                 </div>
 
-                <label class="required-field">UTI:</label>
-<select id="uti">
+                <label class="required-field">Unidade:</label>
+<select id="unidadeEvolucao">
     <option value="" selected disabled>Selecione</option>
     <option value="CARDIOVASCULAR">CARDIOVASCULAR</option>
     <option value="CIRÚRGICA">CIRÚRGICA</option>
@@ -319,7 +319,7 @@
 
         <!-- Seção de Encontrado no Leito -->
         <div class="expandable-section">
-            <div class="section-header"> Encontrado no Leito</div>
+            <div class="section-header">🛏️ Encontrado no Leito</div>
             <div class="section-content">
                 <label class="required-field">Posição no leito:</label>
                 <select id="posicaoLeito">
@@ -364,7 +364,7 @@
 
         <!-- Seção de sinais vitais -->
         <div class="expandable-section">
-            <div class="section-header"> Sinais Vitais</div>
+            <div class="section-header">💓 Sinais Vitais</div>
             <div class="section-content">
                 <div class="vital-signs-container">
                     <div class="vital-sign">
@@ -394,7 +394,7 @@
 
         <!-- Seção de estado mental -->
         <div class="expandable-section">
-        <div class="section-header"> Estado Mental</div>
+        <div class="section-header">🧠 Estado Mental</div>
         <div class="section-content">
             <div class="checkbox-group">
                 <label><input type="checkbox" name="estadoComportamental" value="desperto"> Desperto</label>
@@ -514,7 +514,7 @@
          
         <!-- Seção de estado hemodinâmico -->
         <div class="expandable-section">
-    <div class="section-header" Estado Hemodinâmico</div>
+    <div class="section-header">❤️ Estado Hemodinâmico</div>
     <div class="section-content">
         <div class="radio-group" style="display: flex; flex-wrap: wrap; gap: 15px;">
             <label><input type="radio" name="hemodinamica" value="Hemodinâmica estável" checked> Estável</label>
@@ -543,7 +543,7 @@
 </div>
         <!-- Seção de sistema respiratório -->
 <div class="expandable-section">
-    <div class="section-header"> Sistema Respiratório</div>
+    <div class="section-header">🌬️ Sistema Respiratório</div>
     <div class="section-content">
         <label class="required-field">Tipo de ventilação:</label>
         <select id="sistemaRespiratorio" onchange="atualizarOpcoesRespiratorias()">
@@ -847,7 +847,7 @@
 
 <!-- Seção de mecânica ventilatória -->
 <div class="expandable-section">
-    <div class="section-header"> Avaliação da Função Respiratória</div>
+    <div class="section-header">📊 Avaliação da Função Respiratória</div>
     <div class="section-content">
         <!-- Subseção de Monovacuometria -->
         <div class="expandable-section">
@@ -890,7 +890,7 @@
 </div>
         <!-- Seção de hemogasometria -->
         <div class="expandable-section">
-            <div class="section-header"> Hemogasometria Arterial</div>
+            <div class="section-header">🩸 Hemogasometria Arterial</div>
             <div class="section-content">
                 <label>Realizada HGA:</label>
                 <div class="radio-group">
@@ -931,7 +931,7 @@
 
         <!-- Seção de condição neuro musculoesquelética -->
         <div class="expandable-section">
-            <div class="section-header"> Condição Neuro Musculoesquelética</div>
+            <div class="section-header">💪 Condição Neuro Musculoesquelética</div>
             <div class="section-content">
                 <div class="sub-section">
                     <label>Amplitude de Movimento:</label>
@@ -1330,7 +1330,7 @@
 
         <!-- Seção de aparelho cardiovascular -->
         <div class="expandable-section">
-            <div class="section-header"> Aparelho Cardiovascular</div>
+            <div class="section-header">🫀 Aparelho Cardiovascular</div>
             <div class="section-content">
                 <div class="sub-section">
                     <label>Perfusão Periférica:</label>
@@ -1381,7 +1381,7 @@
 
         <!-- Seção de capacidade funcional -->
         <div class="expandable-section">
-            <div class="section-header"> Capacidade Funcional</div>
+            <div class="section-header">🚶‍♂️ Capacidade Funcional</div>
             <div class="section-content">
                 <div class="sub-section">
                     <label>Capacidade funcional prévia ao internamento:</label>
@@ -1423,7 +1423,7 @@
 
         <!-- Seção de plano terapêutico -->
         <div class="expandable-section">
-            <div class="section-header"> Plano Terapêutico</div>
+            <div class="section-header">📝 Plano Terapêutico</div>
             <div class="section-content">
                 <div class="checkbox-group">
                     <label><input type="checkbox" name="planoTerapeutico" value="Manter/Recuperar Função Respiratória"> Manter/Recuperar Função Respiratória</label>
@@ -1445,7 +1445,7 @@
 
         <!-- Seção de condutas -->
 <div class="expandable-section">
-    <div class="section-header"> Condutas</div>
+    <div class="section-header">🏥 Condutas</div>
     <div class="section-content">
         <!-- Monitorização -->
         <div class="sub-section">
@@ -1573,7 +1573,7 @@
 
         <!-- Seção de códigos de cobrança -->
 <div class="expandable-section">
-    <div class="section-header"> Códigos de Cobrança</div>
+    <div class="section-header">💰 Códigos de Cobrança</div>
     <div class="section-content">
         <div class="radio-group">
             <label><input type="radio" name="codigosCobranca" value="Sim" onclick="mostrarCodigosCobranca()" checked> Sim</label>
@@ -3444,6 +3444,22 @@ texto = texto.replace("paciente encontrado", "paciente encontrada");
   document.getElementById('hospital').textContent = sessionStorage.getItem('evolucao.hospital') || '-';
   document.getElementById('unidade').textContent = sessionStorage.getItem('evolucao.unidade') || '-';
   document.getElementById('leito').textContent = sessionStorage.getItem('evolucao.leito') || '-';
+</script>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const unidade = sessionStorage.getItem('evolucao.unidade');
+    if (unidade) {
+      const unidadeSelect = document.getElementById('unidadeEvolucao');
+      for (let i = 0; i < unidadeSelect.options.length; i++) {
+        if (unidadeSelect.options[i].value.toLowerCase() === unidade.toLowerCase()) {
+          unidadeSelect.selectedIndex = i;
+          break;
+        }
+      }
+    }
+  });
 </script>
 
 </body>
