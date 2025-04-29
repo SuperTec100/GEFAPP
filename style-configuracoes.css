@@ -77,10 +77,6 @@ button.primary:hover {
   background-color: #0b5ed7;
 }
 
-.hidden {
-  display: none;
-}
-
 .panel {
   margin-bottom: 15px;
   border: 1px solid #e0e0e0;
@@ -99,15 +95,5 @@ button.primary:hover {
 
 .panel-content {
   padding: 15px 16px;
-  display: none;
-  animation: fadeIn 0.3s ease;
-}
-
-.panel.open .panel-content {
   display: block;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-5px); }
-  to { opacity: 1; transform: translateY(0); }
 }

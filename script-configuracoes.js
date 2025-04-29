@@ -9,7 +9,6 @@ const unidadesSelect = document.getElementById('unidadesSelect');
 
 let userId;
 
-// Listas fixas
 const locaisFixos = ['Hospital', 'Ambulatório', 'Clínica', 'Domiciliar'];
 const hospitaisFixos = ['HGRS', 'HGE', 'HUPES'];
 const unidadesFixas = ['UTI CIRÚRGICA', 'UTI CARDIOVASCULAR', 'UTI GERAL 1', 'UTI GERAL 2', 'UTI NEO', 'UTI PEDIÁTRICA'];
