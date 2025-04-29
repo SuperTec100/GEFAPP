@@ -15,14 +15,14 @@ const hospitaisContainer = document.getElementById('hospitaisCheckboxes');
 const unidadesContainer = document.getElementById('unidadesCheckboxes');
 const form = document.getElementById('configForm');
 
-let userId;
+let userId, config = {};
 
-function criarCheckbox(nome, idBase, checked = false) {
+function criarCheckbox(nome, grupo, checked = false) {
   const label = document.createElement('label');
   label.className = 'checkbox-item';
   const checkbox = document.createElement('input');
   checkbox.type = 'checkbox';
-  checkbox.name = idBase;
+  checkbox.name = grupo;
   checkbox.value = nome;
   if (checked) checkbox.checked = true;
   label.appendChild(checkbox);
@@ -38,40 +38,43 @@ function renderCheckboxes(container, lista, selecionados, name) {
   });
 }
 
-function renderUnidadesCheckboxes(config) {
+function atualizarUnidades() {
+  const hospitaisSelecionados = Array.from(document.querySelectorAll('input[name="hospital"]:checked')).map(cb => cb.value);
   unidadesContainer.innerHTML = '';
-  Object.entries(unidadesPorHospital).forEach(([hospital, unidades]) => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'unidade-group';
-    const title = document.createElement('h4');
-    title.textContent = hospital;
-    wrapper.appendChild(title);
 
-    unidades.forEach(unidade => {
-      const selecionados = config.unidades?.[hospital] || [];
-      const cb = criarCheckbox(unidade, `unidade-${hospital}`, selecionados.includes(unidade));
-      wrapper.appendChild(cb);
+  hospitaisSelecionados.forEach(hospital => {
+    const grupo = document.createElement('div');
+    grupo.className = 'unidade-group';
+
+    const titulo = document.createElement('h4');
+    titulo.textContent = hospital;
+    grupo.appendChild(titulo);
+
+    (unidadesPorHospital[hospital] || []).forEach(unidade => {
+      const selecionadas = config.unidades?.[hospital] || [];
+      const cb = criarCheckbox(unidade, `unidade-${hospital}`, selecionadas.includes(unidade));
+      grupo.appendChild(cb);
     });
 
-    unidadesContainer.appendChild(wrapper);
+    unidadesContainer.appendChild(grupo);
   });
 }
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     userId = user.uid;
-    const userRef = doc(db, "users", userId);
-    const snap = await getDoc(userRef);
-    const config = snap.exists() ? (snap.data().config || {}) : {};
+    const snap = await getDoc(doc(db, "users", userId));
+    config = snap.exists() ? (snap.data().config || {}) : {};
     renderCheckboxes(locaisContainer, locaisFixos, config.locaisAtendimento || [], 'local');
     renderCheckboxes(hospitaisContainer, hospitaisFixos, config.hospitais || [], 'hospital');
-    renderUnidadesCheckboxes(config);
+    atualizarUnidades();
   }
 });
 
+hospitaisContainer.addEventListener('change', atualizarUnidades);
+
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
-
   const locaisAtendimento = Array.from(document.querySelectorAll('input[name="local"]:checked')).map(i => i.value);
   const hospitais = Array.from(document.querySelectorAll('input[name="hospital"]:checked')).map(i => i.value);
   const unidades = {};
@@ -81,9 +84,6 @@ form.addEventListener('submit', async (e) => {
     if (selecionadas.length > 0) unidades[hospital] = selecionadas;
   });
 
-  await setDoc(doc(db, "users", userId), {
-    config: { locaisAtendimento, hospitais, unidades }
-  }, { merge: true });
-
+  await setDoc(doc(db, "users", userId), { config: { locaisAtendimento, hospitais, unidades } }, { merge: true });
   alert("Configurações salvas com sucesso!");
 });
