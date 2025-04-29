@@ -14,6 +14,14 @@ const unidadeContainer = document.getElementById('unidadeContainer');
 const unidadeSelect = document.getElementById('unidade');
 const leitosContainer = document.getElementById('leitosContainer');
 const listaPacientes = document.getElementById('listaPacientes');
+const cadastroPaciente = document.getElementById('cadastroPaciente');
+
+window.addEventListener('message', (event) => {
+  if (event.data.type === 'USER_CONFIG') {
+    userConfig = event.data.config;
+    setupLocaisAtendimento();
+  }
+});
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
@@ -28,25 +36,29 @@ onAuthStateChanged(auth, async (user) => {
 
 function setupLocaisAtendimento() {
   localAtendimento.innerHTML = '';
-  if (userConfig.locaisAtendimento.length > 1) {
-    const option = document.createElement('option');
-    option.disabled = true;
-    option.selected = true;
-    option.textContent = 'Selecione uma opção';
-    localAtendimento.appendChild(option);
+  if (userConfig && userConfig.locaisAtendimento) {
+    
+    if (userConfig.locaisAtendimento.length > 1) {
+      const option = document.createElement('option');
+      option.disabled = true;
+      option.selected = true;
+      option.textContent = 'Selecione uma opção';
+      localAtendimento.appendChild(option);
+    }
+    userConfig.locaisAtendimento.forEach(local => {
+    
+      const option = document.createElement('option');
+      option.value = local;
+      option.textContent = local;
+      localAtendimento.appendChild(option);
+    });
+    if (userConfig.locaisAtendimento.length === 1) {
+      localAtendimento.value = userConfig.locaisAtendimento[0];
+      carregarHospitais();
+    }
   }
-  userConfig.locaisAtendimento.forEach(local => {
-    const option = document.createElement('option');
-    option.value = local;
-    option.textContent = local;
-    localAtendimento.appendChild(option);
-  });
   loading.style.display = 'none';
   gefContent.style.display = 'block';
-  if (userConfig.locaisAtendimento.length === 1) {
-    localAtendimento.value = userConfig.locaisAtendimento[0];
-    carregarHospitais();
-  }
 }
 
 function carregarHospitais() {
@@ -58,7 +70,7 @@ function carregarHospitais() {
   leitosContainer.style.display = 'none';
 
   if (userConfig.hospitais && localAtendimento.value === 'Hospital') {
-    hospitalContainer.style.display = 'block';
+    
     if (userConfig.hospitais.length > 1) {
       const option = document.createElement('option');
       option.disabled = true;
@@ -67,20 +79,17 @@ function carregarHospitais() {
       hospitalSelect.appendChild(option);
     }
     userConfig.hospitais.forEach(hospital => {
+    
       const option = document.createElement('option');
       option.value = hospital;
       option.textContent = hospital;
       hospitalSelect.appendChild(option);
     });
-
-    const storedHospital = sessionStorage.getItem('evolucao.hospital');
-    if (storedHospital && userConfig.hospitais.includes(storedHospital)) {
-      hospitalSelect.value = storedHospital;
-      carregarUnidades();
-    } else if (userConfig.hospitais.length === 1) {
+    if (userConfig.hospitais.length === 1) {
       hospitalSelect.value = userConfig.hospitais[0];
       carregarUnidades();
     }
+    hospitalContainer.style.display = 'block';
   }
 }
 
@@ -92,7 +101,7 @@ function carregarUnidades() {
 
   const hospital = hospitalSelect.value;
   if (userConfig.unidades && userConfig.unidades[hospital]) {
-    unidadeContainer.style.display = 'block';
+    
     if (userConfig.unidades[hospital].length > 1) {
       const option = document.createElement('option');
       option.disabled = true;
@@ -101,20 +110,17 @@ function carregarUnidades() {
       unidadeSelect.appendChild(option);
     }
     userConfig.unidades[hospital].forEach(unidade => {
+    
       const option = document.createElement('option');
       option.value = unidade;
       option.textContent = unidade;
       unidadeSelect.appendChild(option);
     });
-
-    const storedUnidade = sessionStorage.getItem('evolucao.unidade');
-    if (storedUnidade && userConfig.unidades[hospital].includes(storedUnidade)) {
-      unidadeSelect.value = storedUnidade;
-      carregarPacientes();
-    } else if (userConfig.unidades[hospital].length === 1) {
+    if (userConfig.unidades[hospital].length === 1) {
       unidadeSelect.value = userConfig.unidades[hospital][0];
       carregarPacientes();
     }
+    unidadeContainer.style.display = 'block';
   }
 }
 
@@ -165,13 +171,8 @@ listaPacientes.addEventListener('click', async (e) => {
   const evolucaoBtn = e.target.closest('.btn-evolucao');
   if (evolucaoBtn) {
     const leito = evolucaoBtn.dataset.leito;
-    const hospital = hospitalSelect.value;
-    const unidade = unidadeSelect.value;
-    sessionStorage.setItem('evolucao.leito', leito);
-    sessionStorage.setItem('evolucao.hospital', hospital);
-    sessionStorage.setItem('evolucao.unidade', unidade);
-    document.getElementById('gefContent').style.display = 'none';
-    window.location.href = 'evolucao.html';
+    console.log("Iniciar geração de evolução para Leito:", leito);
+    window.open('evolucao.html', '_blank');
   }
 });
 
@@ -179,62 +180,20 @@ localAtendimento.addEventListener('change', carregarHospitais);
 hospitalSelect.addEventListener('change', carregarUnidades);
 unidadeSelect.addEventListener('change', carregarPacientes);
 
+document.addEventListener("DOMContentLoaded", () => {
+  const btnAdicionar = document.getElementById("btnAdicionarPaciente");
+  const formCadastro = document.getElementById("cadastroPaciente");
+  const btnCancelar = document.getElementById("btnCancelarCadastro");
 
-document.addEventListener('DOMContentLoaded', () => {
-  const btnSalvar = document.getElementById('btnSalvarPaciente');
-  if (btnSalvar) {
-    btnSalvar.addEventListener('click', async () => {
-      const leito = document.getElementById('leitoPaciente').value.trim();
-      const nome = document.getElementById('nomePaciente').value.trim();
-      const hospital = hospitalSelect.value;
-      const unidade = unidadeSelect.value;
-
-      if (!hospital || !unidade || !leito || !nome) {
-        alert('Preencha todos os campos corretamente.');
-        return;
-      }
-
-      const leitoRef = doc(db, "hospitais", hospital, "unidades", unidade, "leitos", leito);
-      await setDoc(leitoRef, { nome });
-      cadastroPaciente.style.display = 'none';
-      carregarPacientes();
+  if (btnAdicionar && formCadastro) {
+    btnAdicionar.addEventListener("click", () => {
+      formCadastro.style.display = "block";
     });
   }
-});
 
-
-document.addEventListener("DOMContentLoaded", () => {
-  const btnSalvar = document.getElementById('btnSalvarPaciente');
-  if (btnSalvar) {
-    console.log("Botão Salvar encontrado e listener configurado.");
-    btnSalvar.addEventListener('click', async () => {
-      const leito = document.getElementById('leitoPaciente')?.value.trim();
-      const nome = document.getElementById('nomePaciente')?.value.trim();
-      const hospital = document.getElementById('hospital')?.value;
-      const unidade = document.getElementById('unidade')?.value;
-
-      console.log("Tentando salvar paciente com dados:");
-      console.log("Leito:", leito, "Nome:", nome, "Hospital:", hospital, "Unidade:", unidade);
-
-      if (!hospital || !unidade || !leito || !nome) {
-        alert('Preencha todos os campos corretamente.');
-        console.warn("Campos obrigatórios não preenchidos.");
-        return;
-      }
-
-      try {
-        const leitoRef = doc(db, "hospitais", hospital, "unidades", unidade, "leitos", leito);
-        await setDoc(leitoRef, { nome });
-        console.log("Paciente salvo com sucesso!");
-        alert("Paciente salvo com sucesso!");
-        document.getElementById("cadastroPaciente").style.display = "none";
-        carregarPacientes();
-      } catch (e) {
-        console.error("Erro ao salvar paciente:", e);
-        alert("Erro ao salvar paciente. Verifique o console.");
-      }
+  if (btnCancelar && formCadastro) {
+    btnCancelar.addEventListener("click", () => {
+      formCadastro.style.display = "none";
     });
-  } else {
-    console.error("Botão #btnSalvarPaciente não encontrado no DOM.");
   }
 });
