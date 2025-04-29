@@ -1,3 +1,4 @@
+
 import { auth, db, doc, getDoc, setDoc } from './firebase-config.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
@@ -29,10 +30,12 @@ onAuthStateChanged(auth, async (user) => {
 
       if (Array.isArray(config.locaisAtendimento)) {
         preencherSelect(localAtendimentoSelect, config.locaisAtendimento);
+        document.getElementById('panel-hospitais').classList.remove('hidden');
       }
 
       if (Array.isArray(config.hospitais)) {
         preencherSelect(hospitaisSelect, config.hospitais);
+        document.getElementById('panel-unidades').classList.remove('hidden');
       }
 
       if (config.unidades) {

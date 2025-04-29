@@ -9,22 +9,27 @@
 <body>
   <div class="config-container">
     <h2>Configurações do Usuário</h2>
-
     <form id="configForm">
-      <div class="form-group">
-        <label for="localAtendimentoSelect">Locais de Atendimento</label>
-        <select id="localAtendimentoSelect" multiple></select>
+      <div class="panel" id="panel-locais">
+        <div class="panel-header">Locais de Atendimento</div>
+        <div class="panel-content form-group">
+          <select id="localAtendimentoSelect" multiple></select>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="hospitaisSelect">Hospitais</label>
-        <select id="hospitaisSelect" multiple></select>
+      <div class="panel hidden" id="panel-hospitais">
+        <div class="panel-header">Hospitais</div>
+        <div class="panel-content form-group">
+          <select id="hospitaisSelect" multiple></select>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="unidadesTextarea">Unidades por Hospital</label>
-        <textarea id="unidadesTextarea" rows="4" placeholder="Ex: Hospital A: UTI;Enfermaria
+      <div class="panel hidden" id="panel-unidades">
+        <div class="panel-header">Unidades por Hospital</div>
+        <div class="panel-content form-group">
+          <textarea id="unidadesTextarea" rows="4" placeholder="Ex: Hospital A: UTI;Enfermaria
 Hospital B: Clínica Médica"></textarea>
+        </div>
       </div>
 
       <div class="form-actions">
@@ -32,5 +37,13 @@ Hospital B: Clínica Médica"></textarea>
       </div>
     </form>
   </div>
+
+  <script>
+    document.querySelectorAll('.panel-header').forEach(header => {
+      header.addEventListener('click', () => {
+        header.parentElement.classList.toggle('open');
+      });
+    });
+  </script>
 </body>
 </html>
