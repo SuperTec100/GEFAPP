@@ -2,49 +2,125 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GEF - Login</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
   <div class="login-container">
     <div class="title-container">
       <h1>GEF</h1>
-      <h2>GERADOR DE EVOLUÇÃO FISIOTERAPÊUTICA</h2>
+      <h2>Gerador de Evolução Fisioterapêutica</h2>
     </div>
 
     <form id="loginForm">
-      <div class="form-group"><input type="email" id="username" placeholder="Email" required></div>
-      <div class="form-group"><input type="password" id="password" placeholder="Senha" required></div>
+      <div class="form-group">
+        <input type="email" id="username" placeholder="E-mail" required>
+      </div>
+      <div class="form-group">
+        <input type="password" id="password" placeholder="Senha" required>
+      </div>
       <button type="submit">Entrar</button>
     </form>
 
-    <div style="text-align:center; margin-top: 20px;">
-      <a href="#" onclick="mostrarCadastro()">Clique aqui para se registrar</a><br>
-      <a href="#" onclick="mostrarRecuperacaoSenha()">Esqueceu a senha?</a>
+    <div style="text-align:center; margin-top:20px;">
+      <a href="#" onclick="mostrarCadastro()">Criar uma conta</a>
+      <span> | </span>
+      <a href="#">Esqueci minha senha</a>
     </div>
 
     <div id="cadastroSection" class="hidden">
-      <div class="top-right"><a href="#" onclick="mostrarLogin()">Já tem conta? Entrar</a></div>
+      <h3 style="text-align:center; margin-bottom:20px;">Cadastro de Usuário</h3>
       <form id="registerForm">
-        <div class="form-group"><input type="text" id="newName" placeholder="Nome completo" required></div>
-        <div class="form-group"><input type="email" id="newEmail" placeholder="Email" required></div>
-        <div class="form-group"><input type="tel" id="newPhone" placeholder="Telefone" required></div>
-        <div class="form-group"><input type="password" id="newPassword" placeholder="Senha desejada" required></div>
+        <div class="form-group">
+          <input type="text" id="newName" placeholder="Nome Completo" required>
+        </div>
+        <div class="form-group">
+          <input type="email" id="newEmail" placeholder="E-mail" required>
+        </div>
+        <div class="form-group">
+          <input type="password" id="newPassword" placeholder="Senha" required>
+        </div>
+        <div class="form-group">
+          <input type="tel" id="newPhone" placeholder="Telefone">
+        </div>
         <button type="submit">Cadastrar</button>
       </form>
-    </div>
-
-    <div id="recuperacaoSenhaSection" class="hidden">
-      <div class="top-right"><a href="#" onclick="mostrarLogin()">Voltar para login</a></div>
-      <form id="recuperarSenhaForm">
-        <div class="form-group">
-          <input type="email" id="resetEmail" placeholder="Seu email" required>
-        </div>
-        <button type="submit">Recuperar Senha</button>
-      </form>
+      <div style="text-align:center; margin-top:15px;">
+        <a href="#" onclick="mostrarLogin()">Voltar para login</a>
+      </div>
     </div>
   </div>
 
   <script type="module" src="script.js"></script>
+  
+  <style>
+    /* Estilos adicionais para melhorar a aparência */
+    .login-container {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 30px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .title-container h1 {
+      font-size: 48px;
+      color: #2c3e50;
+      margin: 0;
+      text-align: center;
+    }
+    
+    .title-container h2 {
+      font-size: 18px;
+      color: #34495e;
+      margin-top: 10px;
+      text-align: center;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+    
+    button:hover {
+      background-color: #2980b9;
+    }
+    
+    a {
+      color: #3498db;
+      text-decoration: none;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+    
+    .hidden {
+      display: none;
+    }
+  </style>
 </body>
 </html>
