@@ -278,8 +278,8 @@
                     </select>
                 </div>
 
-                <label class="required-field">Unidade:</label>
-<select id="unidadeEvolucao">
+                <label class="required-field">UTI:</label>
+<select id="uti">
     <option value="" selected disabled>Selecione</option>
     <option value="CARDIOVASCULAR">CARDIOVASCULAR</option>
     <option value="CIRÚRGICA">CIRÚRGICA</option>
@@ -3449,12 +3449,13 @@ texto = texto.replace("paciente encontrado", "paciente encontrada");
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const unidade = sessionStorage.getItem('evolucao.unidade');
-    if (unidade) {
-      const unidadeSelect = document.getElementById('unidadeEvolucao');
-      for (let i = 0; i < unidadeSelect.options.length; i++) {
-        if (unidadeSelect.options[i].value.toLowerCase() === unidade.toLowerCase()) {
-          unidadeSelect.selectedIndex = i;
+    const unidadeTopo = document.getElementById('unidade')?.textContent || "";
+    const uti = unidadeTopo.replace(/^UTI\s+/i, '').trim().toUpperCase();
+    const utiSelect = document.getElementById('uti');
+    if (uti && utiSelect) {
+      for (let i = 0; i < utiSelect.options.length; i++) {
+        if (utiSelect.options[i].value.toUpperCase() === uti) {
+          utiSelect.selectedIndex = i;
           break;
         }
       }
