@@ -15,14 +15,6 @@ const unidadeContainer = document.getElementById('unidadeContainer');
 const unidadeSelect = document.getElementById('unidade');
 const leitosContainer = document.getElementById('leitosContainer');
 const listaPacientes = document.getElementById('listaPacientes');
-const cadastroPaciente = document.getElementById('cadastroPaciente');
-
-window.addEventListener('message', (event) => {
-  if (event.data.type === 'USER_CONFIG') {
-    userConfig = event.data.config;
-    setupLocaisAtendimento();
-  }
-});
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
@@ -37,29 +29,25 @@ onAuthStateChanged(auth, async (user) => {
 
 function setupLocaisAtendimento() {
   localAtendimento.innerHTML = '';
-  if (userConfig && userConfig.locaisAtendimento) {
-    
-    if (userConfig.locaisAtendimento.length > 1) {
-      const option = document.createElement('option');
-      option.disabled = true;
-      option.selected = true;
-      option.textContent = 'Selecione uma opção';
-      localAtendimento.appendChild(option);
-    }
-    userConfig.locaisAtendimento.forEach(local => {
-    
-      const option = document.createElement('option');
-      option.value = local;
-      option.textContent = local;
-      localAtendimento.appendChild(option);
-    });
-    if (userConfig.locaisAtendimento.length === 1) {
-      localAtendimento.value = userConfig.locaisAtendimento[0];
-      carregarHospitais();
-    }
+  if (userConfig.locaisAtendimento.length > 1) {
+    const option = document.createElement('option');
+    option.disabled = true;
+    option.selected = true;
+    option.textContent = 'Selecione uma opção';
+    localAtendimento.appendChild(option);
   }
+  userConfig.locaisAtendimento.forEach(local => {
+    const option = document.createElement('option');
+    option.value = local;
+    option.textContent = local;
+    localAtendimento.appendChild(option);
+  });
   loading.style.display = 'none';
   gefContent.style.display = 'block';
+  if (userConfig.locaisAtendimento.length === 1) {
+    localAtendimento.value = userConfig.locaisAtendimento[0];
+    carregarHospitais();
+  }
 }
 
 function carregarHospitais() {
@@ -71,7 +59,7 @@ function carregarHospitais() {
   leitosContainer.style.display = 'none';
 
   if (userConfig.hospitais && localAtendimento.value === 'Hospital') {
-    
+    hospitalContainer.style.display = 'block';
     if (userConfig.hospitais.length > 1) {
       const option = document.createElement('option');
       option.disabled = true;
@@ -80,17 +68,20 @@ function carregarHospitais() {
       hospitalSelect.appendChild(option);
     }
     userConfig.hospitais.forEach(hospital => {
-    
       const option = document.createElement('option');
       option.value = hospital;
       option.textContent = hospital;
       hospitalSelect.appendChild(option);
     });
-    if (userConfig.hospitais.length === 1) {
+
+    const storedHospital = sessionStorage.getItem('evolucao.hospital');
+    if (storedHospital && userConfig.hospitais.includes(storedHospital)) {
+      hospitalSelect.value = storedHospital;
+      carregarUnidades();
+    } else if (userConfig.hospitais.length === 1) {
       hospitalSelect.value = userConfig.hospitais[0];
       carregarUnidades();
     }
-    hospitalContainer.style.display = 'block';
   }
 }
 
@@ -102,7 +93,7 @@ function carregarUnidades() {
 
   const hospital = hospitalSelect.value;
   if (userConfig.unidades && userConfig.unidades[hospital]) {
-    
+    unidadeContainer.style.display = 'block';
     if (userConfig.unidades[hospital].length > 1) {
       const option = document.createElement('option');
       option.disabled = true;
@@ -111,17 +102,20 @@ function carregarUnidades() {
       unidadeSelect.appendChild(option);
     }
     userConfig.unidades[hospital].forEach(unidade => {
-    
       const option = document.createElement('option');
       option.value = unidade;
       option.textContent = unidade;
       unidadeSelect.appendChild(option);
     });
-    if (userConfig.unidades[hospital].length === 1) {
+
+    const storedUnidade = sessionStorage.getItem('evolucao.unidade');
+    if (storedUnidade && userConfig.unidades[hospital].includes(storedUnidade)) {
+      unidadeSelect.value = storedUnidade;
+      carregarPacientes();
+    } else if (userConfig.unidades[hospital].length === 1) {
       unidadeSelect.value = userConfig.unidades[hospital][0];
       carregarPacientes();
     }
-    unidadeContainer.style.display = 'block';
   }
 }
 
@@ -172,8 +166,13 @@ listaPacientes.addEventListener('click', async (e) => {
   const evolucaoBtn = e.target.closest('.btn-evolucao');
   if (evolucaoBtn) {
     const leito = evolucaoBtn.dataset.leito;
-    console.log("Iniciar geração de evolução para Leito:", leito);
-    window.open('evolucao.html', '_blank');
+    const hospital = hospitalSelect.value;
+    const unidade = unidadeSelect.value;
+    sessionStorage.setItem('evolucao.leito', leito);
+    sessionStorage.setItem('evolucao.hospital', hospital);
+    sessionStorage.setItem('evolucao.unidade', unidade);
+    document.getElementById('gefContent').style.display = 'none';
+    window.location.href = 'evolucao.html';
   }
 });
 
