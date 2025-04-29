@@ -201,3 +201,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const btnSalvar = document.getElementById('btnSalvarPaciente');
+  if (btnSalvar) {
+    btnSalvar.addEventListener('click', async () => {
+      const leito = document.getElementById('leitoPaciente').value.trim();
+      const nome = document.getElementById('nomePaciente').value.trim();
+      const hospital = document.getElementById('hospital').value;
+      const unidade = document.getElementById('unidade').value;
+
+      if (!hospital || !unidade || !leito || !nome) {
+        alert('Preencha todos os campos corretamente.');
+        return;
+      }
+
+      try {
+        const leitoRef = doc(db, "hospitais", hospital, "unidades", unidade, "leitos", leito);
+        await setDoc(leitoRef, { nome });
+        alert("Paciente salvo com sucesso!");
+        document.getElementById("cadastroPaciente").style.display = "none";
+        carregarPacientes();
+      } catch (e) {
+        console.error("Erro ao salvar paciente:", e);
+        alert("Erro ao salvar paciente. Verifique o console.");
+      }
+    });
+  }
+});
