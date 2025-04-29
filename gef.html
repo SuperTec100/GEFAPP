@@ -4,11 +4,31 @@
 <head>
   <meta charset="UTF-8">
   <title>Gerador de Evolução</title>
-  <script src="script-gef-funcional.js" defer></script>
+  <script type="module" src="script-gef-completo.js" defer></script>
+  <link rel="stylesheet" href="style-dashboard.css">
 </head>
 <body>
-  <div id="gefContent">
-    <button id="btnAdicionarPaciente">Adicionar Paciente</button>
+  <div id="loading">Carregando...</div>
+  <div id="gefContent" style="display:none;">
+    <label>Local de Atendimento:</label>
+    <select id="localAtendimento"></select>
+
+    <div id="hospitalContainer" style="display:none;">
+      <label>Hospital:</label>
+      <select id="hospital"></select>
+    </div>
+
+    <div id="unidadeContainer" style="display:none;">
+      <label>Unidade:</label>
+      <select id="unidade"></select>
+    </div>
+
+    <div id="leitosContainer" style="display:none;">
+      <h3>Pacientes</h3>
+      <ul id="listaPacientes"></ul>
+      <button id="btnAdicionarPaciente">Adicionar Paciente</button>
+    </div>
+
     <div id="cadastroPaciente" style="display:none;">
       <h4>Novo Paciente</h4>
       <input id="nomePaciente" placeholder="Nome do Paciente">
