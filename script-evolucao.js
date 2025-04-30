@@ -1,6 +1,6 @@
 import { auth, db } from './firebase-config.js';
 import {
-  doc, getDoc, setDoc
+  doc, getDoc, setDoc, deleteDoc
 } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 
@@ -21,6 +21,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnSalvar = document.getElementById("btnSalvarEvolucao");
   if (btnSalvar) {
     btnSalvar.addEventListener("click", salvarEvolucao);
+  }
+
+  const btnExcluir = document.getElementById("btnExcluirPaciente");
+  if (btnExcluir) {
+    btnExcluir.addEventListener("click", excluirPaciente);
   }
 
   const msg = document.createElement("div");
@@ -73,23 +78,27 @@ async function salvarEvolucao() {
   }
 }
 
-function coletarCampos() {
-  return {
-    tipoDocumento: document.getElementById("tipoDocumento")?.value || "",
-    uti: document.getElementById("uti")?.value || "",
-    dataEvolucao: document.getElementById("dataEvolucao")?.value || "",
-    turno: document.getElementById("turno")?.value || "",
-    sexo: document.querySelector('input[name="sexo"]:checked')?.value || "",
-    fc: document.getElementById("fc")?.value || "",
-    fr: document.getElementById("fr")?.value || "",
-    spo2: document.getElementById("spo2")?.value || "",
-    pa: document.getElementById("pa")?.value || "",
-    temp: document.getElementById("temp")?.value || "",
-    estadoComportamental: Array.from(document.querySelectorAll('input[name="estadoComportamental"]:checked')).map(cb => cb.value),
-    glasgow: document.getElementById("glasgow")?.value || "",
-    sedacao: document.querySelector('input[name="sedacao"]:checked')?.value || "",
-    trabalhoRespiratorio: document.querySelector('input[name="trabalhoRespiratorio"]:checked')?.value || ""
-  };
+async function excluirPaciente() {
+  const hospital = sessionStorage.getItem("evolucao.hospital");
+  const unidade = sessionStorage.getItem("evolucao.unidade");
+  const leito = sessionStorage.getItem("evolucao.leito");
+
+  if (!hospital || !unidade || !leito || !currentUser) {
+    mostrarMensagem("Informações do paciente não disponíveis.", false);
+    return;
+  }
+
+  if (!confirm(`Tem certeza que deseja excluir o paciente do leito ${leito}?`)) return;
+
+  try {
+    const docRef = doc(db, "users", currentUser.uid, "pacientes", `${hospital}_${unidade}_${leito}`);
+    await deleteDoc(docRef);
+    mostrarMensagem("Paciente excluído com sucesso!");
+    window.location.href = "dashboard.html";
+  } catch (e) {
+    console.error("Erro ao excluir paciente:", e);
+    mostrarMensagem("Erro ao excluir paciente.", false);
+  }
 }
 
 async function carregarDadosSalvos() {
@@ -101,36 +110,64 @@ async function carregarDadosSalvos() {
 
   const docRef = doc(db, "users", currentUser.uid, "pacientes", `${hospital}_${unidade}_${leito}`);
   const snap = await getDoc(docRef);
-
   if (!snap.exists()) return;
 
   const data = snap.data();
 
-  document.getElementById("tipoDocumento").value = data.tipoDocumento || "";
-  document.getElementById("uti").value = data.uti || "";
-  document.getElementById("dataEvolucao").value = data.dataEvolucao || "";
-  document.getElementById("turno").value = data.turno || "";
-  if (data.sexo) {
-    document.querySelector(`input[name="sexo"][value="${data.sexo}"]`)?.checked = true;
-  }
-  document.getElementById("fc").value = data.fc || "";
-  document.getElementById("fr").value = data.fr || "";
-  document.getElementById("spo2").value = data.spo2 || "";
-  document.getElementById("pa").value = data.pa || "";
-  document.getElementById("temp").value = data.temp || "";
-  document.getElementById("glasgow").value = data.glasgow || "";
+  for (const key in data) {
+    const value = data[key];
 
-  if (data.estadoComportamental) {
-    data.estadoComportamental.forEach(estado => {
-      document.querySelector(`input[name="estadoComportamental"][value="${estado}"]`)?.checked = true;
-    });
-  }
+    if (document.getElementById(key)) {
+      document.getElementById(key).value = value;
+    }
 
-  if (data.sedacao) {
-    document.querySelector(`input[name="sedacao"][value="${data.sedacao}"]`)?.checked = true;
-  }
+    if (typeof value === "string") {
+      const radio = document.querySelector(`input[name="${key}"][value="${value}"]`);
+      if (radio) radio.checked = true;
+    }
 
-  if (data.trabalhoRespiratorio) {
-    document.querySelector(`input[name="trabalhoRespiratorio"][value="${data.trabalhoRespiratorio}"]`)?.checked = true;
+    if (Array.isArray(value)) {
+      value.forEach(v => {
+        const checkbox = document.querySelector(`input[name="${key}"][value="${v}"]`);
+        if (checkbox) checkbox.checked = true;
+      });
+    }
+
+    if (typeof value === "boolean") {
+      const checkbox = document.querySelector(`input[name="${key}"]`);
+      if (checkbox) checkbox.checked = value;
+    }
+
+    const select = document.querySelector(`select[name="${key}"]`);
+    if (select) select.value = value;
   }
+}
+
+function coletarCampos() {
+  return {
+    glasgow: document.getElementById("glasgow")?.value || "",
+    sedacao: document.querySelector('input[name="sedacao"]:checked')?.value || "",
+    trabalhoRespiratorio: document.querySelector('input[name="trabalhoRespiratorio"]:checked')?.value || ""
+  };
+}
+
+function pegarValor(id) {
+  return document.getElementById(id)?.value || "";
+}
+
+function pegarRadio(name) {
+  return document.querySelector(`input[name="${name}"]:checked`)?.value || "";
+}
+
+function pegarCheckboxes(name) {
+  return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(cb => cb.value);
+}
+
+function pegarCheckboxSimples(name) {
+  const el = document.querySelector(`input[name="${name}"]`);
+  return el ? el.checked : false;
+}
+
+function pegarSelect(name) {
+  return document.querySelector(`select[name="${name}"]`)?.value || "";
 }
