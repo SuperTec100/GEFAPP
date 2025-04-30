@@ -1,4 +1,3 @@
-import { auth } from './firebase-config.js';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 
 onAuthStateChanged(auth, (user) => {
@@ -9,9 +8,10 @@ onAuthStateChanged(auth, (user) => {
   }
 
   console.log("✅ Usuário autenticado:", user.uid);
-  // Aguarda o carregamento completo da página antes de executar qualquer lógica
+
+  // Aguarda o carregamento do DOM para garantir que elementos existam
   document.addEventListener('DOMContentLoaded', () => {
-    carregarPacientes(); // Chama a função de carregamento de pacientes com usuário já disponível
+    carregarPacientes(); // inicia o carregamento dos pacientes após login
   });
 });
 
