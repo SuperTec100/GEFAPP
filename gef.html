@@ -2,56 +2,17 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Gerador de Evolução</title>
-  <link rel="stylesheet" href="style-gef.css">
-  <script type="module" src="script-gef_autenticado.js" defer></script>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module" src="script-gef.js" defer></script>
 </head>
 <body>
-  <div id="loading" class="loading-overlay">
-    <div class="spinner"></div>
-    <p>Carregando...</p>
-  </div>
-
-  <div class="gef-container" id="gefContent" style="display:none;">
-    <h2>Gerador de Evolução</h2>
-
-    <div class="selection-container">
-      <div class="selection-group">
-        <label for="localAtendimento">Local de Atendimento</label>
-        <select id="localAtendimento"></select>
-      </div>
-
-      <div class="selection-group" id="hospitalContainer" style="display:none;">
-        <label for="hospital">Hospital</label>
-        <select id="hospital"></select>
-      </div>
-
-      <div class="selection-group" id="unidadeContainer" style="display:none;">
-        <label for="unidade">Unidade</label>
-        <select id="unidade"></select>
-      </div>
-
-      <div id="leitosContainer" style="display:none;">
-        <h3>Pacientes</h3>
-        <ul id="listaPacientes"></ul>
-
-        <button id="btnAdicionarPaciente" class="primary" style="margin-top:20px;">+ Adicionar Paciente</button>
-      </div>
-    </div>
-
-    <div id="cadastroPaciente" style="display:none;">
-      <h3>Adicionar Paciente</h3>
-      <div class="selection-group row-fields">
-        <input type="text" id="leitoPaciente" placeholder="Número do Leito">
-        <input type="text" id="nomePaciente" placeholder="Nome do Paciente">
-      </div>
-      <div style="margin-top:10px;">
-        <button id="btnSalvarPaciente" class="primary">Salvar</button>
-        <button id="btnCancelarCadastro" class="secondary">Cancelar</button>
-      </div>
-    </div>
+  <!-- Conteúdo do gerador de evolução (simplificado para exemplo) -->
+  <div id="gefContent">
+    <h1>Gerador de Evolução Fisioterapêutica</h1>
+    <ul id="listaPacientes"></ul>
   </div>
 </body>
 </html>
