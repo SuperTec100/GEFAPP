@@ -7,6 +7,62 @@
   <title>Gerador de Evolução</title>
   <link rel="stylesheet" href="style-gef.css">
   <script type="module" src="script-gef.js" defer></script>
+
+  <style>
+    #listaPacientes li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      border-bottom: 1px solid #ddd;
+      background: #fff;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    .paciente-info {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .paciente-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .paciente-actions button {
+      font-size: 12px;
+      padding: 6px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .paciente-actions .danger {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    .paciente-actions .primary {
+      background-color: #3498db;
+      color: white;
+    }
+
+    .paciente-actions .neutral {
+      background-color: #bdc3c7;
+      color: #2c3e50;
+    }
+
+    .paciente-actions .secondary {
+      background-color: #95a5a6;
+      color: white;
+    }
+
+    .paciente-actions button:hover {
+      opacity: 0.9;
+    }
+  </style>
+
 </head>
 <body>
   <div id="loading" class="loading-overlay">
