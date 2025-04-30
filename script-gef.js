@@ -202,45 +202,51 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-document.getElementById('btnAdicionarPaciente').addEventListener('click', () => {
-  document.getElementById('cadastroPaciente').style.display = 'block';
-});
+document.addEventListener('DOMContentLoaded', () => {
+  const btnAdicionar = document.getElementById('btnAdicionarPaciente');
+  const btnCancelar = document.getElementById('btnCancelarCadastro');
+  const btnSalvar = document.getElementById('btnSalvarPaciente');
 
-document.getElementById('btnCancelarCadastro').addEventListener('click', () => {
-  document.getElementById('cadastroPaciente').style.display = 'none';
-});
+  btnAdicionar?.addEventListener('click', () => {
+    document.getElementById('cadastroPaciente').style.display = 'block';
+  });
 
-document.getElementById('btnSalvarPaciente').addEventListener('click', async () => {
-  const leito = document.getElementById('leitoPaciente').value.trim();
-  const nome = document.getElementById('nomePaciente').value.trim();
-  const hospital = hospitalSelect.value;
-  const unidade = unidadeSelect.value;
-
-  if (!leito || !nome || !hospital || !unidade) {
-    alert("Preencha todos os campos obrigatórios.");
-    return;
-  }
-
-  try {
-    const user = auth.currentUser;
-    if (!user) throw new Error("Usuário não autenticado.");
-
-    const pacienteRef = doc(db, "users", user.uid, "pacientes", `${hospital}_${unidade}_${leito}`);
-    await setDoc(pacienteRef, {
-      nome,
-      leito,
-      hospital,
-      unidade,
-      criadoEm: new Date().toISOString()
-    });
-
-    alert("Paciente salvo com sucesso!");
+  btnCancelar?.addEventListener('click', () => {
     document.getElementById('cadastroPaciente').style.display = 'none';
-    document.getElementById('leitoPaciente').value = '';
-    document.getElementById('nomePaciente').value = '';
-    carregarPacientes();
-  } catch (error) {
-    console.error("Erro ao salvar paciente:", error);
-    alert("Erro ao salvar paciente. Veja o console.");
-  }
+  });
+
+  btnSalvar?.addEventListener('click', async () => {
+    const leito = document.getElementById('leitoPaciente').value.trim();
+    const nome = document.getElementById('nomePaciente').value.trim();
+    const hospital = document.getElementById('hospital')?.value;
+    const unidade = document.getElementById('unidade')?.value;
+
+    if (!leito || !nome || !hospital || !unidade) {
+      alert("Preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error("Usuário não autenticado.");
+
+      const pacienteRef = doc(db, "users", user.uid, "pacientes", `${hospital}_${unidade}_${leito}`);
+      await setDoc(pacienteRef, {
+        nome,
+        leito,
+        hospital,
+        unidade,
+        criadoEm: new Date().toISOString()
+      });
+
+      alert("Paciente salvo com sucesso!");
+      document.getElementById('cadastroPaciente').style.display = 'none';
+      document.getElementById('leitoPaciente').value = '';
+      document.getElementById('nomePaciente').value = '';
+      carregarPacientes();
+    } catch (error) {
+      console.error("Erro ao salvar paciente:", error);
+      alert("Erro ao salvar paciente. Veja o console.");
+    }
+  });
 });
