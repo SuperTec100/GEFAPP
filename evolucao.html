@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Evolução Fisioterapêutica</title>
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gerador de Evolução Fisioterapêutica</title>
+<style>
         :root {
             --primary-color: #2c3e50;
             --secondary-color: #3498db;
@@ -258,1363 +259,1259 @@
 </head>
 <body>
 <div id="paciente-info" style="margin-bottom: 20px; padding: 10px; background: #eef2f5; border-radius: 6px;">
-  <strong>Hospital:</strong> <span id="hospital"></span> |
+<strong>Hospital:</strong> <span id="hospital"></span> |
   <strong>Unidade:</strong> <span id="unidade"></span> |
   <strong>Leito:</strong> <span id="leito"></span>
 </div>
-
-    <div class="container">
-        <h2>Gerador de Evolução Fisioterapêutica</h2>
-
-        <!-- Seção de informações básicas -->
-        <div class="expandable-section">
-            <div class="section-header">📋 Informações Básicas</div>
-            <div class="section-content">
-                <div class="tipo-evolucao">
-                    <label class="required-field">Tipo:</label>
-                    <select id="tipoDocumento">
-                        <option value="evolucao" selected>Evolução</option>
-                        <option value="admissao">Admissão</option>
-                    </select>
-                </div>
-
-                <label class="required-field">UTI:</label>
-<select id="uti">
-    <option value="" selected disabled>Selecione</option>
-    <option value="CARDIOVASCULAR">CARDIOVASCULAR</option>
-    <option value="CIRÚRGICA">CIRÚRGICA</option>
-    <option value="GERAL 1">GERAL 1</option>
-    <option value="GERAL 2">GERAL 2</option>
-    <option value="NEO">NEO</option>
-    <option value="NEURO">NEURO</option>
-    <option value="ONCO-HEMATO">ONCO-HEMATO</option>
-    <option value="PEDI">PEDI</option>
-</select>
-
-                <label class="required-field">Data da Evolução:</label>
-                <input type="text" id="dataEvolucao" placeholder="DD/MM/AAAA" 
-                       pattern="(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}"
-                       title="Digite uma data válida (DD/MM/AAAA)">
-
-                <label class="required-field">Turno:</label>
-                <select id="turno">
-                    <option value="" selected disabled>Selecione</option>
-                    <option value="Manhã">Manhã</option>
-                    <option value="Tarde">Tarde</option>
-                    <option value="Noite">Noite</option>
-                </select>
-
-<label class="required-field">Sexo:</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="sexo" value="Masculino" checked> Masculino</label>
-                    <label><input type="radio" name="sexo" value="Feminino"> Feminino</label>
-                </div>
-
-                <div id="hdaContainer" class="sub-section" style="display: none;">
-                    <label>HDA (História da Doença Atual):</label>
-                    <textarea id="hdaTexto" placeholder="Descreva a história da doença atual do paciente..."></textarea>
-                </div>
-            </div>
-        </div>
-
-        <!-- Seção de Encontrado no Leito -->
-        <div class="expandable-section">
-            <div class="section-header">🛏️ Encontrado no Leito</div>
-            <div class="section-content">
-                <label class="required-field">Posição no leito:</label>
-                <select id="posicaoLeito">
-                    <option value="" selected disabled>Selecione</option>
-                    <option value="decúbito dorsal">Decúbito Dorsal</option>
-                    <option value="decúbito lateral direito">Decúbito Lateral Direito</option>
-                    <option value="decúbito lateral esquerdo">Decúbito Lateral Esquerdo</option>
-                    <option value="sedestação">Sedestação</option>
-                </select>
-
-                <label>Contenção:</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="contencao" value="Sim" onclick="mostrarOpcoesContencao()"> Sim</label>
-                    <label><input type="radio" name="contencao" value="Não" onclick="mostrarOpcoesContencao()" checked> Não</label>
-                </div>
-
-                <div id="opcoesContencao" class="sub-section" style="display:none;">
-                    <label>MMSS:</label>
-                    <input type="checkbox" name="MMSS" value="MMSS"> Sim
-                    <label>MMII:</label>
-                    <input type="checkbox" name="MMII" value="MMII"> Sim
-                </div>
-
-                <!-- Avaliação de Dor -->
-                <div class="sub-section">
-                    <label>Avaliação de Dor:</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="avaliacaoDor" value="Sim" onclick="mostrarEscalaEVA()"> Sim</label>
-                        <label><input type="radio" name="avaliacaoDor" value="Não" onclick="esconderEscalaEVA()" checked> Não</label>
-                    </div>
-
-                    <div id="escalaEVAContainer" style="display:none;">
-                        <div class="eva-container">
-                            <label>Escala EVA (0-10):</label>
-                            <input type="range" id="eva" class="eva-slider" min="0" max="10" step="1" value="0" oninput="document.getElementById('evaValue').textContent = this.value">
-                            <span id="evaValue" class="eva-value">0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Seção de sinais vitais -->
-        <div class="expandable-section">
-            <div class="section-header">💓 Sinais Vitais</div>
-            <div class="section-content">
-                <div class="vital-signs-container">
-                    <div class="vital-sign">
-                        <label class="required-field">FC:</label>
-                        <input type="number" id="fc" min="0">
-                    </div>
-                    <div class="vital-sign">
-                        <label class="required-field">FR:</label>
-                        <input type="number" id="fr" min="0">
-                    </div>
-                    <div class="vital-sign">
-                        <label class="required-field">SPO2:</label>
-                        <input type="number" id="spo2" min="0" max="100">
-                    </div>
-                    <div class="vital-sign">
-                        <label class="required-field">PA:</label>
-                        <input type="text" id="pa" pattern="\d{1,3}\/\d{1,3}" placeholder="Ex: 120/80" oninput="calcularPAM(this.value)">
-                        <span id="pam" style="margin-left:5px;"></span>
-                    </div>
-                    <div class="vital-sign">
-                        <label class="required-field">Temperatura:</label>
-                        <input type="number" id="temp" step="0.1" min="20" max="45">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Seção de estado mental -->
-        <div class="expandable-section">
-        <div class="section-header">🧠 Estado Mental</div>
-        <div class="section-content">
-            <div class="checkbox-group">
-                <label><input type="checkbox" name="estadoComportamental" value="desperto"> Desperto</label>
-                <label><input type="checkbox" name="estadoComportamental" value="vigil"> Vigil</label>
-                <label><input type="checkbox" name="estadoComportamental" value="alerta"> Alerta</label>
-                <label><input type="checkbox" name="estadoComportamental" value="sonolento"> Sonolento</label>
-                <label><input type="checkbox" name="estadoComportamental" value="comatoso"> Comatoso</label>
-                <label><input type="checkbox" name="estadoComportamental" value="agitado"> Agitado</label>
-                <label><input type="checkbox" name="estadoComportamental" value="desorientado"> Desorientado</label>
-                <label><input type="checkbox" name="estadoComportamental" value="orientado"> Orientado</label>
-                <label><input type="checkbox" name="estadoComportamental" value="confuso"> Confuso</label>
-                <label><input type="checkbox" name="estadoComportamental" value="responsivo"> Responsivo</label>
-                <label><input type="checkbox" name="estadoComportamental" value="Narcose Anestésica"> Narcose Anestésica</label>
-                <label><input type="checkbox" name="estadoComportamental" value="não Responsivo"> Não Responsivo</label>
-                <label><input type="checkbox" name="estadoComportamental" value="hipoativo"> Hipoativo</label>
-                
-                <!-- AFASIA (só aparece na UTI Neuro) -->
-                <div id="afasiaContainer" style="display:none; margin-top:15px;">
-                    <label>Afasia:</label>
-                    <div style="display:flex; gap:15px;">
-                        <label><input type="radio" name="afasia" value="Sem" checked> Sem Afasia</label>
-                        <label><input type="radio" name="afasia" value="Motora"> Motora</label>
-                        <label><input type="radio" name="afasia" value="Sensitiva"> Sensitiva</label>
-                        <label><input type="radio" name="afasia" value="Mista"> Mista</label>
-                    </div>
-                </div>
-            </div>
-
-                <label>Sedacão:</label>
-                <div class="radio-group">
-    <label><input type="radio" name="sedacao" value="Sim" onclick="mostrarOpcoesSedacao()"> Sim</label>
-    <label><input type="radio" name="sedacao" value="Narcose Anestésica" onclick="mostrarOpcoesSedacao()"> Narcose Anestésica</label>
-    <label><input type="radio" name="sedacao" value="Não" onclick="mostrarOpcoesSedacao()" checked> Não</label>
-</div>
-
-                <div id="opcoesSedacao" class="sub-section" style="display:none;">
-                    <label>Sedativos:</label>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" name="sedativos" value="Bloqueador Neuromuscular"> Bloqueador Neuromuscular</label>
-                        <label><input type="checkbox" name="sedativos" value="Dormonid"> Dormonid</label>
-                        <label><input type="checkbox" name="sedativos" value="Fentanil"> Fentanil</label>
-                        <label><input type="checkbox" name="sedativos" value="Ketamina"> Ketamina</label>
-                        <label><input type="checkbox" name="sedativos" value="Midazolam"> Midazolam</label>
-                        <label><input type="checkbox" name="sedativos" value="Precedex"> Precedex</label>
-                        <label><input type="checkbox" name="sedativos" value="Propofol"> Propofol</label>
-                    </div>
-
-                    <label>Escala RASS:</label>
-                    <select id="rass">
-                        <option value="-5">-5 (Profundamente Sedado)</option>
-                        <option value="-4">-4 (Sedado, mas responde a estímulos dolorosos)</option>
-                        <option value="-3">-3 (Sedado, mas responde a voz)</option>
-                        <option value="-2">-2 (Sedação leve, responde parcialmente)</option>
-                        <option value="-1">-1 (Levemente sedado, responde completamente)</option>
-                        <option value="0">0 (Completamente acordado, sem sedação)</option>
-                        <option value="1">1 (Agitação leve)</option>
-                        <option value="2">2 (Agitação moderada)</option>
-                        <option value="3">3 (Agitação grave)</option>
-                    </select>
-                </div>
-
-                <div id="opcoesGlasgow" style="display:block;">
-    <label>Escala de Glasgow:</label>
-    <select id="glasgow">
-        <option value="" selected disabled>Selecione</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-        <option value="13">13</option>
-        <option value="14">14</option>
-        <option value="15">15</option>
-    </select>
-    <div id="glasgowComponents" style="margin-top:10px; display:none; font-size:0.9em;">
-        <div style="display:flex; gap:10px;">
-            <div>
-                <small>Ocular</small>
-                <select id="glasgowOcular" style="width:80px;">
-                    <option value="4">4</option>
-                    <option value="3">3</option>
-                    <option value="2">2</option>
-                    <option value="1">1</option>
-                </select>
-            </div>
-            <div>
-                <small>Verbal</small>
-                <select id="glasgowVerbal" style="width:80px;">
-                    <option value="5">5</option>
-                    <option value="4">4</option>
-                    <option value="3">3</option>
-                    <option value="2">2</option>
-                    <option value="1">1</option>
-                </select>
-            </div>
-            <div>
-                <small>Motora</small>
-                <select id="glasgowMotora" style="width:80px;">
-                    <option value="6">6</option>
-                    <option value="5">5</option>
-                    <option value="4">4</option>
-                    <option value="3">3</option>
-                    <option value="2">2</option>
-                    <option value="1">1</option>
-                </select>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-                </div>
-         
-        <!-- Seção de estado hemodinâmico -->
-        <div class="expandable-section">
-    <div class="section-header">❤️ Estado Hemodinâmico</div>
-    <div class="section-content">
-        <div class="radio-group" style="display: flex; flex-wrap: wrap; gap: 15px;">
-            <label><input type="radio" name="hemodinamica" value="Hemodinâmica estável" checked> Estável</label>
-            <label><input type="radio" name="hemodinamica" value="Hemodinâmica compensada"> Compensada</label>
-            <label><input type="radio" name="hemodinamica" value="Hemodinâmica instável"> Instável</label>
-        </div>
-        
-        <div class="radio-group" style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px;">
-            <label><input type="radio" name="drogasVasoativas" value="com uso de drogas vasoativas" onclick="mostrarDrogas()"> Com drogas vasoativas</label>
-            <label><input type="radio" name="drogasVasoativas" value="sem uso de drogas vasoativas" onclick="mostrarDrogas()" checked> Sem drogas vasoativas</label>
-        </div>
-
-        <div id="opcoesDrogas" class="sub-section" style="display:none;">
-            <label>Drogas vasoativas:</label>
-            <div class="checkbox-group">
-                <label><input type="checkbox" name="drogas" value="Amiodarona"> Amiodarona</label>
-                <label><input type="checkbox" name="drogas" value="Ancoron"> Ancoron</label>
-                <label><input type="checkbox" name="drogas" value="Dobutamina"> Dobutamina</label>
-                <label><input type="checkbox" name="drogas" value="Nipride"> Nipride</label>
-                <label><input type="checkbox" name="drogas" value="Noradrenalina"> Noradrenalina</label>
-                <label><input type="checkbox" name="drogas" value="Tridil"> Tridil</label>
-                <label><input type="checkbox" name="drogas" value="Vasopressina"> Vasopressina</label>
-            </div>
-        </div>
-    </div>
-</div>
-        <!-- Seção de sistema respiratório -->
+<div class="container">
+<h2>Gerador de Evolução Fisioterapêutica</h2>
+<!-- Seção de informações básicas -->
 <div class="expandable-section">
-    <div class="section-header">🌬️ Sistema Respiratório</div>
-    <div class="section-content">
-        <label class="required-field">Tipo de ventilação:</label>
-        <select id="sistemaRespiratorio" onchange="atualizarOpcoesRespiratorias()">
-            <option value="" selected disabled>Selecione</option>
-            <option value="espontanea">Ventilação Espontânea</option>
-            <option value="vni">Ventilação Não Invasiva (VNI)</option>
-            <option value="VM">Ventilação Mecânica (VM)</option>
-        </select>
-
-        <!-- Via Aérea (só aparece para VM) -->
-        <div id="viaAereaOptions" class="sub-section" style="display:none;">
-            <label>Via Aérea:</label>
-            <div class="radio-group">
-                <label><input type="radio" name="viaAerea" value="TOT" onclick="mostrarCuffOptions()"> TOT (Tubo Orotraqueal)</label>
-                <label><input type="radio" name="viaAerea" value="TQT" onclick="mostrarOpcoesTQT()"> TQT (Tubo Traqueal)</label>
-            </div>
-            
-            <div id="opcoesTQT" class="sub-section" style="display:none;">
-                <label>Tipo de Cânula:</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="tipoTQT" value="Cânula Plástica Simples"> Cânula Plástica Simples</label>
-                    <label><input type="radio" name="tipoTQT" value="Cânula Plástica Blue Line"> Cânula Plástica Blue Line</label>
-                    <label><input type="radio" name="tipoTQT" value="Cânula Metálica"> Cânula Metálica</label>
-                </div>
-            </div>
-            
-            <div id="cuffOptions" class="sub-section" style="display:none;">
-                <label>Cuff:</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="cuff" value="Insuflado" onclick="mostrarPressaoCuff()"> Insuflado</label>
-                    <label><input type="radio" name="cuff" value="Desinsuflado" onclick="esconderPressaoCuff()"> Desinsuflado</label>
-                </div>
-                
-                <div id="pressaoCuff" class="sub-section" style="display:none;">
-                    <label>P.Cuff (cmH2O):</label>
-                    <input type="number" id="pcuff" min="0" max="50" step="0.1">
-                    
-                    <div style="margin-top: 10px;">
-                        <label>Fixado em Rima Labial (cm):</label>
-                        <input type="number" id="rimaLabial" min="0" max="30" step="0.1">
-                    </div>
-                    <div style="margin-top: 10px;">
-                        <label>Número do Tubo:</label>
-                        <input type="number" id="numeroTubo" min="0" max="10" step="0.5">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modos Ventilatórios (só aparece para VM/VNI) -->
-        <div id="opcoesRespiratorias"></div>
-        
-        <!-- Parâmetros de Ventilação (agora antes da mecânica pulmonar) -->
-        <div id="ventilationParams" class="sub-section" style="display:none;">
-            <div id="VCVParams">
-                <div class="vital-sign">
-                    <label>VC (ml):</label>
-                    <input type="number" id="vc" min="0">
-                </div>
-                <div class="vital-sign">
-                    <label>PEEP (cmH2O):</label>
-                    <input type="number" id="peep" min="0" step="0.1">
-                </div>
-                <div class="vital-sign">
-                    <label>FiO2 (%):</label>
-                    <input type="number" id="fio2" min="21" max="100">
-                </div>
-                <div class="vital-sign">
-                    <label>FR (ipm):</label>
-                    <input type="text" id="frVent" placeholder="Ex: 24/20" pattern="\d{1,2}\/\d{1,2}">
-                </div>
-            </div>
-            <div id="PCVParams">
-                <div class="vital-sign">
-                    <label>Pinsp (cmH2O):</label>
-                    <input type="number" id="pinsp" min="0" step="0.1">
-                </div>
-                <div class="vital-sign">
-                    <label>PEEP (cmH2O):</label>
-                    <input type="number" id="peepPcv" min="0" step="0.1">
-                </div>
-                <div class="vital-sign">
-                    <label>FiO2 (%):</label>
-                    <input type="number" id="fio2Pcv" min="21" max="100">
-                </div>
-                <div class="vital-sign">
-                    <label>FR (ipm):</label>
-                    <input type="text" id="frPcv" placeholder="Ex: 24/20" pattern="\d{1,2}\/\d{1,2}">
-                </div>
-            </div>
-            <div id="PSVParams">
-                <div class="vital-sign">
-                    <label>Psup (cmH2O):</label>
-                    <input type="number" id="psup" min="0" step="0.1">
-                </div>
-                <div class="vital-sign">
-                    <label>PEEP (cmH2O):</label>
-                    <input type="number" id="peepPsv" min="0" step="0.1">
-                </div>
-                <div class="vital-sign">
-                    <label>FiO2 (%):</label>
-                    <input type="number" id="fio2Psv" min="21" max="100">
-                </div>
-            </div>
-            <div id="SIMVParams">
-                <div class="vital-sign">
-                    <label>VC (ml):</label>
-                    <input type="number" id="vcSimv" min="0">
-                </div>
-                <div class="vital-sign">
-                    <label>Psup (cmH2O):</label>
-                    <input type="number" id="psupSimv" min="0" step="0.1">
-                </div>
-                <div class="vital-sign">
-                    <label>PEEP (cmH2O):</label>
-                    <input type="number" id="peepSimv" min="0" step="0.1">
-                </div>
-                <div class="vital-sign">
-                    <label>FR (ipm):</label>
-                    <input type="number" id="frSimv" min="0">
-                </div>
-                <div class="vital-sign">
-                    <label>FiO2 (%):</label>
-                    <input type="number" id="fio2Simv" min="21" max="100">
-                </div>
-            </div>
-        </div>
-
-        <!-- Mecânica Pulmonar (agora depois dos parâmetros) -->
-        <div id="mecanicaPulmonarContainer" class="sub-section" style="display:none;">
-            <label>Mecânica Pulmonar:</label>
-            <div class="radio-group">
-                <label><input type="radio" name="mecanicaPulmonar" value="Sim" onclick="mostrarMecanicaPulmonar()"> Sim</label>
-                <label><input type="radio" name="mecanicaPulmonar" value="Não" onclick="esconderMecanicaPulmonar()" checked> Não</label>
-            </div>
-            
-            <div id="detalhesMecanicaPulmonar" style="display:none; margin-top:10px;">
-                <div class="vital-signs-container">
-                    <div class="vital-sign">
-                        <label>Complacência (ml/cmH2O):</label>
-                        <input type="number" id="Complacência" min="0" step="0.1">
-                    </div>
-                    <div class="vital-sign">
-                        <label>Resistência (cmH2O/L/s):</label>
-                        <input type="number" id="resistencia" min="0" step="0.1">
-                    </div>
-                    <div class="vital-sign">
-                        <label>Pressão de Platô (cmH2O):</label>
-                        <input type="number" id="pressaoPlato" min="0" step="0.1">
-                    </div>
-                    <div class="vital-sign">
-                        <label>Pressão de Pico (cmH2O):</label>
-                        <input type="number" id="pressaoPico" min="0" step="0.1">
-                    </div>
-                    <div class="vital-sign">
-                        <label>Auto-PEEP (cmH2O):</label>
-                        <input type="number" id="autoPEEP" min="0" step="0.1">
-                    </div>
-                    <div class="vital-sign">
-    <label>Drive Pressure (cmH2O):</label>
-    <input type="number" id="drivePressure" min="0" step="0.1">
+<div class="section-header">📋 Informações Básicas</div>
+<div class="section-content">
+<div class="tipo-evolucao">
+<label class="required-field">Tipo:</label>
+<select id="tipoDocumento">
+<option selected="" value="evolucao">Evolução</option>
+<option value="admissao">Admissão</option>
+</select>
 </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="fluxoContainer" class="sub-section" style="display:none;">
-            <label>Fluxo (L/min):</label>
-            <input type="number" id="fluxo" min="1" max="60">
-            <div id="fio2CNAFContainer" style="display:none; margin-top:10px;">
-                <label>FiO₂ (%):</label>
-                <input type="number" id="fio2CNAF" min="21" max="100" value="21">
-            </div>
-            <div id="roxContainer" style="display:none; margin-top:10px;">
-                <label>Índice ROX:</label>
-                <span id="roxValue">-</span>
-                <span id="roxInterpretation"></span>
-            </div>
-        </div>
-
-        <div class="sub-section">
-            <label>Padrão Respiratório:</label>
-            <div class="radio-group">
-                <label><input type="radio" name="respPattern" value="Eupneia" checked> Eupneia</label>
-                <label><input type="radio" name="respPattern" value="Taquipneia"> Taquipneia</label>
-                <label><input type="radio" name="respPattern" value="Bradipneia"> Bradipneia</label>
-                <label><input type="radio" name="respPattern" value="Dispneia"> Dispneia</label>
-                <label><input type="radio" name="respPattern" value="Apneia"> Apneia</label>
-                <label><input type="radio" name="respPattern" value="Cheyne-Stokes"> Cheyne-Stokes</label>
-                <label><input type="radio" name="respPattern" value="Biot"> Biot</label>
-                <label><input type="radio" name="respPattern" value="Kussmaul"> Kussmaul</label>
-            </div>
-        </div>
-
-        <div class="sub-section">
-            <label>Tosse:</label>
-            <div class="radio-group">
-                <label><input type="radio" name="tosse" value="Eficaz" onclick="mostrarTipoTosse()" checked> Eficaz</label>
-                <label><input type="radio" name="tosse" value="Débil" onclick="mostrarTipoTosse()"> Débil</label>
-                <label><input type="radio" name="tosse" value="Ineficaz" onclick="esconderTipoTosse()"> Ineficaz</label>
-                <label><input type="radio" name="tosse" value="Ausente" onclick="esconderTipoTosse()"> Ausente</label>
-            </div>
-            
-            <div id="tipoTosse" class="sub-section" style="display: block;">
-                <label>Tipo:</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="tipoTosse" value="Produtiva" checked> Produtiva</label>
-                    <label><input type="radio" name="tipoTosse" value="Úmida"> Úmida</label>
-                    
-                    <label><input type="radio" name="tipoTosse" value="Seca"> Seca</label>
-                </div>
-            </div>
-        </div>
-
-        <div class="sub-section">
-    <label>Padrão Muscular Ventilatório (PMV):</label>
-    <div class="radio-group">
-        <label><input type="radio" name="pmv" value="Diafragmático"> Diafragmático</label>
-        <label><input type="radio" name="pmv" value="Abdominal"> Abdominal</label>
-        <label><input type="radio" name="pmv" value="Costodiafragmático" checked> Costodiafragmático</label>
-        <label><input type="radio" name="pmv" value="Paradoxal"> Paradoxal</label>
-        <label><input type="radio" name="pmv" value="Acessório"> Acessório</label>
-    </div>
-    <div id="trabalhoRespiratorioContainer" class="sub-section" style="display:block;">
-        <label>Trabalho Respiratório:</label>
-        <div class="radio-group">
-            <label><input type="radio" name="trabalhoRespiratorio" value="Com aumento de trabalho respiratório"> Com aumento</label>
-            <label><input type="radio" name="trabalhoRespiratorio" value="Sem sinais de aumento de trabalho respiratório" checked> Sem aumento</label>
-        </div>
-    </div>
+<label class="required-field">UTI:</label>
+<select id="uti">
+<option disabled="" selected="" value="">Selecione</option>
+<option value="CARDIOVASCULAR">CARDIOVASCULAR</option>
+<option value="CIRÚRGICA">CIRÚRGICA</option>
+<option value="GERAL 1">GERAL 1</option>
+<option value="GERAL 2">GERAL 2</option>
+<option value="NEO">NEO</option>
+<option value="NEURO">NEURO</option>
+<option value="ONCO-HEMATO">ONCO-HEMATO</option>
+<option value="PEDI">PEDI</option>
+</select>
+<label class="required-field">Data da Evolução:</label>
+<input id="dataEvolucao" pattern="(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}" placeholder="DD/MM/AAAA" title="Digite uma data válida (DD/MM/AAAA)" type="text"/>
+<label class="required-field">Turno:</label>
+<select id="turno">
+<option disabled="" selected="" value="">Selecione</option>
+<option value="Manhã">Manhã</option>
+<option value="Tarde">Tarde</option>
+<option value="Noite">Noite</option>
+</select>
+<label class="required-field">Sexo:</label>
+<div class="radio-group">
+<label><input checked="" name="sexo" type="radio" value="Masculino"/> Masculino</label>
+<label><input name="sexo" type="radio" value="Feminino"/> Feminino</label>
 </div>
-
-        <div class="sub-section">
-            <label>Expansibilidade Torácica:</label>
-            <div class="radio-group">
-                <label><input type="radio" name="expansibilidade" value="Simétrica" onclick="hideLungOptions()" checked> Simétrica</label>
-                <label><input type="radio" name="expansibilidade" value="Diminuída" onclick="showLungOptions()"> Diminuída</label>
-                <label><input type="radio" name="expansibilidade" value="Assimétrica" onclick="showLungOptions()"> Assimétrica</label>
-                <label><input type="radio" name="expansibilidade" value="Ausente" onclick="hideLungOptions()"> Ausente</label>
-            </div>
-            <div id="lungOptions" class="sub-section" style="display:none;">
-                <label>Local:</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="lungSide" value="Direito"> Direito</label>
-                    <label><input type="radio" name="lungSide" value="Esquerdo"> Esquerdo</label>
-                    <label><input type="radio" name="lungSide" value="Bilateral"> Bilateral</label>
-                </div>
-            </div>
-        </div>
-
-        <div class="sub-section">
-            <label>Ausculta Pulmonar:</label>
-            <div class="radio-group">
-                <label><input type="radio" name="ausculta" value="Sons audíveis" onclick="mostrarOpcoesRuidos()" checked> Sons audíveis</label>
-                <label><input type="radio" name="ausculta" value="Sons reduzidos" onclick="mostrarOpcoesRuidos()"> Sons reduzidos</label>
-                <label><input type="radio" name="ausculta" value="Sons ausentes" onclick="mostrarOpcoesRuidos()"> Sons ausentes</label>
-            </div>
-            
-            <div id="opcoesRuidos" style="margin-top:10px;">
-                <div id="sonsReduzidosOptions" class="sub-section" style="display:none;">
-                    <label>Localização:</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="auscultaSide" value="Bilateralmente" checked> Bilateralmente</label>
-                        <label><input type="radio" name="auscultaSide" value="Pulmão Direito"> Pulmão Direito</label>
-                        <label><input type="radio" name="auscultaSide" value="Pulmão Esquerdo"> Pulmão Esquerdo</label>
-                        <label><input type="radio" name="auscultaSide" value="Ápice"> Ápice</label>
-                        <label><input type="radio" name="auscultaSide" value="Base"> Base</label>
-                    </div>
-                </div>
-                
-                <label>Ruídos:</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="ruidos" value="com ruídos" onclick="mostrarTiposRuidos()"> Com ruídos</label>
-                    <label><input type="radio" name="ruidos" value="sem ruídos" onclick="esconderTiposRuidos()"> Sem ruídos</label>
-                </div>
-                
-                <div id="tiposRuidos" class="sub-section" style="display:none;">
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" name="tipoRuido" value="Roncos" onclick="mostrarOpcoesRuidos()"> Roncos</label>
-                        <label><input type="checkbox" name="tipoRuido" value="Sibilos"> Sibilos</label>
-                        <label><input type="checkbox" name="tipoRuido" value="Estridores"> Estridores</label>
-                        <label><input type="checkbox" name="tipoRuido" value="Estertores"> Estertores</label>
-                        <label><input type="checkbox" name="tipoRuido" value="Atrito pleural"> Atrito pleural</label>
-                    </div>
-                    </div>
-            </div>
-                    <div class="sub-section">
-    <label>Observações Adicionais (Respiratório):</label>
-    <textarea id="obsRespiratorio" placeholder="Adicione observações sobre o sistema respiratório..." style="height: 80px;"></textarea>
+<div class="sub-section" id="hdaContainer" style="display: none;">
+<label>HDA (História da Doença Atual):</label>
+<textarea id="hdaTexto" placeholder="Descreva a história da doença atual do paciente..."></textarea>
 </div>
-        </div>
-
+</div>
+</div>
+<!-- Seção de Encontrado no Leito -->
+<div class="expandable-section">
+<div class="section-header">🛏️ Encontrado no Leito</div>
+<div class="section-content">
+<label class="required-field">Posição no leito:</label>
+<select id="posicaoLeito">
+<option disabled="" selected="" value="">Selecione</option>
+<option value="decúbito dorsal">Decúbito Dorsal</option>
+<option value="decúbito lateral direito">Decúbito Lateral Direito</option>
+<option value="decúbito lateral esquerdo">Decúbito Lateral Esquerdo</option>
+<option value="sedestação">Sedestação</option>
+</select>
+<label>Contenção:</label>
+<div class="radio-group">
+<label><input name="contencao" onclick="mostrarOpcoesContencao()" type="radio" value="Sim"/> Sim</label>
+<label><input checked="" name="contencao" onclick="mostrarOpcoesContencao()" type="radio" value="Não"/> Não</label>
+</div>
+<div class="sub-section" id="opcoesContencao" style="display:none;">
+<label>MMSS:</label>
+<input name="MMSS" type="checkbox" value="MMSS"/> Sim
+                    <label>MMII:</label>
+<input name="MMII" type="checkbox" value="MMII"/> Sim
+                </div>
+<!-- Avaliação de Dor -->
+<div class="sub-section">
+<label>Avaliação de Dor:</label>
+<div class="radio-group">
+<label><input name="avaliacaoDor" onclick="mostrarEscalaEVA()" type="radio" value="Sim"/> Sim</label>
+<label><input checked="" name="avaliacaoDor" onclick="esconderEscalaEVA()" type="radio" value="Não"/> Não</label>
+</div>
+<div id="escalaEVAContainer" style="display:none;">
+<div class="eva-container">
+<label>Escala EVA (0-10):</label>
+<input class="eva-slider" id="eva" max="10" min="0" oninput="document.getElementById('evaValue').textContent = this.value" step="1" type="range" value="0"/>
+<span class="eva-value" id="evaValue">0</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Seção de sinais vitais -->
+<div class="expandable-section">
+<div class="section-header">💓 Sinais Vitais</div>
+<div class="section-content">
+<div class="vital-signs-container">
+<div class="vital-sign">
+<label class="required-field">FC:</label>
+<input id="fc" min="0" type="number"/>
+</div>
+<div class="vital-sign">
+<label class="required-field">FR:</label>
+<input id="fr" min="0" type="number"/>
+</div>
+<div class="vital-sign">
+<label class="required-field">SPO2:</label>
+<input id="spo2" max="100" min="0" type="number"/>
+</div>
+<div class="vital-sign">
+<label class="required-field">PA:</label>
+<input id="pa" oninput="calcularPAM(this.value)" pattern="\d{1,3}\/\d{1,3}" placeholder="Ex: 120/80" type="text"/>
+<span id="pam" style="margin-left:5px;"></span>
+</div>
+<div class="vital-sign">
+<label class="required-field">Temperatura:</label>
+<input id="temp" max="45" min="20" step="0.1" type="number"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Seção de estado mental -->
+<div class="expandable-section">
+<div class="section-header">🧠 Estado Mental</div>
+<div class="section-content">
+<div class="checkbox-group">
+<label><input name="estadoComportamental" type="checkbox" value="desperto"/> Desperto</label>
+<label><input name="estadoComportamental" type="checkbox" value="vigil"/> Vigil</label>
+<label><input name="estadoComportamental" type="checkbox" value="alerta"/> Alerta</label>
+<label><input name="estadoComportamental" type="checkbox" value="sonolento"/> Sonolento</label>
+<label><input name="estadoComportamental" type="checkbox" value="comatoso"/> Comatoso</label>
+<label><input name="estadoComportamental" type="checkbox" value="agitado"/> Agitado</label>
+<label><input name="estadoComportamental" type="checkbox" value="desorientado"/> Desorientado</label>
+<label><input name="estadoComportamental" type="checkbox" value="orientado"/> Orientado</label>
+<label><input name="estadoComportamental" type="checkbox" value="confuso"/> Confuso</label>
+<label><input name="estadoComportamental" type="checkbox" value="responsivo"/> Responsivo</label>
+<label><input name="estadoComportamental" type="checkbox" value="Narcose Anestésica"/> Narcose Anestésica</label>
+<label><input name="estadoComportamental" type="checkbox" value="não Responsivo"/> Não Responsivo</label>
+<label><input name="estadoComportamental" type="checkbox" value="hipoativo"/> Hipoativo</label>
+<!-- AFASIA (só aparece na UTI Neuro) -->
+<div id="afasiaContainer" style="display:none; margin-top:15px;">
+<label>Afasia:</label>
+<div style="display:flex; gap:15px;">
+<label><input checked="" name="afasia" type="radio" value="Sem"/> Sem Afasia</label>
+<label><input name="afasia" type="radio" value="Motora"/> Motora</label>
+<label><input name="afasia" type="radio" value="Sensitiva"/> Sensitiva</label>
+<label><input name="afasia" type="radio" value="Mista"/> Mista</label>
+</div>
+</div>
+</div>
+<label>Sedacão:</label>
+<div class="radio-group">
+<label><input name="sedacao" onclick="mostrarOpcoesSedacao()" type="radio" value="Sim"/> Sim</label>
+<label><input name="sedacao" onclick="mostrarOpcoesSedacao()" type="radio" value="Narcose Anestésica"/> Narcose Anestésica</label>
+<label><input checked="" name="sedacao" onclick="mostrarOpcoesSedacao()" type="radio" value="Não"/> Não</label>
+</div>
+<div class="sub-section" id="opcoesSedacao" style="display:none;">
+<label>Sedativos:</label>
+<div class="checkbox-group">
+<label><input name="sedativos" type="checkbox" value="Bloqueador Neuromuscular"/> Bloqueador Neuromuscular</label>
+<label><input name="sedativos" type="checkbox" value="Dormonid"/> Dormonid</label>
+<label><input name="sedativos" type="checkbox" value="Fentanil"/> Fentanil</label>
+<label><input name="sedativos" type="checkbox" value="Ketamina"/> Ketamina</label>
+<label><input name="sedativos" type="checkbox" value="Midazolam"/> Midazolam</label>
+<label><input name="sedativos" type="checkbox" value="Precedex"/> Precedex</label>
+<label><input name="sedativos" type="checkbox" value="Propofol"/> Propofol</label>
+</div>
+<label>Escala RASS:</label>
+<select id="rass">
+<option value="-5">-5 (Profundamente Sedado)</option>
+<option value="-4">-4 (Sedado, mas responde a estímulos dolorosos)</option>
+<option value="-3">-3 (Sedado, mas responde a voz)</option>
+<option value="-2">-2 (Sedação leve, responde parcialmente)</option>
+<option value="-1">-1 (Levemente sedado, responde completamente)</option>
+<option value="0">0 (Completamente acordado, sem sedação)</option>
+<option value="1">1 (Agitação leve)</option>
+<option value="2">2 (Agitação moderada)</option>
+<option value="3">3 (Agitação grave)</option>
+</select>
+</div>
+<div id="opcoesGlasgow" style="display:block;">
+<label>Escala de Glasgow:</label>
+<select id="glasgow">
+<option disabled="" selected="" value="">Selecione</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+</select>
+<div id="glasgowComponents" style="margin-top:10px; display:none; font-size:0.9em;">
+<div style="display:flex; gap:10px;">
+<div>
+<small>Ocular</small>
+<select id="glasgowOcular" style="width:80px;">
+<option value="4">4</option>
+<option value="3">3</option>
+<option value="2">2</option>
+<option value="1">1</option>
+</select>
+</div>
+<div>
+<small>Verbal</small>
+<select id="glasgowVerbal" style="width:80px;">
+<option value="5">5</option>
+<option value="4">4</option>
+<option value="3">3</option>
+<option value="2">2</option>
+<option value="1">1</option>
+</select>
+</div>
+<div>
+<small>Motora</small>
+<select id="glasgowMotora" style="width:80px;">
+<option value="6">6</option>
+<option value="5">5</option>
+<option value="4">4</option>
+<option value="3">3</option>
+<option value="2">2</option>
+<option value="1">1</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Seção de estado hemodinâmico -->
+<div class="expandable-section">
+<div class="section-header">❤️ Estado Hemodinâmico</div>
+<div class="section-content">
+<div class="radio-group" style="display: flex; flex-wrap: wrap; gap: 15px;">
+<label><input checked="" name="hemodinamica" type="radio" value="Hemodinâmica estável"/> Estável</label>
+<label><input name="hemodinamica" type="radio" value="Hemodinâmica compensada"/> Compensada</label>
+<label><input name="hemodinamica" type="radio" value="Hemodinâmica instável"/> Instável</label>
+</div>
+<div class="radio-group" style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px;">
+<label><input name="drogasVasoativas" onclick="mostrarDrogas()" type="radio" value="com uso de drogas vasoativas"/> Com drogas vasoativas</label>
+<label><input checked="" name="drogasVasoativas" onclick="mostrarDrogas()" type="radio" value="sem uso de drogas vasoativas"/> Sem drogas vasoativas</label>
+</div>
+<div class="sub-section" id="opcoesDrogas" style="display:none;">
+<label>Drogas vasoativas:</label>
+<div class="checkbox-group">
+<label><input name="drogas" type="checkbox" value="Amiodarona"/> Amiodarona</label>
+<label><input name="drogas" type="checkbox" value="Ancoron"/> Ancoron</label>
+<label><input name="drogas" type="checkbox" value="Dobutamina"/> Dobutamina</label>
+<label><input name="drogas" type="checkbox" value="Nipride"/> Nipride</label>
+<label><input name="drogas" type="checkbox" value="Noradrenalina"/> Noradrenalina</label>
+<label><input name="drogas" type="checkbox" value="Tridil"/> Tridil</label>
+<label><input name="drogas" type="checkbox" value="Vasopressina"/> Vasopressina</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Seção de sistema respiratório -->
+<div class="expandable-section">
+<div class="section-header">🌬️ Sistema Respiratório</div>
+<div class="section-content">
+<label class="required-field">Tipo de ventilação:</label>
+<select id="sistemaRespiratorio" onchange="atualizarOpcoesRespiratorias()">
+<option disabled="" selected="" value="">Selecione</option>
+<option value="espontanea">Ventilação Espontânea</option>
+<option value="vni">Ventilação Não Invasiva (VNI)</option>
+<option value="VM">Ventilação Mecânica (VM)</option>
+</select>
+<!-- Via Aérea (só aparece para VM) -->
+<div class="sub-section" id="viaAereaOptions" style="display:none;">
+<label>Via Aérea:</label>
+<div class="radio-group">
+<label><input name="viaAerea" onclick="mostrarCuffOptions()" type="radio" value="TOT"/> TOT (Tubo Orotraqueal)</label>
+<label><input name="viaAerea" onclick="mostrarOpcoesTQT()" type="radio" value="TQT"/> TQT (Tubo Traqueal)</label>
+</div>
+<div class="sub-section" id="opcoesTQT" style="display:none;">
+<label>Tipo de Cânula:</label>
+<div class="radio-group">
+<label><input name="tipoTQT" type="radio" value="Cânula Plástica Simples"/> Cânula Plástica Simples</label>
+<label><input name="tipoTQT" type="radio" value="Cânula Plástica Blue Line"/> Cânula Plástica Blue Line</label>
+<label><input name="tipoTQT" type="radio" value="Cânula Metálica"/> Cânula Metálica</label>
+</div>
+</div>
+<div class="sub-section" id="cuffOptions" style="display:none;">
+<label>Cuff:</label>
+<div class="radio-group">
+<label><input name="cuff" onclick="mostrarPressaoCuff()" type="radio" value="Insuflado"/> Insuflado</label>
+<label><input name="cuff" onclick="esconderPressaoCuff()" type="radio" value="Desinsuflado"/> Desinsuflado</label>
+</div>
+<div class="sub-section" id="pressaoCuff" style="display:none;">
+<label>P.Cuff (cmH2O):</label>
+<input id="pcuff" max="50" min="0" step="0.1" type="number"/>
+<div style="margin-top: 10px;">
+<label>Fixado em Rima Labial (cm):</label>
+<input id="rimaLabial" max="30" min="0" step="0.1" type="number"/>
+</div>
+<div style="margin-top: 10px;">
+<label>Número do Tubo:</label>
+<input id="numeroTubo" max="10" min="0" step="0.5" type="number"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Modos Ventilatórios (só aparece para VM/VNI) -->
+<div id="opcoesRespiratorias"></div>
+<!-- Parâmetros de Ventilação (agora antes da mecânica pulmonar) -->
+<div class="sub-section" id="ventilationParams" style="display:none;">
+<div id="VCVParams">
+<div class="vital-sign">
+<label>VC (ml):</label>
+<input id="vc" min="0" type="number"/>
+</div>
+<div class="vital-sign">
+<label>PEEP (cmH2O):</label>
+<input id="peep" min="0" step="0.1" type="number"/>
+</div>
+<div class="vital-sign">
+<label>FiO2 (%):</label>
+<input id="fio2" max="100" min="21" type="number"/>
+</div>
+<div class="vital-sign">
+<label>FR (ipm):</label>
+<input id="frVent" pattern="\d{1,2}\/\d{1,2}" placeholder="Ex: 24/20" type="text"/>
+</div>
+</div>
+<div id="PCVParams">
+<div class="vital-sign">
+<label>Pinsp (cmH2O):</label>
+<input id="pinsp" min="0" step="0.1" type="number"/>
+</div>
+<div class="vital-sign">
+<label>PEEP (cmH2O):</label>
+<input id="peepPcv" min="0" step="0.1" type="number"/>
+</div>
+<div class="vital-sign">
+<label>FiO2 (%):</label>
+<input id="fio2Pcv" max="100" min="21" type="number"/>
+</div>
+<div class="vital-sign">
+<label>FR (ipm):</label>
+<input id="frPcv" pattern="\d{1,2}\/\d{1,2}" placeholder="Ex: 24/20" type="text"/>
+</div>
+</div>
+<div id="PSVParams">
+<div class="vital-sign">
+<label>Psup (cmH2O):</label>
+<input id="psup" min="0" step="0.1" type="number"/>
+</div>
+<div class="vital-sign">
+<label>PEEP (cmH2O):</label>
+<input id="peepPsv" min="0" step="0.1" type="number"/>
+</div>
+<div class="vital-sign">
+<label>FiO2 (%):</label>
+<input id="fio2Psv" max="100" min="21" type="number"/>
+</div>
+</div>
+<div id="SIMVParams">
+<div class="vital-sign">
+<label>VC (ml):</label>
+<input id="vcSimv" min="0" type="number"/>
+</div>
+<div class="vital-sign">
+<label>Psup (cmH2O):</label>
+<input id="psupSimv" min="0" step="0.1" type="number"/>
+</div>
+<div class="vital-sign">
+<label>PEEP (cmH2O):</label>
+<input id="peepSimv" min="0" step="0.1" type="number"/>
+</div>
+<div class="vital-sign">
+<label>FR (ipm):</label>
+<input id="frSimv" min="0" type="number"/>
+</div>
+<div class="vital-sign">
+<label>FiO2 (%):</label>
+<input id="fio2Simv" max="100" min="21" type="number"/>
+</div>
+</div>
+</div>
+<!-- Mecânica Pulmonar (agora depois dos parâmetros) -->
+<div class="sub-section" id="mecanicaPulmonarContainer" style="display:none;">
+<label>Mecânica Pulmonar:</label>
+<div class="radio-group">
+<label><input name="mecanicaPulmonar" onclick="mostrarMecanicaPulmonar()" type="radio" value="Sim"/> Sim</label>
+<label><input checked="" name="mecanicaPulmonar" onclick="esconderMecanicaPulmonar()" type="radio" value="Não"/> Não</label>
+</div>
+<div id="detalhesMecanicaPulmonar" style="display:none; margin-top:10px;">
+<div class="vital-signs-container">
+<div class="vital-sign">
+<label>Complacência (ml/cmH2O):</label>
+<input id="Complacência" min="0" step="0.1" type="number"/>
+</div>
+<div class="vital-sign">
+<label>Resistência (cmH2O/L/s):</label>
+<input id="resistencia" min="0" step="0.1" type="number"/>
+</div>
+<div class="vital-sign">
+<label>Pressão de Platô (cmH2O):</label>
+<input id="pressaoPlato" min="0" step="0.1" type="number"/>
+</div>
+<div class="vital-sign">
+<label>Pressão de Pico (cmH2O):</label>
+<input id="pressaoPico" min="0" step="0.1" type="number"/>
+</div>
+<div class="vital-sign">
+<label>Auto-PEEP (cmH2O):</label>
+<input id="autoPEEP" min="0" step="0.1" type="number"/>
+</div>
+<div class="vital-sign">
+<label>Drive Pressure (cmH2O):</label>
+<input id="drivePressure" min="0" step="0.1" type="number"/>
+</div>
+</div>
+</div>
+</div>
+<div class="sub-section" id="fluxoContainer" style="display:none;">
+<label>Fluxo (L/min):</label>
+<input id="fluxo" max="60" min="1" type="number"/>
+<div id="fio2CNAFContainer" style="display:none; margin-top:10px;">
+<label>FiO₂ (%):</label>
+<input id="fio2CNAF" max="100" min="21" type="number" value="21"/>
+</div>
+<div id="roxContainer" style="display:none; margin-top:10px;">
+<label>Índice ROX:</label>
+<span id="roxValue">-</span>
+<span id="roxInterpretation"></span>
+</div>
+</div>
+<div class="sub-section">
+<label>Padrão Respiratório:</label>
+<div class="radio-group">
+<label><input checked="" name="respPattern" type="radio" value="Eupneia"/> Eupneia</label>
+<label><input name="respPattern" type="radio" value="Taquipneia"/> Taquipneia</label>
+<label><input name="respPattern" type="radio" value="Bradipneia"/> Bradipneia</label>
+<label><input name="respPattern" type="radio" value="Dispneia"/> Dispneia</label>
+<label><input name="respPattern" type="radio" value="Apneia"/> Apneia</label>
+<label><input name="respPattern" type="radio" value="Cheyne-Stokes"/> Cheyne-Stokes</label>
+<label><input name="respPattern" type="radio" value="Biot"/> Biot</label>
+<label><input name="respPattern" type="radio" value="Kussmaul"/> Kussmaul</label>
+</div>
+</div>
+<div class="sub-section">
+<label>Tosse:</label>
+<div class="radio-group">
+<label><input checked="" name="tosse" onclick="mostrarTipoTosse()" type="radio" value="Eficaz"/> Eficaz</label>
+<label><input name="tosse" onclick="mostrarTipoTosse()" type="radio" value="Débil"/> Débil</label>
+<label><input name="tosse" onclick="esconderTipoTosse()" type="radio" value="Ineficaz"/> Ineficaz</label>
+<label><input name="tosse" onclick="esconderTipoTosse()" type="radio" value="Ausente"/> Ausente</label>
+</div>
+<div class="sub-section" id="tipoTosse" style="display: block;">
+<label>Tipo:</label>
+<div class="radio-group">
+<label><input checked="" name="tipoTosse" type="radio" value="Produtiva"/> Produtiva</label>
+<label><input name="tipoTosse" type="radio" value="Úmida"/> Úmida</label>
+<label><input name="tipoTosse" type="radio" value="Seca"/> Seca</label>
+</div>
+</div>
+</div>
+<div class="sub-section">
+<label>Padrão Muscular Ventilatório (PMV):</label>
+<div class="radio-group">
+<label><input name="pmv" type="radio" value="Diafragmático"/> Diafragmático</label>
+<label><input name="pmv" type="radio" value="Abdominal"/> Abdominal</label>
+<label><input checked="" name="pmv" type="radio" value="Costodiafragmático"/> Costodiafragmático</label>
+<label><input name="pmv" type="radio" value="Paradoxal"/> Paradoxal</label>
+<label><input name="pmv" type="radio" value="Acessório"/> Acessório</label>
+</div>
+<div class="sub-section" id="trabalhoRespiratorioContainer" style="display:block;">
+<label>Trabalho Respiratório:</label>
+<div class="radio-group">
+<label><input name="trabalhoRespiratorio" type="radio" value="Com aumento de trabalho respiratório"/> Com aumento</label>
+<label><input checked="" name="trabalhoRespiratorio" type="radio" value="Sem sinais de aumento de trabalho respiratório"/> Sem aumento</label>
+</div>
+</div>
+</div>
+<div class="sub-section">
+<label>Expansibilidade Torácica:</label>
+<div class="radio-group">
+<label><input checked="" name="expansibilidade" onclick="hideLungOptions()" type="radio" value="Simétrica"/> Simétrica</label>
+<label><input name="expansibilidade" onclick="showLungOptions()" type="radio" value="Diminuída"/> Diminuída</label>
+<label><input name="expansibilidade" onclick="showLungOptions()" type="radio" value="Assimétrica"/> Assimétrica</label>
+<label><input name="expansibilidade" onclick="hideLungOptions()" type="radio" value="Ausente"/> Ausente</label>
+</div>
+<div class="sub-section" id="lungOptions" style="display:none;">
+<label>Local:</label>
+<div class="radio-group">
+<label><input name="lungSide" type="radio" value="Direito"/> Direito</label>
+<label><input name="lungSide" type="radio" value="Esquerdo"/> Esquerdo</label>
+<label><input name="lungSide" type="radio" value="Bilateral"/> Bilateral</label>
+</div>
+</div>
+</div>
+<div class="sub-section">
+<label>Ausculta Pulmonar:</label>
+<div class="radio-group">
+<label><input checked="" name="ausculta" onclick="mostrarOpcoesRuidos()" type="radio" value="Sons audíveis"/> Sons audíveis</label>
+<label><input name="ausculta" onclick="mostrarOpcoesRuidos()" type="radio" value="Sons reduzidos"/> Sons reduzidos</label>
+<label><input name="ausculta" onclick="mostrarOpcoesRuidos()" type="radio" value="Sons ausentes"/> Sons ausentes</label>
+</div>
+<div id="opcoesRuidos" style="margin-top:10px;">
+<div class="sub-section" id="sonsReduzidosOptions" style="display:none;">
+<label>Localização:</label>
+<div class="radio-group">
+<label><input checked="" name="auscultaSide" type="radio" value="Bilateralmente"/> Bilateralmente</label>
+<label><input name="auscultaSide" type="radio" value="Pulmão Direito"/> Pulmão Direito</label>
+<label><input name="auscultaSide" type="radio" value="Pulmão Esquerdo"/> Pulmão Esquerdo</label>
+<label><input name="auscultaSide" type="radio" value="Ápice"/> Ápice</label>
+<label><input name="auscultaSide" type="radio" value="Base"/> Base</label>
+</div>
+</div>
+<label>Ruídos:</label>
+<div class="radio-group">
+<label><input name="ruidos" onclick="mostrarTiposRuidos()" type="radio" value="com ruídos"/> Com ruídos</label>
+<label><input name="ruidos" onclick="esconderTiposRuidos()" type="radio" value="sem ruídos"/> Sem ruídos</label>
+</div>
+<div class="sub-section" id="tiposRuidos" style="display:none;">
+<div class="checkbox-group">
+<label><input name="tipoRuido" onclick="mostrarOpcoesRuidos()" type="checkbox" value="Roncos"/> Roncos</label>
+<label><input name="tipoRuido" type="checkbox" value="Sibilos"/> Sibilos</label>
+<label><input name="tipoRuido" type="checkbox" value="Estridores"/> Estridores</label>
+<label><input name="tipoRuido" type="checkbox" value="Estertores"/> Estertores</label>
+<label><input name="tipoRuido" type="checkbox" value="Atrito pleural"/> Atrito pleural</label>
+</div>
+</div>
+</div>
+<div class="sub-section">
+<label>Observações Adicionais (Respiratório):</label>
+<textarea id="obsRespiratorio" placeholder="Adicione observações sobre o sistema respiratório..." style="height: 80px;"></textarea>
+</div>
+</div>
 <!-- Marcos Respiratórios -->
 <div class="sub-section">
-    <label>Marcos Respiratórios:</label>
-    <textarea id="marcosRespiratorios" placeholder="Ex: IOT(21/03), TQT (28/03), Data de Extubação..." style="height: 80px;"></textarea>
+<label>Marcos Respiratórios:</label>
+<textarea id="marcosRespiratorios" placeholder="Ex: IOT(21/03), TQT (28/03), Data de Extubação..." style="height: 80px;"></textarea>
 </div>
-
-    </div>
 </div>
-
+</div>
 <!-- Seção de mecânica ventilatória -->
 <div class="expandable-section">
-    <div class="section-header">📊 Avaliação da Função Respiratória</div>
-    <div class="section-content">
-        <!-- Subseção de Monovacuometria -->
-        <div class="expandable-section">
-            <div class="section-header">Monovacuometria</div>
-            <div class="section-content">
-                <div class="vital-signs-container">
-                    <div class="vital-sign">
-                        <label>PiMax (cmH2O):</label>
-                        <input type="number" id="pimax" min="0" step="0.1">
-                    </div>
-                    <div class="vital-sign">
-                        <label>PeMax (cmH2O):</label>
-                        <input type="number" id="pemax" min="0" step="0.1">
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Subseção de Ventilometria -->
-        <div class="expandable-section">
-            <div class="section-header">Ventilometria</div>
-            <div class="section-content">
-                <div class="vital-signs-container">
-                    <div class="vital-sign">
-                        <label>Volume Corrente (ml):</label>
-                        <input type="number" id="vcVentilometria" min="0">
-                    </div>
-                    <div class="vital-sign">
-                        <label>Frequência Respiratória (irpm):</label>
-                        <input type="number" id="frVentilometria" min="0">
-                    </div>
-                    <div class="vital-sign">
-                        <label>Volume Minuto (L/min):</label>
-                        <input type="number" id="vm" min="0" step="0.1" readonly>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-        <!-- Seção de hemogasometria -->
-        <div class="expandable-section">
-            <div class="section-header">🩸 Hemogasometria Arterial</div>
-            <div class="section-content">
-                <label>Realizada HGA:</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="hga" value="Com HGA" onclick="mostrarCamposHGA()"> Com HGA</label>
-                    <label><input type="radio" name="hga" value="Sem HGA" onclick="esconderCamposHGA()" checked> Sem HGA</label>
-                </div>
-                
-                <div id="camposHGA" class="sub-section" style="display:none;">
-                    <div class="vital-signs-container">
-                        <div class="vital-sign">
-                            <label>pH:</label>
-                            <input type="number" id="ph" step="0.01" min="6.8" max="7.8">
-                        </div>
-                        <div class="vital-sign">
-                            <label>PaO2:</label>
-                            <input type="number" id="pao2" min="0">
-                        </div>
-                        <div class="vital-sign">
-                            <label>PCO2:</label>
-                            <input type="number" id="pco2" min="0">
-                        </div>
-                        <div class="vital-sign">
-                            <label>HCO3:</label>
-                            <input type="number" id="hco3" min="0">
-                        </div>
-                        <div class="vital-sign">
-                            <label>Lac:</label>
-                            <input type="number" id="lac" step="0.1" min="0">
-                        </div>
-                        <div class="vital-sign">
-                            <label>P/F:</label>
-                            <input type="number" id="pf" min="0">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Seção de condição neuro musculoesquelética -->
-        <div class="expandable-section">
-            <div class="section-header">💪 Condição Neuro Musculoesquelética</div>
-            <div class="section-content">
-                <div class="sub-section">
-                    <label>Amplitude de Movimento:</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="amplitudeMovimento" value="Preservadas" onclick="esconderLocalizacaoADM()" checked> Preservadas</label>
-                        <label><input type="radio" name="amplitudeMovimento" value="Reduzidas" onclick="mostrarLocalizacaoADM()"> Reduzidas</label>
-                    </div>
-                    
-                    <div id="localizacaoADM" class="sub-section" style="display:none;">
-                        <div class="vital-signs-container">
-                            <div class="vital-sign">
-                                <label>MSD:</label>
-                                <select name="admMSD">
-                                    <option value="ADM Normal">ADM Normal</option>
-                                    <option value="ADM Levemente Reduzida">ADM Levemente Reduzida</option>
-                                    <option value="ADM Moderadamente Reduzida">ADM Moderadamente Reduzida</option>
-                                    <option value="ADM Severamente Reduzida">ADM Severamente Reduzida</option>
-                                    <option value="Anquilose ou ADM Ausente">Anquilose ou ADM Ausente</option>
-                                </select>
-                            </div>
-                            <div class="vital-sign">
-                                <label>MSE:</label>
-                                <select name="admMSE">
-                                    <option value="ADM Normal">ADM Normal</option>
-                                    <option value="ADM Levemente Reduzida">ADM Levemente Reduzida</option>
-                                    <option value="ADM Moderadamente Reduzida">ADM Moderadamente Reduzida</option>
-                                    <option value="ADM Severamente Reduzida">ADM Severamente Reduzida</option>
-                                    <option value="Anquilose ou ADM Ausente">Anquilose ou ADM Ausente</option>
-                                </select>
-                            </div>
-                            <div class="vital-sign">
-                                <label>MID:</label>
-                                <select name="admMID">
-                                    <option value="ADM Normal">ADM Normal</option>
-                                    <option value="ADM Levemente Reduzida">ADM Levemente Reduzida</option>
-                                    <option value="ADM Moderadamente Reduzida">ADM Moderadamente Reduzida</option>
-                                    <option value="ADM Severamente Reduzida">ADM Severamente Reduzida</option>
-                                    <option value="Anquilose ou ADM Ausente">Anquilose ou ADM Ausente</option>
-                                </select>
-                            </div>
-                            <div class="vital-sign">
-                                <label>MIE:</label>
-                                <select name="admMIE">
-                                    <option value="ADM Normal">ADM Normal</option>
-                                    <option value="ADM Levemente Reduzida">ADM Levemente Reduzida</option>
-                                    <option value="ADM Moderadamente Reduzida">ADM Moderadamente Reduzida</option>
-                                    <option value="ADM Severamente Reduzida">ADM Severamente Reduzida</option>
-                                    <option value="Anquilose ou ADM Ausente">Anquilose ou ADM Ausente</option>
-                                </select>
-                            </div>
-                            <div class="vital-sign">
-                                <label>Tronco:</label>
-                                <select name="admTronco">
-                                    <option value="ADM Normal">ADM Normal</option>
-                                    <option value="ADM Levemente Reduzida">ADM Levemente Reduzida</option>
-                                    <option value="ADM Moderadamente Reduzida">ADM Moderadamente Reduzida</option>
-                                    <option value="ADM Severamente Reduzida">ADM Severamente Reduzida</option>
-                                    <option value="Anquilose ou ADM Ausente">Anquilose ou ADM Ausente</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sub-section">
-                    <label>Amputações:</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="amputacao" value="Sim" onclick="mostrarOpcoesAmputacao()"> Sim</label>
-                        <label><input type="radio" name="amputacao" value="Não" onclick="esconderOpcoesAmputacao()" checked> Não</label>
-                    </div>
-                    
-                    <div id="opcoesAmputacao" class="sub-section" style="display:none;">
-                        <label>Tipo e Localização:</label>
-                        <div class="vital-signs-container">
-                            <div class="vital-sign">
-                                <label><input type="checkbox" name="localAmputacao" value="MSD"> Membro Superior Direito</label>
-                                <select name="tipoAmputacaoMSD">
-                                    <option value="">Selecione o tipo</option>
-                                    <option value="Dedo(s)">Dedo(s)</option>
-                                    <option value="Mão">Mão</option>
-                                    <option value="Antebraço">Antebraço</option>
-                                    <option value="Braço">Braço</option>
-                                </select>
-                            </div>
-                            <div class="vital-sign">
-                                <label><input type="checkbox" name="localAmputacao" value="MSE"> Membro Superior Esquerdo</label>
-                                <select name="tipoAmputacaoMSE">
-                                    <option value="">Selecione o tipo</option>
-                                    <option value="Dedo(s)">Dedo(s)</option>
-                                    <option value="Mão">Mão</option>
-                                    <option value="Antebraço">Antebraço</option>
-                                    <option value="Braço">Braço</option>
-                                </select>
-                            </div>
-                            <div class="vital-sign">
-                                <label><input type="checkbox" name="localAmputacao" value="MID"> Membro Inferior Direito</label>
-                                <select name="tipoAmputacaoMID">
-                                    <option value="">Selecione o tipo</option>
-                                    <option value="Dedo(s)">Dedo(s)</option>
-                                    <option value="Pé">Pé</option>
-                                    <option value="Transtibial">Transtibial</option>
-                                    <option value="Transfemoral">Transfemoral</option>
-                                    <option value="Hemipelvectomia">Hemipelvectomia</option>
-                                </select>
-                            </div>
-                            <div class="vital-sign">
-                                <label><input type="checkbox" name="localAmputacao" value="MIE"> Membro Inferior Esquerdo</label>
-                                <select name="tipoAmputacaoMIE">
-                                    <option value="">Selecione o tipo</option>
-                                    <option value="Dedo(s)">Dedo(s)</option>
-                                    <option value="Pé">Pé</option>
-                                    <option value="Transtibial">Transtibial</option>
-                                    <option value="Transfemoral">Transfemoral</option>
-                                    <option value="Hemipelvectomia">Hemipelvectomia</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sub-section">
-                    <label>Avaliar Força Muscular:</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="forcaMuscular" value="MRC" onclick="mostrarOpcoesMRC()" checked> MRC</label>
-                        <label><input type="radio" name="forcaMuscular" value="NaoPossivelAvaliar" onclick="mostrarMotivosNaoAvaliar()"> Não Possível Avaliar</label>
-                    </div>
-                    
-                    <div id="opcoesMRC" class="sub-section" style="display:block;">
-                        <div class="vital-sign">
-                            <label>Total MRC:</label>
-                            <input type="number" id="totalMRCInput" min="0" max="60" onchange="atualizarInterpretacaoMRC(this.value)">
-                            <span>/60</span>
-                        </div>
-                        <div id="mrcInterpretation" style="font-style: italic; color: #555;">Paralisia total</div>
-                    </div>
-                    
-                    <div id="motivosNaoAvaliar" class="sub-section" style="display:none;">
-                        <label>Motivo:</label>
-                        <div class="checkbox-group">
-                            <label><input type="checkbox" name="motivoNaoAvaliar" value="Secundário Nível de Consciência"> Secundário Nível de Consciência</label>
-                            <label><input type="checkbox" name="motivoNaoAvaliar" value="Secundário Nível de Colaboração"> Secundário Nível de Colaboração</label>
-                            <label><input type="checkbox" name="motivoNaoAvaliar" value="Por Recusa"> Por Recusa</label>
-                            <label><input type="checkbox" name="motivoNaoAvaliar" value="Secundário Restrição ao Leito"> Secundário Restrição ao Leito</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sub-section">
-                    <label>Presença de Déficit Motor:</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="deficitMotor" value="Sim" onclick="mostrarOpcoesDeficitMotor()"> Sim</label>
-                        <label><input type="radio" name="deficitMotor" value="Não" onclick="esconderOpcoesDeficitMotor()" checked> Não</label>
-                        <label><input type="radio" name="deficitMotor" value="Não Avaliado" onclick="esconderOpcoesDeficitMotor()"> Não Avaliado</label>
-                    </div>
-                    
-                    <div id="opcoesDeficitMotor" class="sub-section" style="display:none;">
-                        <div class="sub-section">
-    <label>Alteração no Tônus:</label>
-    <div class="radio-group">
-        <label><input type="radio" name="alteracaoTonus" value="Sem alteração" checked onclick="document.getElementById('localTonus').style.display='none'"> Sem alteração</label>
-        <label><input type="radio" name="alteracaoTonus" value="Hipotonus" onclick="document.getElementById('localTonus').style.display='block'"> Hipotonus</label>
-        <label><input type="radio" name="alteracaoTonus" value="Hipertonus" onclick="document.getElementById('localTonus').style.display='block'"> Hipertonus</label>
-    </div>
-    
-    <div id="localTonus" style="display:none; margin-top:10px;">
-        <label>Onde?</label>
-        <div style="display:flex; gap:15px;">
-            <label><input type="checkbox" name="localTonus" value="MSD"> Braço D</label>
-            <label><input type="checkbox" name="localTonus" value="MSE"> Braço E</label>
-            <label><input type="checkbox" name="localTonus" value="MID"> Perna D</label>
-            <label><input type="checkbox" name="localTonus" value="MIE"> Perna E</label>
-            <label><input type="checkbox" name="localTonus" value="Tronco"> Tronco</label>
-        </div>
-    </div>
-</div>
-                        
-                        <div class="sub-section">
-                            <label>Alterações no Controle Motor:</label>
-                            <div class="radio-group">
-                                <label><input type="radio" name="alteracaoControleMotor" value="Sem alteração" checked onclick="esconderLocalizacoesMotoras()"> Sem alteração</label>
-                                <label><input type="radio" name="alteracaoControleMotor" value="Plegia" onclick="mostrarLocalizacaoParalisia()"> Plegia</label>
-                                <label><input type="radio" name="alteracaoControleMotor" value="Paresia" onclick="mostrarLocalizacaoFraqueza()"> Paresia</label>
-                            </div>
-                            
-                            <div id="localizacaoParalisia" class="sub-section" style="display:none;">
-    <label>Localização da paralisia completa:</label>
-    <div class="checkbox-group">
-        <!-- MSD -->
-        <div class="expandable-section">
-            <div class="section-header">
-                <label><input type="checkbox" name="localParalisia" value="MSD" onclick="toggleArticulacoes(this, 'MSD')"> MSD</label>
-            </div>
-            <div class="section-content" id="articulacoesMSD" style="display:none;">
-                <label>Articulações:</label>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" name="articulacaoMSD" value="ombro"> Ombro</label>
-                    <label><input type="checkbox" name="articulacaoMSD" value="cotovelo"> Cotovelo</label>
-                    <label><input type="checkbox" name="articulacaoMSD" value="punho"> Punho</label>
-                    <label><input type="checkbox" name="articulacaoMSD" value="mão"> Mão</label>
-                    <label><input type="checkbox" name="articulacaoMSD" value="dedos"> Dedos</label>
-                </div>
-            </div>
-        </div>
-        
-        <!-- MSE -->
-        <div class="expandable-section">
-            <div class="section-header">
-                <label><input type="checkbox" name="localParalisia" value="MSE" onclick="toggleArticulacoes(this, 'MSE')"> MSE </label>
-            </div>
-            <div class="section-content" id="articulacoesMSE" style="display:none;">
-                <label>Articulações:</label>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" name="articulacaoMSE" value="ombro"> Ombro</label>
-                    <label><input type="checkbox" name="articulacaoMSE" value="cotovelo"> Cotovelo</label>
-                    <label><input type="checkbox" name="articulacaoMSE" value="punho"> Punho</label>
-                    <label><input type="checkbox" name="articulacaoMSE" value="mão"> Mão</label>
-                    <label><input type="checkbox" name="articulacaoMSE" value="dedos"> Dedos</label>
-                </div>
-            </div>
-        </div>
-        
-        <!-- MID -->
-        <div class="expandable-section">
-            <div class="section-header">
-                <label><input type="checkbox" name="localParalisia" value="MID" onclick="toggleArticulacoes(this, 'MID')"> MID </label>
-            </div>
-            <div class="section-content" id="articulacoesMID" style="display:none;">
-                <label>Articulações:</label>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" name="articulacaoMID" value="quadril"> Quadril</label>
-                    <label><input type="checkbox" name="articulacaoMID" value="joelho"> Joelho</label>
-                    <label><input type="checkbox" name="articulacaoMID" value="tornozelo"> Tornozelo</label>
-                    <label><input type="checkbox" name="articulacaoMID" value="pé"> Pé</label>
-                    <label><input type="checkbox" name="articulacaoMID" value="dedos"> Dedos</label>
-                </div>
-            </div>
-        </div>
-        
-        <!-- MIE -->
-        <div class="expandable-section">
-            <div class="section-header">
-                <label><input type="checkbox" name="localParalisia" value="MIE" onclick="toggleArticulacoes(this, 'MIE')"> MIE </label>
-            </div>
-            <div class="section-content" id="articulacoesMIE" style="display:none;">
-                <label>Articulações:</label>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" name="articulacaoMIE" value="quadril"> Quadril</label>
-                    <label><input type="checkbox" name="articulacaoMIE" value="joelho"> Joelho</label>
-                    <label><input type="checkbox" name="articulacaoMIE" value="tornozelo"> Tornozelo</label>
-                    <label><input type="checkbox" name="articulacaoMIE" value="pé"> Pé</label>
-                    <label><input type="checkbox" name="articulacaoMIE" value="dedos"> Dedos</label>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Tronco -->
-        <label><input type="checkbox" name="localParalisia" value="Tronco"> Tronco</label>
-    </div>
-</div>
-
-<div id="localizacaoFraqueza" class="sub-section" style="display:none;">
-    <label>Localização da fraqueza parcial do movimento:</label>
-    <div class="checkbox-group">
-        <!-- MSD -->
-        <div class="expandable-section">
-            <div class="section-header">
-                <label><input type="checkbox" name="localFraqueza" value="MSD" onclick="toggleArticulacoes(this, 'MSD', 'Fraqueza')"> MSD </label>
-            </div>
-            <div class="section-content" id="articulacoesFraquezaMSD" style="display:none;">
-                <label>Articulações:</label>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" name="articulacaoFraquezaMSD" value="ombro"> Ombro</label>
-                    <label><input type="checkbox" name="articulacaoFraquezaMSD" value="cotovelo"> Cotovelo</label>
-                    <label><input type="checkbox" name="articulacaoFraquezaMSD" value="punho"> Punho</label>
-                    <label><input type="checkbox" name="articulacaoFraquezaMSD" value="mão"> Mão</label>
-                    <label><input type="checkbox" name="articulacaoFraquezaMSD" value="dedos"> Dedos</label>
-                </div>
-            </div>
-        </div>
-        
-        <!-- MSE -->
-        <div class="expandable-section">
-            <div class="section-header">
-                <label><input type="checkbox" name="localFraqueza" value="MSE" onclick="toggleArticulacoes(this, 'MSE', 'Fraqueza')"> MSE </label>
-            </div>
-            <div class="section-content" id="articulacoesFraquezaMSE" style="display:none;">
-                <label>Articulações:</label>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" name="articulacaoFraquezaMSE" value="ombro"> Ombro</label>
-                    <label><input type="checkbox" name="articulacaoFraquezaMSE" value="cotovelo"> Cotovelo</label>
-                    <label><input type="checkbox" name="articulacaoFraquezaMSE" value="punho"> Punho</label>
-                    <label><input type="checkbox" name="articulacaoFraquezaMSE" value="mão"> Mão</label>
-                    <label><input type="checkbox" name="articulacaoFraquezaMSE" value="dedos"> Dedos</label>
-                </div>
-            </div>
-        </div>
-        
-        <!-- MID -->
-        <div class="expandable-section">
-            <div class="section-header">
-                <label><input type="checkbox" name="localFraqueza" value="MID" onclick="toggleArticulacoes(this, 'MID', 'Fraqueza')"> MID </label>
-            </div>
-            <div class="section-content" id="articulacoesFraquezaMID" style="display:none;">
-                <label>Articulações:</label>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" name="articulacaoFraquezaMID" value="quadril"> Quadril</label>
-                    <label><input type="checkbox" name="articulacaoFraquezaMID" value="joelho"> Joelho</label>
-                    <label><input type="checkbox" name="articulacaoFraquezaMID" value="tornozelo"> Tornozelo</label>
-                    <label><input type="checkbox" name="articulacaoFraquezaMID" value="pé"> Pé</label>
-                    <label><input type="checkbox" name="articulacaoFraquezaMID" value="dedos"> Dedos</label>
-                </div>
-            </div>
-        </div>
-        
-        <!-- MIE -->
-        <div class="expandable-section">
-            <div class="section-header">
-                <label><input type="checkbox" name="localFraqueza" value="MIE" onclick="toggleArticulacoes(this, 'MIE', 'Fraqueza')"> MIE </label>
-            </div>
-            <div class="section-content" id="articulacoesFraquezaMIE" style="display:none;">
-                <label>Articulações:</label>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" name="articulacaoFraquezaMIE" value="quadril"> Quadril</label>
-                    <label><input type="checkbox" name="articulacaoFraquezaMIE" value="joelho"> Joelho</label>
-                    <label><input type="checkbox" name="articulacaoFraquezaMIE" value="tornozelo"> Tornozelo</label>
-                    <label><input type="checkbox" name="articulacaoFraquezaMIE" value="pé"> Pé</label>
-                    <label><input type="checkbox" name="articulacaoFraquezaMIE" value="dedos"> Dedos</label>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Tronco -->
-        <label><input type="checkbox" name="localFraqueza" value="Tronco"> Tronco</label>
-    </div>
-</div>
-
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="sub-section">
-                    <label>Presença de Déficit Sensorial:</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="deficitSensorial" value="Sim" onclick="mostrarOpcoesDeficitSensorial()"> Sim</label>
-                        <label><input type="radio" name="deficitSensorial" value="Não" onclick="esconderOpcoesDeficitSensorial()" checked> Não</label>
-                        <label><input type="radio" name="deficitSensorial" value="Não Avaliado" onclick="esconderOpcoesDeficitSensorial()"> Não Avaliado</label>
-                    </div>
-                    
-                    <div id="opcoesDeficitSensorial" class="sub-section" style="display:none;">
-                        <div class="checkbox-group">
-                            <label><input type="checkbox" name="deficitSensorialTipo" value="Propriocepção alterada" onclick="mostrarLocalizacaoPropriocepcao()"> Propriocepção alterada</label>
-                            <label><input type="checkbox" name="deficitSensorialTipo" value="Cinetesia prejudicada" onclick="mostrarLocalizacaoCinetesia()"> Cinetesia prejudicada</label>
-                            <label><input type="checkbox" name="deficitSensorialTipo" value="Barognosia alterada" onclick="mostrarLocalizacaoBarognosia()"> Barognosia alterada</label>
-                        </div>
-                        
-                        <div id="localizacaoPropriocepcao" class="sub-section" style="display:none;">
-                            <label>Localização:</label>
-                            <div class="checkbox-group">
-                                <label><input type="checkbox" name="localPropriocepcao" value="MSD"> MSD</label>
-                                <label><input type="checkbox" name="localPropriocepcao" value="MSE"> MSE</label>
-                                <label><input type="checkbox" name="localPropriocepcao" value="MID"> MID</label>
-                                <label><input type="checkbox" name="localPropriocepcao" value="MIE"> MIE</label>
-                                <label><input type="checkbox" name="localPropriocepcao" value="Tronco"> Tronco</label>
-                            </div>
-                        </div>
-                        
-                        <div id="localizacaoCinetesia" class="sub-section" style="display:none;">
-                            <label>Localização:</label>
-                            <div class="checkbox-group">
-                                <label><input type="checkbox" name="localCinetesia" value="MSD"> MSD</label>
-                                <label><input type="checkbox" name="localCinetesia" value="MSE"> MSE</label>
-                                <label><input type="checkbox" name="localCinetesia" value="MID"> MID</label>
-                                <label><input type="checkbox" name="localCinetesia" value="MIE"> MIE</label>
-                                <label><input type="checkbox" name="localCinetesia" value="Tronco"> Tronco</label>
-                            </div>
-                        </div>
-                        
-                        <div id="localizacaoBarognosia" class="sub-section" style="display:none;">
-                            <label>Localização:</label>
-                            <div class="checkbox-group">
-                                <label><input type="checkbox" name="localBarognosia" value="MSD"> MSD</label>
-                                <label><input type="checkbox" name="localBarognosia" value="MSE"> MSE</label>
-                                <label><input type="checkbox" name="localBarognosia" value="MID"> MID</label>
-                                <label><input type="checkbox" name="localBarognosia" value="MIE"> MIE</label>
-                                <label><input type="checkbox" name="localBarognosia" value="Tronco"> Tronco</label>
-                                </div>
-                             </div>
-                          </div>
-                         <div class="sub-section">
-    <label>Observações Adicionais (Neuro Musculoesquelético):</label>
-    <textarea id="obsNeuroMusculo" placeholder="Adicione observações sobre a condição neuro musculoesquelética..." style="height: 80px;"></textarea>
-</div>
-                       </div>
-                    </div>
-                </div>
-
-        <!-- Seção de aparelho cardiovascular -->
-        <div class="expandable-section">
-            <div class="section-header">🫀 Aparelho Cardiovascular</div>
-            <div class="section-content">
-                <div class="sub-section">
-                    <label>Perfusão Periférica:</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="perfusao" value="Preservada" checked> Preservada</label>
-                        <label><input type="radio" name="perfusao" value="Diminuída"> Diminuída</label>
-                        <label><input type="radio" name="perfusao" value="Ausente"> Ausente</label>
-                    </div>
-                </div>
-                
-                <div class="sub-section">
-                    <label>Edema:</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="edema" value="Ausente" onclick="esconderDetalhesEdema()" checked> Ausente</label>
-                        <label><input type="radio" name="edema" value="Presente" onclick="mostrarDetalhesEdema()"> Presente</label>
-                    </div>
-                    
-                    <div id="detalhesEdema" class="sub-section" style="display:none;">
-                        <label>Grau:</label>
-                        <div class="radio-group">
-                            <label><input type="radio" name="grauEdema" value="+1/+4"> +1 (Leve depressão, 2mm)</label>
-                            <label><input type="radio" name="grauEdema" value="+2/+4"> +2 (Moderada depressão, 4mm)</label>
-                            <label><input type="radio" name="grauEdema" value="+3/+4"> +3 (Profunda depressão, 6mm)</label>
-                            <label><input type="radio" name="grauEdema" value="+4/+4"> +4 (Muito profunda, 8mm)</label>
-                        </div>
-                        
-                        <label style="margin-top:10px;">Localização:</label>
-                        <div class="checkbox-group">
-                            <label><input type="checkbox" name="localEdema" value="MMII"> MMII</label>
-                            <label><input type="checkbox" name="localEdema" value="MMSS"> MMSS</label>
-                            <label><input type="checkbox" name="localEdema" value="Face"> Face</label>
-                            <label><input type="checkbox" name="localEdema" value="Generalizado"> Generalizado</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="sub-section">
-                    <label>Outros:</label>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" name="outrosCardio" value="Pulsos periféricos presentes"> Pulsos periféricos presentes</label>
-                        <label><input type="checkbox" name="outrosCardio" value="Pulsos periféricos diminuídos"> Pulsos periféricos diminuídos</label>
-                        <label><input type="checkbox" name="outrosCardio" value="Pulsos periféricos ausentes"> Pulsos periféricos ausentes</label>
-                        <label><input type="checkbox" name="outrosCardio" value="Turgência jugular aumentada"> Turgência jugular aumentada</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Seção de capacidade funcional -->
-        <div class="expandable-section">
-            <div class="section-header">🚶‍♂️ Capacidade Funcional</div>
-            <div class="section-content">
-                <div class="sub-section">
-                    <label>Capacidade funcional prévia ao internamento:</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="capacidadePrevia" value="Previamente Independente comunitário" checked> Independente comunitário</label>
-                        <label><input type="radio" name="capacidadePrevia" value="Previamente Independente domiciliar"> Independente domiciliar</label>
-                        <label><input type="radio" name="capacidadePrevia" value="Previamente Acamado"> Acamado</label>
-                        <label><input type="radio" name="capacidadePrevia" value="Sem informações da Funcionalidade Previa"> Sem informações</label>
-                    </div>
-                </div>
-
-                <div class="sub-section">
-                    <label>Capacidade Funcional Atual:</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="escalaFSS" value="Aplicavel" onclick="mostrarEscalaFSS()" checked> Escala FSS</label>
-                        <label><input type="radio" name="escalaFSS" value="NaoAplicavel" onclick="mostrarMotivosNaoAplicarFSS()"> Não possível aplicar</label>
-                    </div>
-                    
-                    <div id="opcoesFSS" style="margin-top:10px;">
-                        <div class="vital-sign">
-                            <label>Escala FSS (0-35):</label>
-                            <input type="number" id="fssScore" min="0" max="35" onchange="atualizarInterpretacaoFSS(this.value)">
-                        </div>
-                        <div id="fssInterpretation" style="font-style: italic; color: #555;">Independente</div>
-                    </div>
-                    
-                    <div id="motivosNaoAplicarFSS" class="sub-section" style="display:none;">
-                        <label>Motivo:</label>
-                        <div class="checkbox-group">
-                            <label><input type="checkbox" name="motivoNaoAplicarFSS" value="Secundário Nível de Consciência"> Secundário Nível de Consciência</label>
-                            <label><input type="checkbox" name="motivoNaoAplicarFSS" value="Secundário Nível de Colaboração"> Secundário Nível de Colaboração</label>
-                            <label><input type="checkbox" name="motivoNaoAplicarFSS" value="Por Recusa"> Por Recusa</label>
-                            <label><input type="checkbox" name="motivoNaoAplicarFSS" value="Secundário Restrição ao Leito"> Secundário Restrição ao Leito</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Seção de plano terapêutico -->
-        <div class="expandable-section">
-            <div class="section-header">📝 Plano Terapêutico</div>
-            <div class="section-content">
-                <div class="checkbox-group">
-                    <label><input type="checkbox" name="planoTerapeutico" value="Manter/Recuperar Função Respiratória"> Manter/Recuperar Função Respiratória</label>
-                    <label><input type="checkbox" name="planoTerapeutico" value="Otimizar Volumes e Capacidades Pulmonares"> Otimizar Volumes e Capacidades Pulmonares</label>
-                    <label><input type="checkbox" name="planoTerapeutico" value="Melhoria da Força Muscular e Mobilidade"> Melhoria da Força Muscular e Mobilidade</label>
-                    <label><input type="checkbox" name="planoTerapeutico" value="Prevenir Complicações Motoras"> Prevenir Complicações Motoras</label>
-                    <label><input type="checkbox" name="planoTerapeutico" value="Prevenir Complicações Respiratórias"> Prevenir Complicações Respiratórias</label>
-                    <label><input type="checkbox" name="planoTerapeutico" value="Melhorar Tolerância ao Exercício"> Melhorar Tolerância ao Exercício</label>
-                    <label><input type="checkbox" name="planoTerapeutico" value="Otimizar Padrão Ventilatório"> Otimizar Padrão Ventilatório</label>
-                    <label><input type="checkbox" name="planoTerapeutico" value="Promover Independência Funcional"> Promover Independência Funcional</label>
-                    <label><input type="checkbox" name="planoTerapeutico" value="Reduzir Tempo de Desmame Ventilatório"> Reduzir Tempo de Desmame Ventilatório</label>
-                    <label><input type="checkbox" name="planoTerapeutico" value="Manter Permeabilidade de Vias Aéreas"> Manter Permeabilidade de Vias Aéreas</label>
-                    <label><input type="checkbox" name="planoTerapeutico" value="Prevenir Atrofia Muscular"> Prevenir Atrofia Muscular</label>
-                    <label><input type="checkbox" name="planoTerapeutico" value="Melhorar Oxigenação"> Melhorar Oxigenação</label>
-                    <label><input type="checkbox" name="planoTerapeutico" value="Proporcionar Medidas para Conforto"> Proporcionar Medidas para Conforto</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Seção de condutas -->
+<div class="section-header">📊 Avaliação da Função Respiratória</div>
+<div class="section-content">
+<!-- Subseção de Monovacuometria -->
 <div class="expandable-section">
-    <div class="section-header">🏥 Condutas</div>
-    <div class="section-content">
-        <!-- Monitorização -->
-        <div class="sub-section">
-            <h4>Monitorização</h4>
-            <div class="checkbox-group">
-                <label><input type="checkbox" name="condutaMonitorizacao" value="Monitorização Cardiorrespiratória"> Monitorização Cardiorrespiratória</label>
-                <label><input type="checkbox" name="condutaMonitorizacao" value="Monitorização Neurológica"> Monitorização Neurológica</label>
-            </div>
-        </div>
-        
-        <!-- Avaliações -->
-        <div class="sub-section">
-            <h4>Avaliações</h4>
-            <div class="checkbox-group">
-                <label><input type="checkbox" name="condutaAvaliacao" value="Avaliação Respiratória"> Avaliação Respiratória</label>
-                <label><input type="checkbox" name="condutaAvaliacao" value="Avaliação Motora"> Avaliação Motora</label>
-                <label><input type="checkbox" name="condutaAvaliacao" value="Avaliação Admissional"> Avaliação Admissional</label>
-            </div>
-        </div>
-        
-        <!-- Gerenciamento -->
-        <div class="sub-section">
-            <h4>Gerenciamento</h4>
-            <div class="checkbox-group">
-                <label><input type="checkbox" name="condutaGerenciamento" value="Gerenciamento de VM"> Gerenciamento de VM</label>
-                <label><input type="checkbox" name="condutaGerenciamento" value="Gerenciamento da VNI"> Gerenciamento da VNI</label>
-                <label><input type="checkbox" name="condutaGerenciamento" value="Gerenciamento de oxigenoterapia"> Gerenciamento de oxigenoterapia</label>
-                <label><input type="checkbox" name="condutaGerenciamento" value="Gerenciamento dos Alarmes Ventilatórios"> Gerenciamento dos Alarmes Ventilatórios</label>
-                <label><input type="checkbox" name="condutaGerenciamento" value="Gerenciamento da pressão do Cuff"> Gerenciamento da pressão do Cuff</label>
-            </div>
-        </div>
-        
-        <!-- Intervenções Respiratórias -->
-        <div class="sub-section">
-            <h4>Intervenções Respiratórias</h4>
-            <div class="checkbox-group">
-                <label><input type="checkbox" name="condutaRespiratoria" value="Ajuste de Pcuff"> Ajuste de Pcuff</label>
-                <label><input type="checkbox" name="condutaRespiratoria" value="Ajuste de Modo Ventilatório"> Ajuste de Modo Ventilatório</label>
-                <label><input type="checkbox" name="condutaRespiratoria" value="Respiração por pressão positiva intermitente - RPPI"> RPPI</label>
-                <label><input type="checkbox" name="condutaRespiratoria" value="Cálculo de Volume Minuto Ideal"> Cálculo de Volume Minuto Ideal</label>
-                <label><input type="checkbox" name="condutaRespiratoria" value="Terapia de Higiene Brônquica" onclick="mostrarDetalhesSecrecao()"> Terapia de Higiene Brônquica</label>
-                <label><input type="checkbox" name="condutaRespiratoria" value="Troca de Filtro" onclick="mostrarDetalhesTroca('filtro')"> Troca de Filtro</label>
-<label><input type="checkbox" name="condutaRespiratoria" value="Troca de Trach Care" onclick="mostrarDetalhesTroca('trach')"> Troca de Trach Care</label>
-                <label><input type="checkbox" name="condutaRespiratoria" value="Titulação de PEEP"> Titulação de PEEP</label>
-            </div>
-            
-            <div id="detalhesSecrecao" class="sub-section" style="display:none;">
-    <label>Quantidade:</label>
-    <select id="quantidadeSecrecao">
-        <option value="Pouca quantidade">Pouca quantidade</option>
-        <option value="Moderada quantidade">Moderada quantidade</option>
-        <option value="Grande quantidade">Grande quantidade</option>
-    </select>
-    
-    <label style="margin-top:10px;">Aspecto:</label>
-    <select id="aspectoSecrecao">
-        <option value="Mucóide">Mucóide</option>
-        <option value="Purulenta">Purulenta</option>
-        <option value="Sanguinolenta">Sanguinolenta</option>
-        <option value="Espessa">Espessa</option>
-        <option value="Serosa">Serosa</option>
-    </select>
+<div class="section-header">Monovacuometria</div>
+<div class="section-content">
+<div class="vital-signs-container">
+<div class="vital-sign">
+<label>PiMax (cmH2O):</label>
+<input id="pimax" min="0" step="0.1" type="number"/>
 </div>
-            <!-- Detalhes para Troca de Filtro -->
-<div id="detalhesTrocaFiltro" class="sub-section" style="display:none;">
-    <label>Motivo:</label>
-    <div class="radio-group">
-        <label><input type="radio" name="motivoTrocaFiltro" value="Por sujidade"> Por sujidade</label>
-        <label><input type="radio" name="motivoTrocaFiltro" value="Por data"> Por data</label>
-    </div>
+<div class="vital-sign">
+<label>PeMax (cmH2O):</label>
+<input id="pemax" min="0" step="0.1" type="number"/>
 </div>
-
+</div>
+</div>
+</div>
+<!-- Subseção de Ventilometria -->
+<div class="expandable-section">
+<div class="section-header">Ventilometria</div>
+<div class="section-content">
+<div class="vital-signs-container">
+<div class="vital-sign">
+<label>Volume Corrente (ml):</label>
+<input id="vcVentilometria" min="0" type="number"/>
+</div>
+<div class="vital-sign">
+<label>Frequência Respiratória (irpm):</label>
+<input id="frVentilometria" min="0" type="number"/>
+</div>
+<div class="vital-sign">
+<label>Volume Minuto (L/min):</label>
+<input id="vm" min="0" readonly="" step="0.1" type="number"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Seção de hemogasometria -->
+<div class="expandable-section">
+<div class="section-header">🩸 Hemogasometria Arterial</div>
+<div class="section-content">
+<label>Realizada HGA:</label>
+<div class="radio-group">
+<label><input name="hga" onclick="mostrarCamposHGA()" type="radio" value="Com HGA"/> Com HGA</label>
+<label><input checked="" name="hga" onclick="esconderCamposHGA()" type="radio" value="Sem HGA"/> Sem HGA</label>
+</div>
+<div class="sub-section" id="camposHGA" style="display:none;">
+<div class="vital-signs-container">
+<div class="vital-sign">
+<label>pH:</label>
+<input id="ph" max="7.8" min="6.8" step="0.01" type="number"/>
+</div>
+<div class="vital-sign">
+<label>PaO2:</label>
+<input id="pao2" min="0" type="number"/>
+</div>
+<div class="vital-sign">
+<label>PCO2:</label>
+<input id="pco2" min="0" type="number"/>
+</div>
+<div class="vital-sign">
+<label>HCO3:</label>
+<input id="hco3" min="0" type="number"/>
+</div>
+<div class="vital-sign">
+<label>Lac:</label>
+<input id="lac" min="0" step="0.1" type="number"/>
+</div>
+<div class="vital-sign">
+<label>P/F:</label>
+<input id="pf" min="0" type="number"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Seção de condição neuro musculoesquelética -->
+<div class="expandable-section">
+<div class="section-header">💪 Condição Neuro Musculoesquelética</div>
+<div class="section-content">
+<div class="sub-section">
+<label>Amplitude de Movimento:</label>
+<div class="radio-group">
+<label><input checked="" name="amplitudeMovimento" onclick="esconderLocalizacaoADM()" type="radio" value="Preservadas"/> Preservadas</label>
+<label><input name="amplitudeMovimento" onclick="mostrarLocalizacaoADM()" type="radio" value="Reduzidas"/> Reduzidas</label>
+</div>
+<div class="sub-section" id="localizacaoADM" style="display:none;">
+<div class="vital-signs-container">
+<div class="vital-sign">
+<label>MSD:</label>
+<select name="admMSD">
+<option value="ADM Normal">ADM Normal</option>
+<option value="ADM Levemente Reduzida">ADM Levemente Reduzida</option>
+<option value="ADM Moderadamente Reduzida">ADM Moderadamente Reduzida</option>
+<option value="ADM Severamente Reduzida">ADM Severamente Reduzida</option>
+<option value="Anquilose ou ADM Ausente">Anquilose ou ADM Ausente</option>
+</select>
+</div>
+<div class="vital-sign">
+<label>MSE:</label>
+<select name="admMSE">
+<option value="ADM Normal">ADM Normal</option>
+<option value="ADM Levemente Reduzida">ADM Levemente Reduzida</option>
+<option value="ADM Moderadamente Reduzida">ADM Moderadamente Reduzida</option>
+<option value="ADM Severamente Reduzida">ADM Severamente Reduzida</option>
+<option value="Anquilose ou ADM Ausente">Anquilose ou ADM Ausente</option>
+</select>
+</div>
+<div class="vital-sign">
+<label>MID:</label>
+<select name="admMID">
+<option value="ADM Normal">ADM Normal</option>
+<option value="ADM Levemente Reduzida">ADM Levemente Reduzida</option>
+<option value="ADM Moderadamente Reduzida">ADM Moderadamente Reduzida</option>
+<option value="ADM Severamente Reduzida">ADM Severamente Reduzida</option>
+<option value="Anquilose ou ADM Ausente">Anquilose ou ADM Ausente</option>
+</select>
+</div>
+<div class="vital-sign">
+<label>MIE:</label>
+<select name="admMIE">
+<option value="ADM Normal">ADM Normal</option>
+<option value="ADM Levemente Reduzida">ADM Levemente Reduzida</option>
+<option value="ADM Moderadamente Reduzida">ADM Moderadamente Reduzida</option>
+<option value="ADM Severamente Reduzida">ADM Severamente Reduzida</option>
+<option value="Anquilose ou ADM Ausente">Anquilose ou ADM Ausente</option>
+</select>
+</div>
+<div class="vital-sign">
+<label>Tronco:</label>
+<select name="admTronco">
+<option value="ADM Normal">ADM Normal</option>
+<option value="ADM Levemente Reduzida">ADM Levemente Reduzida</option>
+<option value="ADM Moderadamente Reduzida">ADM Moderadamente Reduzida</option>
+<option value="ADM Severamente Reduzida">ADM Severamente Reduzida</option>
+<option value="Anquilose ou ADM Ausente">Anquilose ou ADM Ausente</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+<div class="sub-section">
+<label>Amputações:</label>
+<div class="radio-group">
+<label><input name="amputacao" onclick="mostrarOpcoesAmputacao()" type="radio" value="Sim"/> Sim</label>
+<label><input checked="" name="amputacao" onclick="esconderOpcoesAmputacao()" type="radio" value="Não"/> Não</label>
+</div>
+<div class="sub-section" id="opcoesAmputacao" style="display:none;">
+<label>Tipo e Localização:</label>
+<div class="vital-signs-container">
+<div class="vital-sign">
+<label><input name="localAmputacao" type="checkbox" value="MSD"/> Membro Superior Direito</label>
+<select name="tipoAmputacaoMSD">
+<option value="">Selecione o tipo</option>
+<option value="Dedo(s)">Dedo(s)</option>
+<option value="Mão">Mão</option>
+<option value="Antebraço">Antebraço</option>
+<option value="Braço">Braço</option>
+</select>
+</div>
+<div class="vital-sign">
+<label><input name="localAmputacao" type="checkbox" value="MSE"/> Membro Superior Esquerdo</label>
+<select name="tipoAmputacaoMSE">
+<option value="">Selecione o tipo</option>
+<option value="Dedo(s)">Dedo(s)</option>
+<option value="Mão">Mão</option>
+<option value="Antebraço">Antebraço</option>
+<option value="Braço">Braço</option>
+</select>
+</div>
+<div class="vital-sign">
+<label><input name="localAmputacao" type="checkbox" value="MID"/> Membro Inferior Direito</label>
+<select name="tipoAmputacaoMID">
+<option value="">Selecione o tipo</option>
+<option value="Dedo(s)">Dedo(s)</option>
+<option value="Pé">Pé</option>
+<option value="Transtibial">Transtibial</option>
+<option value="Transfemoral">Transfemoral</option>
+<option value="Hemipelvectomia">Hemipelvectomia</option>
+</select>
+</div>
+<div class="vital-sign">
+<label><input name="localAmputacao" type="checkbox" value="MIE"/> Membro Inferior Esquerdo</label>
+<select name="tipoAmputacaoMIE">
+<option value="">Selecione o tipo</option>
+<option value="Dedo(s)">Dedo(s)</option>
+<option value="Pé">Pé</option>
+<option value="Transtibial">Transtibial</option>
+<option value="Transfemoral">Transfemoral</option>
+<option value="Hemipelvectomia">Hemipelvectomia</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+<div class="sub-section">
+<label>Avaliar Força Muscular:</label>
+<div class="radio-group">
+<label><input checked="" name="forcaMuscular" onclick="mostrarOpcoesMRC()" type="radio" value="MRC"/> MRC</label>
+<label><input name="forcaMuscular" onclick="mostrarMotivosNaoAvaliar()" type="radio" value="NaoPossivelAvaliar"/> Não Possível Avaliar</label>
+</div>
+<div class="sub-section" id="opcoesMRC" style="display:block;">
+<div class="vital-sign">
+<label>Total MRC:</label>
+<input id="totalMRCInput" max="60" min="0" onchange="atualizarInterpretacaoMRC(this.value)" type="number"/>
+<span>/60</span>
+</div>
+<div id="mrcInterpretation" style="font-style: italic; color: #555;">Paralisia total</div>
+</div>
+<div class="sub-section" id="motivosNaoAvaliar" style="display:none;">
+<label>Motivo:</label>
+<div class="checkbox-group">
+<label><input name="motivoNaoAvaliar" type="checkbox" value="Secundário Nível de Consciência"/> Secundário Nível de Consciência</label>
+<label><input name="motivoNaoAvaliar" type="checkbox" value="Secundário Nível de Colaboração"/> Secundário Nível de Colaboração</label>
+<label><input name="motivoNaoAvaliar" type="checkbox" value="Por Recusa"/> Por Recusa</label>
+<label><input name="motivoNaoAvaliar" type="checkbox" value="Secundário Restrição ao Leito"/> Secundário Restrição ao Leito</label>
+</div>
+</div>
+</div>
+<div class="sub-section">
+<label>Presença de Déficit Motor:</label>
+<div class="radio-group">
+<label><input name="deficitMotor" onclick="mostrarOpcoesDeficitMotor()" type="radio" value="Sim"/> Sim</label>
+<label><input checked="" name="deficitMotor" onclick="esconderOpcoesDeficitMotor()" type="radio" value="Não"/> Não</label>
+<label><input name="deficitMotor" onclick="esconderOpcoesDeficitMotor()" type="radio" value="Não Avaliado"/> Não Avaliado</label>
+</div>
+<div class="sub-section" id="opcoesDeficitMotor" style="display:none;">
+<div class="sub-section">
+<label>Alteração no Tônus:</label>
+<div class="radio-group">
+<label><input checked="" name="alteracaoTonus" onclick="document.getElementById('localTonus').style.display='none'" type="radio" value="Sem alteração"/> Sem alteração</label>
+<label><input name="alteracaoTonus" onclick="document.getElementById('localTonus').style.display='block'" type="radio" value="Hipotonus"/> Hipotonus</label>
+<label><input name="alteracaoTonus" onclick="document.getElementById('localTonus').style.display='block'" type="radio" value="Hipertonus"/> Hipertonus</label>
+</div>
+<div id="localTonus" style="display:none; margin-top:10px;">
+<label>Onde?</label>
+<div style="display:flex; gap:15px;">
+<label><input name="localTonus" type="checkbox" value="MSD"/> Braço D</label>
+<label><input name="localTonus" type="checkbox" value="MSE"/> Braço E</label>
+<label><input name="localTonus" type="checkbox" value="MID"/> Perna D</label>
+<label><input name="localTonus" type="checkbox" value="MIE"/> Perna E</label>
+<label><input name="localTonus" type="checkbox" value="Tronco"/> Tronco</label>
+</div>
+</div>
+</div>
+<div class="sub-section">
+<label>Alterações no Controle Motor:</label>
+<div class="radio-group">
+<label><input checked="" name="alteracaoControleMotor" onclick="esconderLocalizacoesMotoras()" type="radio" value="Sem alteração"/> Sem alteração</label>
+<label><input name="alteracaoControleMotor" onclick="mostrarLocalizacaoParalisia()" type="radio" value="Plegia"/> Plegia</label>
+<label><input name="alteracaoControleMotor" onclick="mostrarLocalizacaoFraqueza()" type="radio" value="Paresia"/> Paresia</label>
+</div>
+<div class="sub-section" id="localizacaoParalisia" style="display:none;">
+<label>Localização da paralisia completa:</label>
+<div class="checkbox-group">
+<!-- MSD -->
+<div class="expandable-section">
+<div class="section-header">
+<label><input name="localParalisia" onclick="toggleArticulacoes(this, 'MSD')" type="checkbox" value="MSD"/> MSD</label>
+</div>
+<div class="section-content" id="articulacoesMSD" style="display:none;">
+<label>Articulações:</label>
+<div class="checkbox-group">
+<label><input name="articulacaoMSD" type="checkbox" value="ombro"/> Ombro</label>
+<label><input name="articulacaoMSD" type="checkbox" value="cotovelo"/> Cotovelo</label>
+<label><input name="articulacaoMSD" type="checkbox" value="punho"/> Punho</label>
+<label><input name="articulacaoMSD" type="checkbox" value="mão"/> Mão</label>
+<label><input name="articulacaoMSD" type="checkbox" value="dedos"/> Dedos</label>
+</div>
+</div>
+</div>
+<!-- MSE -->
+<div class="expandable-section">
+<div class="section-header">
+<label><input name="localParalisia" onclick="toggleArticulacoes(this, 'MSE')" type="checkbox" value="MSE"/> MSE </label>
+</div>
+<div class="section-content" id="articulacoesMSE" style="display:none;">
+<label>Articulações:</label>
+<div class="checkbox-group">
+<label><input name="articulacaoMSE" type="checkbox" value="ombro"/> Ombro</label>
+<label><input name="articulacaoMSE" type="checkbox" value="cotovelo"/> Cotovelo</label>
+<label><input name="articulacaoMSE" type="checkbox" value="punho"/> Punho</label>
+<label><input name="articulacaoMSE" type="checkbox" value="mão"/> Mão</label>
+<label><input name="articulacaoMSE" type="checkbox" value="dedos"/> Dedos</label>
+</div>
+</div>
+</div>
+<!-- MID -->
+<div class="expandable-section">
+<div class="section-header">
+<label><input name="localParalisia" onclick="toggleArticulacoes(this, 'MID')" type="checkbox" value="MID"/> MID </label>
+</div>
+<div class="section-content" id="articulacoesMID" style="display:none;">
+<label>Articulações:</label>
+<div class="checkbox-group">
+<label><input name="articulacaoMID" type="checkbox" value="quadril"/> Quadril</label>
+<label><input name="articulacaoMID" type="checkbox" value="joelho"/> Joelho</label>
+<label><input name="articulacaoMID" type="checkbox" value="tornozelo"/> Tornozelo</label>
+<label><input name="articulacaoMID" type="checkbox" value="pé"/> Pé</label>
+<label><input name="articulacaoMID" type="checkbox" value="dedos"/> Dedos</label>
+</div>
+</div>
+</div>
+<!-- MIE -->
+<div class="expandable-section">
+<div class="section-header">
+<label><input name="localParalisia" onclick="toggleArticulacoes(this, 'MIE')" type="checkbox" value="MIE"/> MIE </label>
+</div>
+<div class="section-content" id="articulacoesMIE" style="display:none;">
+<label>Articulações:</label>
+<div class="checkbox-group">
+<label><input name="articulacaoMIE" type="checkbox" value="quadril"/> Quadril</label>
+<label><input name="articulacaoMIE" type="checkbox" value="joelho"/> Joelho</label>
+<label><input name="articulacaoMIE" type="checkbox" value="tornozelo"/> Tornozelo</label>
+<label><input name="articulacaoMIE" type="checkbox" value="pé"/> Pé</label>
+<label><input name="articulacaoMIE" type="checkbox" value="dedos"/> Dedos</label>
+</div>
+</div>
+</div>
+<!-- Tronco -->
+<label><input name="localParalisia" type="checkbox" value="Tronco"/> Tronco</label>
+</div>
+</div>
+<div class="sub-section" id="localizacaoFraqueza" style="display:none;">
+<label>Localização da fraqueza parcial do movimento:</label>
+<div class="checkbox-group">
+<!-- MSD -->
+<div class="expandable-section">
+<div class="section-header">
+<label><input name="localFraqueza" onclick="toggleArticulacoes(this, 'MSD', 'Fraqueza')" type="checkbox" value="MSD"/> MSD </label>
+</div>
+<div class="section-content" id="articulacoesFraquezaMSD" style="display:none;">
+<label>Articulações:</label>
+<div class="checkbox-group">
+<label><input name="articulacaoFraquezaMSD" type="checkbox" value="ombro"/> Ombro</label>
+<label><input name="articulacaoFraquezaMSD" type="checkbox" value="cotovelo"/> Cotovelo</label>
+<label><input name="articulacaoFraquezaMSD" type="checkbox" value="punho"/> Punho</label>
+<label><input name="articulacaoFraquezaMSD" type="checkbox" value="mão"/> Mão</label>
+<label><input name="articulacaoFraquezaMSD" type="checkbox" value="dedos"/> Dedos</label>
+</div>
+</div>
+</div>
+<!-- MSE -->
+<div class="expandable-section">
+<div class="section-header">
+<label><input name="localFraqueza" onclick="toggleArticulacoes(this, 'MSE', 'Fraqueza')" type="checkbox" value="MSE"/> MSE </label>
+</div>
+<div class="section-content" id="articulacoesFraquezaMSE" style="display:none;">
+<label>Articulações:</label>
+<div class="checkbox-group">
+<label><input name="articulacaoFraquezaMSE" type="checkbox" value="ombro"/> Ombro</label>
+<label><input name="articulacaoFraquezaMSE" type="checkbox" value="cotovelo"/> Cotovelo</label>
+<label><input name="articulacaoFraquezaMSE" type="checkbox" value="punho"/> Punho</label>
+<label><input name="articulacaoFraquezaMSE" type="checkbox" value="mão"/> Mão</label>
+<label><input name="articulacaoFraquezaMSE" type="checkbox" value="dedos"/> Dedos</label>
+</div>
+</div>
+</div>
+<!-- MID -->
+<div class="expandable-section">
+<div class="section-header">
+<label><input name="localFraqueza" onclick="toggleArticulacoes(this, 'MID', 'Fraqueza')" type="checkbox" value="MID"/> MID </label>
+</div>
+<div class="section-content" id="articulacoesFraquezaMID" style="display:none;">
+<label>Articulações:</label>
+<div class="checkbox-group">
+<label><input name="articulacaoFraquezaMID" type="checkbox" value="quadril"/> Quadril</label>
+<label><input name="articulacaoFraquezaMID" type="checkbox" value="joelho"/> Joelho</label>
+<label><input name="articulacaoFraquezaMID" type="checkbox" value="tornozelo"/> Tornozelo</label>
+<label><input name="articulacaoFraquezaMID" type="checkbox" value="pé"/> Pé</label>
+<label><input name="articulacaoFraquezaMID" type="checkbox" value="dedos"/> Dedos</label>
+</div>
+</div>
+</div>
+<!-- MIE -->
+<div class="expandable-section">
+<div class="section-header">
+<label><input name="localFraqueza" onclick="toggleArticulacoes(this, 'MIE', 'Fraqueza')" type="checkbox" value="MIE"/> MIE </label>
+</div>
+<div class="section-content" id="articulacoesFraquezaMIE" style="display:none;">
+<label>Articulações:</label>
+<div class="checkbox-group">
+<label><input name="articulacaoFraquezaMIE" type="checkbox" value="quadril"/> Quadril</label>
+<label><input name="articulacaoFraquezaMIE" type="checkbox" value="joelho"/> Joelho</label>
+<label><input name="articulacaoFraquezaMIE" type="checkbox" value="tornozelo"/> Tornozelo</label>
+<label><input name="articulacaoFraquezaMIE" type="checkbox" value="pé"/> Pé</label>
+<label><input name="articulacaoFraquezaMIE" type="checkbox" value="dedos"/> Dedos</label>
+</div>
+</div>
+</div>
+<!-- Tronco -->
+<label><input name="localFraqueza" type="checkbox" value="Tronco"/> Tronco</label>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sub-section">
+<label>Presença de Déficit Sensorial:</label>
+<div class="radio-group">
+<label><input name="deficitSensorial" onclick="mostrarOpcoesDeficitSensorial()" type="radio" value="Sim"/> Sim</label>
+<label><input checked="" name="deficitSensorial" onclick="esconderOpcoesDeficitSensorial()" type="radio" value="Não"/> Não</label>
+<label><input name="deficitSensorial" onclick="esconderOpcoesDeficitSensorial()" type="radio" value="Não Avaliado"/> Não Avaliado</label>
+</div>
+<div class="sub-section" id="opcoesDeficitSensorial" style="display:none;">
+<div class="checkbox-group">
+<label><input name="deficitSensorialTipo" onclick="mostrarLocalizacaoPropriocepcao()" type="checkbox" value="Propriocepção alterada"/> Propriocepção alterada</label>
+<label><input name="deficitSensorialTipo" onclick="mostrarLocalizacaoCinetesia()" type="checkbox" value="Cinetesia prejudicada"/> Cinetesia prejudicada</label>
+<label><input name="deficitSensorialTipo" onclick="mostrarLocalizacaoBarognosia()" type="checkbox" value="Barognosia alterada"/> Barognosia alterada</label>
+</div>
+<div class="sub-section" id="localizacaoPropriocepcao" style="display:none;">
+<label>Localização:</label>
+<div class="checkbox-group">
+<label><input name="localPropriocepcao" type="checkbox" value="MSD"/> MSD</label>
+<label><input name="localPropriocepcao" type="checkbox" value="MSE"/> MSE</label>
+<label><input name="localPropriocepcao" type="checkbox" value="MID"/> MID</label>
+<label><input name="localPropriocepcao" type="checkbox" value="MIE"/> MIE</label>
+<label><input name="localPropriocepcao" type="checkbox" value="Tronco"/> Tronco</label>
+</div>
+</div>
+<div class="sub-section" id="localizacaoCinetesia" style="display:none;">
+<label>Localização:</label>
+<div class="checkbox-group">
+<label><input name="localCinetesia" type="checkbox" value="MSD"/> MSD</label>
+<label><input name="localCinetesia" type="checkbox" value="MSE"/> MSE</label>
+<label><input name="localCinetesia" type="checkbox" value="MID"/> MID</label>
+<label><input name="localCinetesia" type="checkbox" value="MIE"/> MIE</label>
+<label><input name="localCinetesia" type="checkbox" value="Tronco"/> Tronco</label>
+</div>
+</div>
+<div class="sub-section" id="localizacaoBarognosia" style="display:none;">
+<label>Localização:</label>
+<div class="checkbox-group">
+<label><input name="localBarognosia" type="checkbox" value="MSD"/> MSD</label>
+<label><input name="localBarognosia" type="checkbox" value="MSE"/> MSE</label>
+<label><input name="localBarognosia" type="checkbox" value="MID"/> MID</label>
+<label><input name="localBarognosia" type="checkbox" value="MIE"/> MIE</label>
+<label><input name="localBarognosia" type="checkbox" value="Tronco"/> Tronco</label>
+</div>
+</div>
+</div>
+<div class="sub-section">
+<label>Observações Adicionais (Neuro Musculoesquelético):</label>
+<textarea id="obsNeuroMusculo" placeholder="Adicione observações sobre a condição neuro musculoesquelética..." style="height: 80px;"></textarea>
+</div>
+</div>
+</div>
+</div>
+<!-- Seção de aparelho cardiovascular -->
+<div class="expandable-section">
+<div class="section-header">🫀 Aparelho Cardiovascular</div>
+<div class="section-content">
+<div class="sub-section">
+<label>Perfusão Periférica:</label>
+<div class="radio-group">
+<label><input checked="" name="perfusao" type="radio" value="Preservada"/> Preservada</label>
+<label><input name="perfusao" type="radio" value="Diminuída"/> Diminuída</label>
+<label><input name="perfusao" type="radio" value="Ausente"/> Ausente</label>
+</div>
+</div>
+<div class="sub-section">
+<label>Edema:</label>
+<div class="radio-group">
+<label><input checked="" name="edema" onclick="esconderDetalhesEdema()" type="radio" value="Ausente"/> Ausente</label>
+<label><input name="edema" onclick="mostrarDetalhesEdema()" type="radio" value="Presente"/> Presente</label>
+</div>
+<div class="sub-section" id="detalhesEdema" style="display:none;">
+<label>Grau:</label>
+<div class="radio-group">
+<label><input name="grauEdema" type="radio" value="+1/+4"/> +1 (Leve depressão, 2mm)</label>
+<label><input name="grauEdema" type="radio" value="+2/+4"/> +2 (Moderada depressão, 4mm)</label>
+<label><input name="grauEdema" type="radio" value="+3/+4"/> +3 (Profunda depressão, 6mm)</label>
+<label><input name="grauEdema" type="radio" value="+4/+4"/> +4 (Muito profunda, 8mm)</label>
+</div>
+<label style="margin-top:10px;">Localização:</label>
+<div class="checkbox-group">
+<label><input name="localEdema" type="checkbox" value="MMII"/> MMII</label>
+<label><input name="localEdema" type="checkbox" value="MMSS"/> MMSS</label>
+<label><input name="localEdema" type="checkbox" value="Face"/> Face</label>
+<label><input name="localEdema" type="checkbox" value="Generalizado"/> Generalizado</label>
+</div>
+</div>
+</div>
+<div class="sub-section">
+<label>Outros:</label>
+<div class="checkbox-group">
+<label><input name="outrosCardio" type="checkbox" value="Pulsos periféricos presentes"/> Pulsos periféricos presentes</label>
+<label><input name="outrosCardio" type="checkbox" value="Pulsos periféricos diminuídos"/> Pulsos periféricos diminuídos</label>
+<label><input name="outrosCardio" type="checkbox" value="Pulsos periféricos ausentes"/> Pulsos periféricos ausentes</label>
+<label><input name="outrosCardio" type="checkbox" value="Turgência jugular aumentada"/> Turgência jugular aumentada</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Seção de capacidade funcional -->
+<div class="expandable-section">
+<div class="section-header">🚶‍♂️ Capacidade Funcional</div>
+<div class="section-content">
+<div class="sub-section">
+<label>Capacidade funcional prévia ao internamento:</label>
+<div class="radio-group">
+<label><input checked="" name="capacidadePrevia" type="radio" value="Previamente Independente comunitário"/> Independente comunitário</label>
+<label><input name="capacidadePrevia" type="radio" value="Previamente Independente domiciliar"/> Independente domiciliar</label>
+<label><input name="capacidadePrevia" type="radio" value="Previamente Acamado"/> Acamado</label>
+<label><input name="capacidadePrevia" type="radio" value="Sem informações da Funcionalidade Previa"/> Sem informações</label>
+</div>
+</div>
+<div class="sub-section">
+<label>Capacidade Funcional Atual:</label>
+<div class="radio-group">
+<label><input checked="" name="escalaFSS" onclick="mostrarEscalaFSS()" type="radio" value="Aplicavel"/> Escala FSS</label>
+<label><input name="escalaFSS" onclick="mostrarMotivosNaoAplicarFSS()" type="radio" value="NaoAplicavel"/> Não possível aplicar</label>
+</div>
+<div id="opcoesFSS" style="margin-top:10px;">
+<div class="vital-sign">
+<label>Escala FSS (0-35):</label>
+<input id="fssScore" max="35" min="0" onchange="atualizarInterpretacaoFSS(this.value)" type="number"/>
+</div>
+<div id="fssInterpretation" style="font-style: italic; color: #555;">Independente</div>
+</div>
+<div class="sub-section" id="motivosNaoAplicarFSS" style="display:none;">
+<label>Motivo:</label>
+<div class="checkbox-group">
+<label><input name="motivoNaoAplicarFSS" type="checkbox" value="Secundário Nível de Consciência"/> Secundário Nível de Consciência</label>
+<label><input name="motivoNaoAplicarFSS" type="checkbox" value="Secundário Nível de Colaboração"/> Secundário Nível de Colaboração</label>
+<label><input name="motivoNaoAplicarFSS" type="checkbox" value="Por Recusa"/> Por Recusa</label>
+<label><input name="motivoNaoAplicarFSS" type="checkbox" value="Secundário Restrição ao Leito"/> Secundário Restrição ao Leito</label>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Seção de plano terapêutico -->
+<div class="expandable-section">
+<div class="section-header">📝 Plano Terapêutico</div>
+<div class="section-content">
+<div class="checkbox-group">
+<label><input name="planoTerapeutico" type="checkbox" value="Manter/Recuperar Função Respiratória"/> Manter/Recuperar Função Respiratória</label>
+<label><input name="planoTerapeutico" type="checkbox" value="Otimizar Volumes e Capacidades Pulmonares"/> Otimizar Volumes e Capacidades Pulmonares</label>
+<label><input name="planoTerapeutico" type="checkbox" value="Melhoria da Força Muscular e Mobilidade"/> Melhoria da Força Muscular e Mobilidade</label>
+<label><input name="planoTerapeutico" type="checkbox" value="Prevenir Complicações Motoras"/> Prevenir Complicações Motoras</label>
+<label><input name="planoTerapeutico" type="checkbox" value="Prevenir Complicações Respiratórias"/> Prevenir Complicações Respiratórias</label>
+<label><input name="planoTerapeutico" type="checkbox" value="Melhorar Tolerância ao Exercício"/> Melhorar Tolerância ao Exercício</label>
+<label><input name="planoTerapeutico" type="checkbox" value="Otimizar Padrão Ventilatório"/> Otimizar Padrão Ventilatório</label>
+<label><input name="planoTerapeutico" type="checkbox" value="Promover Independência Funcional"/> Promover Independência Funcional</label>
+<label><input name="planoTerapeutico" type="checkbox" value="Reduzir Tempo de Desmame Ventilatório"/> Reduzir Tempo de Desmame Ventilatório</label>
+<label><input name="planoTerapeutico" type="checkbox" value="Manter Permeabilidade de Vias Aéreas"/> Manter Permeabilidade de Vias Aéreas</label>
+<label><input name="planoTerapeutico" type="checkbox" value="Prevenir Atrofia Muscular"/> Prevenir Atrofia Muscular</label>
+<label><input name="planoTerapeutico" type="checkbox" value="Melhorar Oxigenação"/> Melhorar Oxigenação</label>
+<label><input name="planoTerapeutico" type="checkbox" value="Proporcionar Medidas para Conforto"/> Proporcionar Medidas para Conforto</label>
+</div>
+</div>
+</div>
+<!-- Seção de condutas -->
+<div class="expandable-section">
+<div class="section-header">🏥 Condutas</div>
+<div class="section-content">
+<!-- Monitorização -->
+<div class="sub-section">
+<h4>Monitorização</h4>
+<div class="checkbox-group">
+<label><input name="condutaMonitorizacao" type="checkbox" value="Monitorização Cardiorrespiratória"/> Monitorização Cardiorrespiratória</label>
+<label><input name="condutaMonitorizacao" type="checkbox" value="Monitorização Neurológica"/> Monitorização Neurológica</label>
+</div>
+</div>
+<!-- Avaliações -->
+<div class="sub-section">
+<h4>Avaliações</h4>
+<div class="checkbox-group">
+<label><input name="condutaAvaliacao" type="checkbox" value="Avaliação Respiratória"/> Avaliação Respiratória</label>
+<label><input name="condutaAvaliacao" type="checkbox" value="Avaliação Motora"/> Avaliação Motora</label>
+<label><input name="condutaAvaliacao" type="checkbox" value="Avaliação Admissional"/> Avaliação Admissional</label>
+</div>
+</div>
+<!-- Gerenciamento -->
+<div class="sub-section">
+<h4>Gerenciamento</h4>
+<div class="checkbox-group">
+<label><input name="condutaGerenciamento" type="checkbox" value="Gerenciamento de VM"/> Gerenciamento de VM</label>
+<label><input name="condutaGerenciamento" type="checkbox" value="Gerenciamento da VNI"/> Gerenciamento da VNI</label>
+<label><input name="condutaGerenciamento" type="checkbox" value="Gerenciamento de oxigenoterapia"/> Gerenciamento de oxigenoterapia</label>
+<label><input name="condutaGerenciamento" type="checkbox" value="Gerenciamento dos Alarmes Ventilatórios"/> Gerenciamento dos Alarmes Ventilatórios</label>
+<label><input name="condutaGerenciamento" type="checkbox" value="Gerenciamento da pressão do Cuff"/> Gerenciamento da pressão do Cuff</label>
+</div>
+</div>
+<!-- Intervenções Respiratórias -->
+<div class="sub-section">
+<h4>Intervenções Respiratórias</h4>
+<div class="checkbox-group">
+<label><input name="condutaRespiratoria" type="checkbox" value="Ajuste de Pcuff"/> Ajuste de Pcuff</label>
+<label><input name="condutaRespiratoria" type="checkbox" value="Ajuste de Modo Ventilatório"/> Ajuste de Modo Ventilatório</label>
+<label><input name="condutaRespiratoria" type="checkbox" value="Respiração por pressão positiva intermitente - RPPI"/> RPPI</label>
+<label><input name="condutaRespiratoria" type="checkbox" value="Cálculo de Volume Minuto Ideal"/> Cálculo de Volume Minuto Ideal</label>
+<label><input name="condutaRespiratoria" onclick="mostrarDetalhesSecrecao()" type="checkbox" value="Terapia de Higiene Brônquica"/> Terapia de Higiene Brônquica</label>
+<label><input name="condutaRespiratoria" onclick="mostrarDetalhesTroca('filtro')" type="checkbox" value="Troca de Filtro"/> Troca de Filtro</label>
+<label><input name="condutaRespiratoria" onclick="mostrarDetalhesTroca('trach')" type="checkbox" value="Troca de Trach Care"/> Troca de Trach Care</label>
+<label><input name="condutaRespiratoria" type="checkbox" value="Titulação de PEEP"/> Titulação de PEEP</label>
+</div>
+<div class="sub-section" id="detalhesSecrecao" style="display:none;">
+<label>Quantidade:</label>
+<select id="quantidadeSecrecao">
+<option value="Pouca quantidade">Pouca quantidade</option>
+<option value="Moderada quantidade">Moderada quantidade</option>
+<option value="Grande quantidade">Grande quantidade</option>
+</select>
+<label style="margin-top:10px;">Aspecto:</label>
+<select id="aspectoSecrecao">
+<option value="Mucóide">Mucóide</option>
+<option value="Purulenta">Purulenta</option>
+<option value="Sanguinolenta">Sanguinolenta</option>
+<option value="Espessa">Espessa</option>
+<option value="Serosa">Serosa</option>
+</select>
+</div>
+<!-- Detalhes para Troca de Filtro -->
+<div class="sub-section" id="detalhesTrocaFiltro" style="display:none;">
+<label>Motivo:</label>
+<div class="radio-group">
+<label><input name="motivoTrocaFiltro" type="radio" value="Por sujidade"/> Por sujidade</label>
+<label><input name="motivoTrocaFiltro" type="radio" value="Por data"/> Por data</label>
+</div>
+</div>
 <!-- Detalhes para Troca de Trach Care -->
-<div id="detalhesTrocaTrach" class="sub-section" style="display:none;">
-    <label>Motivo:</label>
-    <div class="radio-group">
-        <label><input type="radio" name="motivoTrocaTrach" value="Por sujidade"> Por sujidade</label>
-        <label><input type="radio" name="motivoTrocaTrach" value="Por data"> Por data</label>
-    </div>
+<div class="sub-section" id="detalhesTrocaTrach" style="display:none;">
+<label>Motivo:</label>
+<div class="radio-group">
+<label><input name="motivoTrocaTrach" type="radio" value="Por sujidade"/> Por sujidade</label>
+<label><input name="motivoTrocaTrach" type="radio" value="Por data"/> Por data</label>
 </div>
-        </div>
-        
-        <!-- Intervenções Motoras -->
-        <div class="sub-section">
-            <h4>Intervenções Motoras</h4>
-            <div class="checkbox-group">
-                <label><input type="checkbox" name="condutaMotora" value="Bombeamento tíbio társico"> Bombeamento tíbio társico</label>        
-        <label><input type="checkbox" name="condutaMotora" value="Cicloergometro"> Cicloergometro</label>
-        <label><input type="checkbox" name="condutaMotora" value="Descarga de peso"> Descarga de peso</label>
-        <label><input type="checkbox" name="condutaMotora" value="Enfaixamento"> Enfaixamento</label>
-        <label><input type="checkbox" name="condutaMotora" value="Estímulo à ativação muscular"> Estímulo à ativação muscular</label>
-        <label><input type="checkbox" name="condutaMotora" value="Estímulos à linha média"> Estímulos à linha média</label>
-        <label><input type="checkbox" name="condutaMotora" value="Estimulação tátil cinestésica"> Estimulação tátil cinestésica</label>
-        <label><input type="checkbox" name="condutaMotora" value="Diagonais (PNF)"> Diagonais (PNF)</label>
-        <label><input type="checkbox" name="condutaMotora" value="Deambulação"> Deambulação</label>
-        <label><input type="checkbox" name="condutaMotora" value="Exercício de Ponte"> Exercício de Ponte</label>
-        <label><input type="checkbox" name="condutaMotora" value="Facilitação da marcha"> Facilitação da marcha</label>
-        <label><input type="checkbox" name="condutaMotora" value="Fortalecimento Muscular com Caneleira"> Fortalecimento com Caneleira</label>
-        <label><input type="checkbox" name="condutaMotora" value="Fortalecimento Muscular com Halter"> Fortalecimento com Halter</label>
-        <label><input type="checkbox" name="condutaMotora" value="Mobilização no leito"> Mobilização no leito</label>
-        <label><input type="checkbox" name="condutaMotora" value="Ortostase"> Ortostase</label>
-        <label><input type="checkbox" name="condutaMotora" value="Prancha Ortostática"> Prancha Ortostática</label>
-        <label><input type="checkbox" name="condutaMotora" value="Sedestação com membros pendentes"> Sedestação com membros pendentes</label>
-        <label><input type="checkbox" name="condutaMotora" value="Sedestação na poltrona"> Sedestação na poltrona</label>
-        <label><input type="checkbox" name="condutaMotora" value="Treino de Sedestação e Ortostase"> Treino de Sedestação/Ortostase</label>
-        <label><input type="checkbox" name="condutaMotora" value="Treino de controle de tronco"> Treino de controle de tronco</label>
-            </div>
-        </div>
-        
-        <!-- Posicionamento -->
-        <div class="sub-section">
-            <h4>Posicionamento</h4>
-            <div class="checkbox-group">
-                <label><input type="checkbox" name="condutaPosicionamento" value="Posicionamento biomecânico adequado"> Posicionamento biomecânico adequado</label>
-            </div>
-        </div>
-        
-        <!-- Marcos de Mobilização -->
-        <div class="sub-section">
-    <label>Marcos de Mobilização:</label>
-    <textarea id="marcosMobilizacao" placeholder="Ex: Primeira ortostase (data), Primeira deambulação (data), Progressões..." style="height: 80px;"></textarea>
 </div>
-    </div>
 </div>
-
-        <!-- Seção de códigos de cobrança -->
+<!-- Intervenções Motoras -->
+<div class="sub-section">
+<h4>Intervenções Motoras</h4>
+<div class="checkbox-group">
+<label><input name="condutaMotora" type="checkbox" value="Bombeamento tíbio társico"/> Bombeamento tíbio társico</label>
+<label><input name="condutaMotora" type="checkbox" value="Cicloergometro"/> Cicloergometro</label>
+<label><input name="condutaMotora" type="checkbox" value="Descarga de peso"/> Descarga de peso</label>
+<label><input name="condutaMotora" type="checkbox" value="Enfaixamento"/> Enfaixamento</label>
+<label><input name="condutaMotora" type="checkbox" value="Estímulo à ativação muscular"/> Estímulo à ativação muscular</label>
+<label><input name="condutaMotora" type="checkbox" value="Estímulos à linha média"/> Estímulos à linha média</label>
+<label><input name="condutaMotora" type="checkbox" value="Estimulação tátil cinestésica"/> Estimulação tátil cinestésica</label>
+<label><input name="condutaMotora" type="checkbox" value="Diagonais (PNF)"/> Diagonais (PNF)</label>
+<label><input name="condutaMotora" type="checkbox" value="Deambulação"/> Deambulação</label>
+<label><input name="condutaMotora" type="checkbox" value="Exercício de Ponte"/> Exercício de Ponte</label>
+<label><input name="condutaMotora" type="checkbox" value="Facilitação da marcha"/> Facilitação da marcha</label>
+<label><input name="condutaMotora" type="checkbox" value="Fortalecimento Muscular com Caneleira"/> Fortalecimento com Caneleira</label>
+<label><input name="condutaMotora" type="checkbox" value="Fortalecimento Muscular com Halter"/> Fortalecimento com Halter</label>
+<label><input name="condutaMotora" type="checkbox" value="Mobilização no leito"/> Mobilização no leito</label>
+<label><input name="condutaMotora" type="checkbox" value="Ortostase"/> Ortostase</label>
+<label><input name="condutaMotora" type="checkbox" value="Prancha Ortostática"/> Prancha Ortostática</label>
+<label><input name="condutaMotora" type="checkbox" value="Sedestação com membros pendentes"/> Sedestação com membros pendentes</label>
+<label><input name="condutaMotora" type="checkbox" value="Sedestação na poltrona"/> Sedestação na poltrona</label>
+<label><input name="condutaMotora" type="checkbox" value="Treino de Sedestação e Ortostase"/> Treino de Sedestação/Ortostase</label>
+<label><input name="condutaMotora" type="checkbox" value="Treino de controle de tronco"/> Treino de controle de tronco</label>
+</div>
+</div>
+<!-- Posicionamento -->
+<div class="sub-section">
+<h4>Posicionamento</h4>
+<div class="checkbox-group">
+<label><input name="condutaPosicionamento" type="checkbox" value="Posicionamento biomecânico adequado"/> Posicionamento biomecânico adequado</label>
+</div>
+</div>
+<!-- Marcos de Mobilização -->
+<div class="sub-section">
+<label>Marcos de Mobilização:</label>
+<textarea id="marcosMobilizacao" placeholder="Ex: Primeira ortostase (data), Primeira deambulação (data), Progressões..." style="height: 80px;"></textarea>
+</div>
+</div>
+</div>
+<!-- Seção de códigos de cobrança -->
 <div class="expandable-section">
-    <div class="section-header">💰 Códigos de Cobrança</div>
-    <div class="section-content">
-        <div class="radio-group">
-            <label><input type="radio" name="codigosCobranca" value="Sim" onclick="mostrarCodigosCobranca()" checked> Sim</label>
-            <label><input type="radio" name="codigosCobranca" value="Não" onclick="esconderCodigosCobranca()"> Não</label>
-        </div>
-        
-        <div id="codigosCobrancaContainer" class="sub-section">
-            <p id="codigosText">Códigos: 03.02.04.001-3/ 03.02.05.003-5/ 03.02.06.002-2/ 03.02.04.003-0/ 03.02.04.004-8/ 03.02.05.001-9</p>
-        </div>
-    </div>
+<div class="section-header">💰 Códigos de Cobrança</div>
+<div class="section-content">
+<div class="radio-group">
+<label><input checked="" name="codigosCobranca" onclick="mostrarCodigosCobranca()" type="radio" value="Sim"/> Sim</label>
+<label><input name="codigosCobranca" onclick="esconderCodigosCobranca()" type="radio" value="Não"/> Não</label>
 </div>
-                
-                <div id="codigosCobrancaContainer" class="sub-section" style="display:none;">
-                    <p id="codigosText"></p>
-                </div>
-            </div>
-        </div>
+<div class="sub-section" id="codigosCobrancaContainer">
+<p id="codigosText">Códigos: 03.02.04.001-3/ 03.02.05.003-5/ 03.02.06.002-2/ 03.02.04.003-0/ 03.02.04.004-8/ 03.02.05.001-9</p>
+</div>
+</div>
+</div>
+<div class="sub-section" id="codigosCobrancaContainer" style="display:none;">
+<p id="codigosText"></p>
+</div>
+</div>
 
-        <!-- Botões de ação -->
-        <div style="margin: 20px 0;">
-            <button onclick="gerarEvolucao()">Gerar Evolução</button>
-            <button onclick="gerarMiniEvolucao()">Mini Evolução</button>
-            <button onclick="copiarTexto()">Copiar Texto</button>
-        </div>
+<!-- Botões de ação -->
+<div style="margin: 20px 0;">
+<button onclick="gerarEvolucao()">Gerar Evolução</button>
+<button onclick="gerarMiniEvolucao()">Mini Evolução</button>
+<button onclick="copiarTexto()">Copiar Texto</button>
+</div>
+<!-- Container para mostrar campos não preenchidos -->
+<div id="missingFieldsContainer" style="display: none; background-color: #ffeeee; padding: 15px; border-radius: var(--border-radius); margin-bottom: 20px;">
+<h3 style="color: var(--danger-color); margin-top: 0;">Campos obrigatórios não preenchidos:</h3>
+<ul id="missingFieldsList" style="color: var(--danger-color); padding-left: 20px;"></ul>
+</div>
+<!-- Seção de texto gerado -->
+<div class="output-section">
+<h3>Texto Gerado:</h3>
+<textarea id="textoEvolucao" readonly=""></textarea>
+</div>
+<div class="developer-credit">Desenvolvedor: Daniel Macedo</div>
 
-        <!-- Container para mostrar campos não preenchidos -->
-        <div id="missingFieldsContainer" style="display: none; background-color: #ffeeee; padding: 15px; border-radius: var(--border-radius); margin-bottom: 20px;">
-            <h3 style="color: var(--danger-color); margin-top: 0;">Campos obrigatórios não preenchidos:</h3>
-            <ul id="missingFieldsList" style="color: var(--danger-color); padding-left: 20px;"></ul>
-        </div>
-
-        <!-- Seção de texto gerado -->
-        <div class="output-section">
-            <h3>Texto Gerado:</h3>
-            <textarea id="textoEvolucao" readonly></textarea>
-        </div>
-        
-        <div class="developer-credit">Desenvolvedor: Daniel Macedo</div>
-    </div>
-
-    <script>
+<script>
         // Funções para expandir/recolher seções
         document.querySelectorAll('.section-header').forEach(header => {
             header.addEventListener('click', () => {
@@ -3439,14 +3336,11 @@ texto = texto.replace("paciente encontrado", "paciente encontrada");
 }
 
     </script>
-
 <script>
   document.getElementById('hospital').textContent = sessionStorage.getItem('evolucao.hospital') || '-';
   document.getElementById('unidade').textContent = sessionStorage.getItem('evolucao.unidade') || '-';
   document.getElementById('leito').textContent = sessionStorage.getItem('evolucao.leito') || '-';
 </script>
-
-
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const unidadeTopo = document.getElementById('unidade')?.textContent || "";
@@ -3462,12 +3356,9 @@ texto = texto.replace("paciente encontrado", "paciente encontrada");
     }
   });
 </script>
-
-
 <div style="margin-top: 30px; text-align: right;">
-  <button id="btnSalvarEvolucao">💾 Salvar Evolução</button>
+<button id="btnSalvarEvolucao">💾 Salvar Evolução</button><button class="danger" id="btnExcluirPaciente">Excluir Paciente</button>
 </div>
-<script type="module" src="script-evolucao.js"></script>
+<script src="script-evolucao.js" type="module"></script>
 </body>
-
 </html>
