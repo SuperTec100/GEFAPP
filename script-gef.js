@@ -122,35 +122,30 @@ function carregarUnidades() {
   }
 }
 
-async function carregarPacientes() {
+async 
+function carregarPacientes() {
   listaPacientes.innerHTML = '';
-  leitosContainer.style.display = 'none';
+  leitosContainer.style.display = 'block';
 
   const hospital = hospitalSelect.value;
   const unidade = unidadeSelect.value;
 
-  const leitosRef = collection(db, "usuarios", auth.currentUser.uid, "hospitais", hospital, "unidades", unidade, "leitos");
-  const leitosSnap = await getDocs(leitosRef);
+  const leitos = JSON.parse(localStorage.getItem(`leitos_${hospital}_${unidade}`)) || [];
 
-  if (leitosSnap.empty) {
-    listaPacientes.innerHTML = '<li style="color:#777">Nenhum paciente cadastrado.</li>';
-  } else {
-    leitosSnap.forEach(docSnap => {
-      const leito = docSnap.id;
-      const nome = docSnap.data().nome;
-
-      const li = document.createElement('li');
-      li.innerHTML = `
-        <strong>Leito ${leito}</strong> - ${nome}
-        <button class="small danger" onclick="excluirPaciente('${hospital}', '${unidade}', '${leito}')">Excluir</button>
-        <button class="small primary" onclick="gerarEvolucao('${hospital}', '${unidade}', '${leito}', '${nome}')">Evoluir</button>
-      `;
-      listaPacientes.appendChild(li);
+  leitos.forEach(paciente => {
+    const li = document.createElement('li');
+    li.textContent = `Leito ${paciente.leito} - ${paciente.nome}`;
+    li.classList.add('paciente-item');
+    li.addEventListener('click', () => {
+      sessionStorage.setItem("evolucao.hospital", hospital);
+      sessionStorage.setItem("evolucao.unidade", unidade);
+      sessionStorage.setItem("evolucao.leito", paciente.leito);
+      window.location.href = "evolucao.html";
     });
-  }
-
-  leitosContainer.style.display = 'block';
+    listaPacientes.appendChild(li);
+  });
 }
+
 
 btnAdicionarPaciente.addEventListener('click', () => {
   cadastroPaciente.style.display = 'block';
