@@ -144,6 +144,8 @@ async function carregarPacientes() {
         <strong>Leito ${leito}</strong> - ${nome}
         <button class="small danger" onclick="excluirPaciente('${hospital}', '${unidade}', '${leito}')">Excluir</button>
         <button class="small primary" onclick="gerarEvolucao('${hospital}', '${unidade}', '${leito}', '${nome}')">Evoluir</button>
+        <button class="small secondary" onclick="gerarRelatorio('${hospital}', '${unidade}', '${leito}', '${nome}')">Relatório</button>
+        <button class="small secondary" onclick="prescreverExercicio('${hospital}', '${unidade}', '${leito}', '${nome}')">Prescrever</button>
       `;
       listaPacientes.appendChild(li);
     });
@@ -190,6 +192,22 @@ window.gerarEvolucao = (hospital, unidade, leito, nome) => {
   sessionStorage.setItem('evolucao.leito', leito);
   sessionStorage.setItem('evolucao.nome', nome);
   window.location.href = 'evolucao.html';
+};
+
+window.gerarRelatorio = (hospital, unidade, leito, nome) => {
+  sessionStorage.setItem('evolucao.hospital', hospital);
+  sessionStorage.setItem('evolucao.unidade', unidade);
+  sessionStorage.setItem('evolucao.leito', leito);
+  sessionStorage.setItem('evolucao.nome', nome);
+  window.location.href = 'relatorio.html';
+};
+
+window.prescreverExercicio = (hospital, unidade, leito, nome) => {
+  sessionStorage.setItem('evolucao.hospital', hospital);
+  sessionStorage.setItem('evolucao.unidade', unidade);
+  sessionStorage.setItem('evolucao.leito', leito);
+  sessionStorage.setItem('evolucao.nome', nome);
+  window.location.href = 'prescricao.html';
 };
 
 localAtendimento.addEventListener('change', carregarHospitais);
