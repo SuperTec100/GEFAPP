@@ -14,6 +14,10 @@ const unidadeContainer = document.getElementById('unidadeContainer');
 const unidadeSelect = document.getElementById('unidade');
 const leitosContainer = document.getElementById('leitosContainer');
 const listaPacientes = document.getElementById('listaPacientes');
+const cadastroPaciente = document.getElementById('cadastroPaciente');
+const btnAdicionarPaciente = document.getElementById('btnAdicionarPaciente');
+const btnSalvar = document.getElementById('btnSalvarPaciente');
+const btnCancelar = document.getElementById('btnCancelarCadastro');
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
@@ -120,84 +124,52 @@ function carregarUnidades() {
 
 async function carregarPacientes() {
   listaPacientes.innerHTML = '';
-  leitosContainer.style.display = 'block';
+  leitosContainer.style.display = 'none';
 
   const hospital = hospitalSelect.value;
   const unidade = unidadeSelect.value;
-  if (!hospital || !unidade) return;
 
-  const leitosRef = collection(db, "hospitais", hospital, "unidades", unidade, "leitos");
+  const leitosRef = collection(db, "usuarios", auth.currentUser.uid, "hospitais", hospital, "unidades", unidade, "leitos");
   const leitosSnap = await getDocs(leitosRef);
 
   if (leitosSnap.empty) {
-    listaPacientes.innerHTML = "<li>Nenhum paciente cadastrado</li>";
+    listaPacientes.innerHTML = '<li style="color:#777">Nenhum paciente cadastrado.</li>';
+  } else {
+    leitosSnap.forEach(docSnap => {
+      const li = document.createElement('li');
+      li.textContent = `Leito ${docSnap.id} - ${docSnap.data().nome}`;
+      listaPacientes.appendChild(li);
+    });
+  }
+
+  leitosContainer.style.display = 'block';
+}
+
+btnAdicionarPaciente.addEventListener('click', () => {
+  cadastroPaciente.style.display = 'block';
+});
+
+btnCancelar.addEventListener('click', () => {
+  cadastroPaciente.style.display = 'none';
+});
+
+btnSalvar.addEventListener('click', async () => {
+  const leito = document.getElementById('leitoPaciente').value.trim();
+  const nome = document.getElementById('nomePaciente').value.trim();
+  const hospital = hospitalSelect.value;
+  const unidade = unidadeSelect.value;
+
+  if (!hospital || !unidade || !leito || !nome) {
+    alert('Preencha todos os campos corretamente.');
     return;
   }
 
-  leitosSnap.forEach(docSnap => {
-    const dados = docSnap.data();
-    const nome = dados.nome || 'Sem nome';
-    const li = document.createElement('li');
-    li.className = 'paciente-item';
-    li.innerHTML = `
-      <div class="info-paciente"><strong>Leito ${docSnap.id}</strong>: ${nome}</div>
-      <div class="actions">
-        <button class="btn-evolucao" data-leito="${docSnap.id}">Gerar Evolução</button>
-        <button class="btn-excluir" data-leito="${docSnap.id}"><i class="fas fa-trash"></i></button>
-      </div>
-    `;
-    listaPacientes.appendChild(li);
-  });
-}
-
-listaPacientes.addEventListener('click', async (e) => {
-  const excluirBtn = e.target.closest('.btn-excluir');
-  if (excluirBtn) {
-    const leito = excluirBtn.dataset.leito;
-    const hospital = hospitalSelect.value;
-    const unidade = unidadeSelect.value;
-    if (confirm(`Deseja realmente remover o paciente do Leito ${leito}?`)) {
-      await deleteDoc(doc(db, "hospitais", hospital, "unidades", unidade, "leitos", leito));
-      excluirBtn.closest('li').remove();
-    }
-  }
-
-  const evolucaoBtn = e.target.closest('.btn-evolucao');
-  if (evolucaoBtn) {
-    const leito = evolucaoBtn.dataset.leito;
-    const hospital = hospitalSelect.value;
-    const unidade = unidadeSelect.value;
-    sessionStorage.setItem('evolucao.leito', leito);
-    sessionStorage.setItem('evolucao.hospital', hospital);
-    sessionStorage.setItem('evolucao.unidade', unidade);
-    document.getElementById('gefContent').style.display = 'none';
-    window.location.href = 'evolucao.html';
-  }
+  const leitoRef = doc(db, "usuarios", auth.currentUser.uid, "hospitais", hospital, "unidades", unidade, "leitos", leito);
+  await setDoc(leitoRef, { nome });
+  cadastroPaciente.style.display = 'none';
+  carregarPacientes();
 });
 
 localAtendimento.addEventListener('change', carregarHospitais);
 hospitalSelect.addEventListener('change', carregarUnidades);
 unidadeSelect.addEventListener('change', carregarPacientes);
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  const btnSalvar = document.getElementById('btnSalvarPaciente');
-  if (btnSalvar) {
-    btnSalvar.addEventListener('click', async () => {
-      const leito = document.getElementById('leitoPaciente').value.trim();
-      const nome = document.getElementById('nomePaciente').value.trim();
-      const hospital = hospitalSelect.value;
-      const unidade = unidadeSelect.value;
-
-      if (!hospital || !unidade || !leito || !nome) {
-        alert('Preencha todos os campos corretamente.');
-        return;
-      }
-
-      const leitoRef = doc(db, "hospitais", hospital, "unidades", unidade, "leitos", leito);
-      await setDoc(leitoRef, { nome });
-      cadastroPaciente.style.display = 'none';
-      carregarPacientes();
-    });
-  }
-});
