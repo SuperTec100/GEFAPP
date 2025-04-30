@@ -1,3 +1,11 @@
+
+import { auth, db, doc, getDocs, setDoc, deleteDoc, collection } from './firebase-config.js';
+
+const hospitalSelect = document.getElementById('hospital');
+const unidadeSelect = document.getElementById('unidade');
+const leitosContainer = document.getElementById('leitosContainer');
+const listaPacientes = document.getElementById('listaPacientes');
+
 if (typeof onAuthStateChanged === "undefined") {
   import('https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js').then(({ onAuthStateChanged }) => {
     onAuthStateChanged(auth, (user) => {
@@ -26,14 +34,6 @@ if (typeof onAuthStateChanged === "undefined") {
   });
 }
 
-import { auth, db, doc, getDocs, setDoc, deleteDoc, collection } from './firebase-config.js';
-
-const hospitalSelect = document.getElementById('hospital');
-const unidadeSelect = document.getElementById('unidade');
-const leitosContainer = document.getElementById('leitosContainer');
-const listaPacientes = document.getElementById('listaPacientes');
-
-// Salvar paciente
 document.addEventListener('DOMContentLoaded', () => {
   const btnSalvar = document.getElementById('btnSalvarPaciente');
   if (btnSalvar) {
@@ -74,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Carregar pacientes
 async function carregarPacientes() {
   listaPacientes.innerHTML = '';
   leitosContainer.style.display = 'block';
@@ -103,18 +102,17 @@ async function carregarPacientes() {
     const leito = dados.leito || 'Sem leito';
     const li = document.createElement('li');
     li.className = 'paciente-item';
-    li.innerHTML = \`
-      <div class="info-paciente"><strong>Leito \${leito}</strong>: \${nome}</div>
+    li.innerHTML = `
+      <div class="info-paciente"><strong>Leito ${leito}</strong>: ${nome}</div>
       <div class="actions">
-        <button class="btn-evolucao" data-leito="\${leito}">Gerar Evolução</button>
-        <button class="btn-excluir" data-id="\${docSnap.id}"><i class="fas fa-trash"></i></button>
+        <button class="btn-evolucao" data-leito="${leito}">Gerar Evolução</button>
+        <button class="btn-excluir" data-id="${docSnap.id}"><i class="fas fa-trash"></i></button>
       </div>
-    \`;
+    `;
     listaPacientes.appendChild(li);
   });
 }
 
-// Excluir paciente
 listaPacientes.addEventListener('click', async (e) => {
   const excluirBtn = e.target.closest('.btn-excluir');
   if (excluirBtn) {
