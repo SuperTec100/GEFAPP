@@ -5,7 +5,14 @@ onAuthStateChanged(auth, (user) => {
   if (!user) {
     alert("Você precisa estar logado para acessar esta página.");
     window.location.href = "index.html";
+    return;
   }
+
+  console.log("✅ Usuário autenticado:", user.uid);
+  // Aguarda o carregamento completo da página antes de executar qualquer lógica
+  document.addEventListener('DOMContentLoaded', () => {
+    carregarPacientes(); // Chama a função de carregamento de pacientes com usuário já disponível
+  });
 });
 
 import { app, auth } from './firebase-config.js';
