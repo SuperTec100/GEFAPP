@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prescrição de Exercícios</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer>
+    document.addEventListener('DOMContentLoaded', () => {
+      const nome = sessionStorage.getItem('evolucao.nome');
+      const leito = sessionStorage.getItem('evolucao.leito');
+      const hospital = sessionStorage.getItem('evolucao.hospital');
+      const unidade = sessionStorage.getItem('evolucao.unidade');
+
+      document.getElementById('infoPaciente').textContent =
+        `Paciente: ${nome} | Leito: ${leito} | Unidade: ${unidade} | Hospital: ${hospital}`;
+    });
+  </script>
+</head>
+<body>
+  <div class="login-container">
+    <div class="title-container">
+      <h1>Prescrição</h1>
+      <h2 id="infoPaciente">Carregando dados do paciente...</h2>
+    </div>
+
+    <form>
+      <div class="form-group">
+        <label for="exercicio">Exercício</label>
+        <input type="text" id="exercicio" name="exercicio" placeholder="Nome do exercício">
+      </div>
+
+      <div class="form-group">
+        <label for="frequencia">Frequência</label>
+        <input type="text" id="frequencia" name="frequencia" placeholder="Ex: 2x ao dia">
+      </div>
+
+      <div class="form-group">
+        <label for="observacoes">Observações</label>
+        <input type="text" id="observacoes" name="observacoes" placeholder="Comentários adicionais">
+      </div>
+
+      <button type="submit">Salvar Prescrição</button>
+    </form>
+  </div>
+</body>
+</html>
