@@ -142,8 +142,8 @@ async function carregarPacientes() {
       const li = document.createElement('li');
       li.innerHTML = `
         <strong>Leito ${leito}</strong> - ${nome}
-        <button class="small danger" onclick="excluirPaciente('${hospital}', '${unidade}', '${leito}')">Excluir</button>
-        <button class="small primary" onclick="gerarEvolucao('${hospital}', '${unidade}', '${leito}', '${nome}')">Evoluir</button>
+        <button class="small danger" onclick="excluirPaciente('${hospital}', '${unidade}', '${leito}')">Excluir</button><button class="small neutral" onclick="prescrever('${hospital}', '${unidade}', '${leito}')">Prescrever</button><button class="small secondary" onclick="abrirRelatorio('${hospital}', '${unidade}', '${leito}')">Relatório</button>
+        <button class="small primary" onclick="gerarEvolucao('${hospital}', '${unidade}', '${leito}', '${nome}')">Evoluir</button><button class="small neutral" onclick="prescrever('${hospital}', '${unidade}', '${leito}')">Prescrever</button><button class="small secondary" onclick="abrirRelatorio('${hospital}', '${unidade}', '${leito}')">Relatório</button>
       `;
       listaPacientes.appendChild(li);
     });
@@ -195,3 +195,12 @@ window.gerarEvolucao = (hospital, unidade, leito, nome) => {
 localAtendimento.addEventListener('change', carregarHospitais);
 hospitalSelect.addEventListener('change', carregarUnidades);
 unidadeSelect.addEventListener('change', carregarPacientes);
+
+
+window.prescrever = (hospital, unidade, leito) => {
+  alert(`Prescrição (em desenvolvimento) - Leito ${leito}`);
+};
+
+window.abrirRelatorio = (hospital, unidade, leito) => {
+  alert(`Relatório (em desenvolvimento) - Leito ${leito}`);
+};
