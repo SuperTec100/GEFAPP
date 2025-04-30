@@ -136,8 +136,15 @@ async function carregarPacientes() {
     listaPacientes.innerHTML = '<li style="color:#777">Nenhum paciente cadastrado.</li>';
   } else {
     leitosSnap.forEach(docSnap => {
+      const leito = docSnap.id;
+      const nome = docSnap.data().nome;
+
       const li = document.createElement('li');
-      li.textContent = `Leito ${docSnap.id} - ${docSnap.data().nome}`;
+      li.innerHTML = `
+        <strong>Leito ${leito}</strong> - ${nome}
+        <button class="small danger" onclick="excluirPaciente('${hospital}', '${unidade}', '${leito}')">Excluir</button>
+        <button class="small primary" onclick="gerarEvolucao('${hospital}', '${unidade}', '${leito}', '${nome}')">Evoluir</button>
+      `;
       listaPacientes.appendChild(li);
     });
   }
@@ -169,6 +176,21 @@ btnSalvar.addEventListener('click', async () => {
   cadastroPaciente.style.display = 'none';
   carregarPacientes();
 });
+
+window.excluirPaciente = async (hospital, unidade, leito) => {
+  if (!confirm(`Tem certeza que deseja excluir o paciente do Leito ${leito}?`)) return;
+  const ref = doc(db, "usuarios", auth.currentUser.uid, "hospitais", hospital, "unidades", unidade, "leitos", leito);
+  await deleteDoc(ref);
+  carregarPacientes();
+};
+
+window.gerarEvolucao = (hospital, unidade, leito, nome) => {
+  sessionStorage.setItem('evolucao.hospital', hospital);
+  sessionStorage.setItem('evolucao.unidade', unidade);
+  sessionStorage.setItem('evolucao.leito', leito);
+  sessionStorage.setItem('evolucao.nome', nome);
+  window.location.href = 'evolucao.html';
+};
 
 localAtendimento.addEventListener('change', carregarHospitais);
 hospitalSelect.addEventListener('change', carregarUnidades);
