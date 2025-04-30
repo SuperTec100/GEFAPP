@@ -8,11 +8,12 @@
   <link rel="stylesheet" href="style-gef.css">
   <script type="module" src="script-gef.js" defer></script>
 
+  
   <style>
     #listaPacientes li {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       padding: 8px 12px;
       border-bottom: 1px solid #ddd;
       background: #fff;
@@ -23,11 +24,14 @@
     .paciente-info {
       font-weight: bold;
       color: #2c3e50;
+      max-width: 60%;
     }
 
     .paciente-actions {
       display: flex;
+      flex-direction: column;
       gap: 6px;
+      align-items: flex-end;
     }
 
     .paciente-actions button {
@@ -36,6 +40,7 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      min-width: 100px;
     }
 
     .paciente-actions .danger {
@@ -62,6 +67,7 @@
       opacity: 0.9;
     }
   </style>
+
 
 </head>
 <body>
