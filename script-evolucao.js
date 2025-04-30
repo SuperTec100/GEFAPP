@@ -1,8 +1,6 @@
-// script-evolucao.js
-
 import { auth, db } from './firebase-config.js';
 import {
-  doc, getDoc, setDoc, deleteDoc
+  doc, getDoc, setDoc
 } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 
@@ -23,11 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnSalvar = document.getElementById("btnSalvarEvolucao");
   if (btnSalvar) {
     btnSalvar.addEventListener("click", salvarEvolucao);
-  }
-
-  const btnExcluir = document.getElementById("btnExcluirPaciente");
-  if (btnExcluir) {
-    btnExcluir.addEventListener("click", excluirPaciente);
   }
 
   const msg = document.createElement("div");
@@ -80,29 +73,6 @@ async function salvarEvolucao() {
   }
 }
 
-async function excluirPaciente() {
-  const hospital = sessionStorage.getItem("evolucao.hospital");
-  const unidade = sessionStorage.getItem("evolucao.unidade");
-  const leito = sessionStorage.getItem("evolucao.leito");
-
-  if (!hospital || !unidade || !leito || !currentUser) {
-    mostrarMensagem("Informações do paciente não disponíveis.", false);
-    return;
-  }
-
-  if (!confirm(`Tem certeza que deseja excluir o paciente do leito ${leito}?`)) return;
-
-  try {
-    const docRef = doc(db, "users", currentUser.uid, "pacientes", `${hospital}_${unidade}_${leito}`);
-    await deleteDoc(docRef);
-    mostrarMensagem("Paciente excluído com sucesso!");
-    window.location.href = "dashboard.html";
-  } catch (e) {
-    console.error("Erro ao excluir paciente:", e);
-    mostrarMensagem("Erro ao excluir paciente.", false);
-  }
-}
-
 function coletarCampos() {
   return {
     tipoDocumento: document.getElementById("tipoDocumento")?.value || "",
@@ -141,8 +111,7 @@ async function carregarDadosSalvos() {
   document.getElementById("dataEvolucao").value = data.dataEvolucao || "";
   document.getElementById("turno").value = data.turno || "";
   if (data.sexo) {
-    const inputSexo = document.querySelector(`input[name="sexo"][value="${data.sexo}"]`);
-    if (inputSexo) inputSexo.checked = true;
+    document.querySelector(`input[name="sexo"][value="${data.sexo}"]`)?.checked = true;
   }
   document.getElementById("fc").value = data.fc || "";
   document.getElementById("fr").value = data.fr || "";
@@ -151,20 +120,17 @@ async function carregarDadosSalvos() {
   document.getElementById("temp").value = data.temp || "";
   document.getElementById("glasgow").value = data.glasgow || "";
 
-  if (Array.isArray(data.estadoComportamental)) {
+  if (data.estadoComportamental) {
     data.estadoComportamental.forEach(estado => {
-      const cb = document.querySelector(`input[name="estadoComportamental"][value="${estado}"]`);
-      if (cb) cb.checked = true;
+      document.querySelector(`input[name="estadoComportamental"][value="${estado}"]`)?.checked = true;
     });
   }
 
   if (data.sedacao) {
-    const inputSedacao = document.querySelector(`input[name="sedacao"][value="${data.sedacao}"]`);
-    if (inputSedacao) inputSedacao.checked = true;
+    document.querySelector(`input[name="sedacao"][value="${data.sedacao}"]`)?.checked = true;
   }
 
   if (data.trabalhoRespiratorio) {
-    const inputTR = document.querySelector(`input[name="trabalhoRespiratorio"][value="${data.trabalhoRespiratorio}"]`);
-    if (inputTR) inputTR.checked = true;
+    document.querySelector(`input[name="trabalhoRespiratorio"][value="${data.trabalhoRespiratorio}"]`)?.checked = true;
   }
 }
