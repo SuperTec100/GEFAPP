@@ -13,7 +13,7 @@
     #listaPacientes li {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
       padding: 8px 12px;
       border-bottom: 1px solid #ddd;
       background: #fff;
@@ -24,14 +24,13 @@
     .paciente-info {
       font-weight: bold;
       color: #2c3e50;
-      max-width: 60%;
+      flex: 1;
     }
 
     .paciente-actions {
       display: flex;
-      flex-direction: column;
-      gap: 6px;
-      align-items: flex-end;
+      flex-shrink: 0;
+      gap: 8px;
     }
 
     .paciente-actions button {
@@ -40,7 +39,7 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      min-width: 100px;
+      min-width: 80px;
     }
 
     .paciente-actions .danger {
