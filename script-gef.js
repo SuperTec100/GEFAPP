@@ -122,7 +122,6 @@ function carregarUnidades() {
   }
 }
 
-async 
 function carregarPacientes() {
   listaPacientes.innerHTML = '';
   leitosContainer.style.display = 'block';
