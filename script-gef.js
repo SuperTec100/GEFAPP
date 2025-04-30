@@ -1,4 +1,3 @@
-
 import { app, auth } from './firebase-config.js';
 import { getFirestore, doc, getDoc, setDoc, collection, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
@@ -151,37 +150,54 @@ async function carregarPacientes() {
   });
 }
 
+listaPacientes.addEventListener('click', async (e) => {
+  const excluirBtn = e.target.closest('.btn-excluir');
+  if (excluirBtn) {
+    const leito = excluirBtn.dataset.leito;
+    const hospital = hospitalSelect.value;
+    const unidade = unidadeSelect.value;
+    if (confirm(`Deseja realmente remover o paciente do Leito ${leito}?`)) {
+      await deleteDoc(doc(db, "hospitais", hospital, "unidades", unidade, "leitos", leito));
+      excluirBtn.closest('li').remove();
+    }
+  }
+
+  const evolucaoBtn = e.target.closest('.btn-evolucao');
+  if (evolucaoBtn) {
+    const leito = evolucaoBtn.dataset.leito;
+    const hospital = hospitalSelect.value;
+    const unidade = unidadeSelect.value;
+    sessionStorage.setItem('evolucao.leito', leito);
+    sessionStorage.setItem('evolucao.hospital', hospital);
+    sessionStorage.setItem('evolucao.unidade', unidade);
+    document.getElementById('gefContent').style.display = 'none';
+    window.location.href = 'evolucao.html';
+  }
+});
+
 localAtendimento.addEventListener('change', carregarHospitais);
 hospitalSelect.addEventListener('change', carregarUnidades);
 unidadeSelect.addEventListener('change', carregarPacientes);
 
-document.addEventListener("DOMContentLoaded", function () {
-  const btn = document.getElementById("btnAdicionarPaciente");
-  const form = document.getElementById("cadastroPaciente");
-  if (btn && form) {
-    btn.addEventListener("click", () => {
-      form.style.display = "block";
+
+document.addEventListener('DOMContentLoaded', () => {
+  const btnSalvar = document.getElementById('btnSalvarPaciente');
+  if (btnSalvar) {
+    btnSalvar.addEventListener('click', async () => {
+      const leito = document.getElementById('leitoPaciente').value.trim();
+      const nome = document.getElementById('nomePaciente').value.trim();
+      const hospital = hospitalSelect.value;
+      const unidade = unidadeSelect.value;
+
+      if (!hospital || !unidade || !leito || !nome) {
+        alert('Preencha todos os campos corretamente.');
+        return;
+      }
+
+      const leitoRef = doc(db, "hospitais", hospital, "unidades", unidade, "leitos", leito);
+      await setDoc(leitoRef, { nome });
+      cadastroPaciente.style.display = 'none';
+      carregarPacientes();
     });
   }
-
-  const listaPacientes = document.getElementById("listaPacientes");
-  listaPacientes.addEventListener("click", (e) => {
-    const evolucaoBtn = e.target.closest(".btn-evolucao");
-    if (evolucaoBtn) {
-      const leito = evolucaoBtn.dataset.leito;
-      const hospital = document.getElementById("hospital").value;
-      const unidade = document.getElementById("unidade").value;
-      sessionStorage.setItem("evolucao.leito", leito);
-      sessionStorage.setItem("evolucao.hospital", hospital);
-      sessionStorage.setItem("evolucao.unidade", unidade);
-
-      const gefContent = document.getElementById("gefContent");
-      const iframe = document.getElementById("evolucaoIframe");
-      if (gefContent && iframe) {
-        gefContent.style.display = "none";
-        iframe.src = "evolucao.html";
-        iframe.style.display = "block";
-      }
-    }
-  });
 });
