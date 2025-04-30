@@ -1,3 +1,4 @@
+
 body {
   font-family: Arial, sans-serif;
   background-color: #f5f7fa;
@@ -73,4 +74,39 @@ button:hover {
 
 .top-right a:hover {
   text-decoration: underline;
+}
+
+/* Botões de ação */
+.botao-acao {
+  padding: 6px 12px;
+  margin: 2px 4px;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.botao-excluir {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.botao-evoluir {
+  background-color: #dcdcdc;
+  color: #222;
+}
+
+.botao-relatorio {
+  background-color: #d0d0d0;
+  color: #111;
+}
+
+.botao-prescrever {
+  background-color: #c8c8c8;
+  color: #111;
+}
+
+.botao-acao:hover {
+  filter: brightness(90%);
 }
