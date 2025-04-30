@@ -142,10 +142,10 @@ async function carregarPacientes() {
       const li = document.createElement('li');
       li.innerHTML = `
         <strong>Leito ${leito}</strong> - ${nome}
-        <button style="background-color: #e74c3c; color: white;" class="small" onclick="excluirPaciente('${hospital}', '${unidade}', '${leito}')">Excluir</button>
-        <button style="background-color: #3498db; color: white;" class="small" onclick="gerarEvolucao('${hospital}', '${unidade}', '${leito}', '${nome}')">Evoluir</button>
-        <button style="background-color: #2ecc71; color: white;" class="small" onclick="gerarRelatorio('${hospital}', '${unidade}', '${leito}', '${nome}')">Relatório</button>
-        <button style="background-color: #f39c12; color: white;" class="small" onclick="prescreverExercicio('${hospital}', '${unidade}', '${leito}', '${nome}')">Prescrever</button>
+        <button style="background-color: #cccccc; color: black;" class="small" onclick="excluirPaciente('${hospital}', '${unidade}', '${leito}')">Excluir</button>
+        <button style="background-color: #dddddd; color: black;" class="small" onclick="gerarEvolucao('${hospital}', '${unidade}', '${leito}', '${nome}')">Evoluir</button>
+        <button style="background-color: #eeeeee; color: black;" class="small" onclick="gerarRelatorio('${hospital}', '${unidade}', '${leito}', '${nome}')">Relatório</button>
+        <button style="background-color: #f5f5f5; color: black;" class="small" onclick="prescreverExercicio('${hospital}', '${unidade}', '${leito}', '${nome}')">Prescrever</button>
       `;
       listaPacientes.appendChild(li);
     });
