@@ -13,16 +13,9 @@ export function mostrarEscalaEVA() {
 }
 
 export function mostrarOpcoesSedacao() {
-  const valorSelecionado = document.querySelector('input[name="sedacao"]:checked')?.value;
-
-  const containerSedacao = document.getElementById("opcoesSedacao");
-  const glasgowContainer = document.getElementById("opcoesGlasgow");
-
-  // Exibir container de sedação apenas se for "Sim"
-  containerSedacao.style.display = (valorSelecionado === "Sim") ? "block" : "none";
-
-  // Exibir escala de Glasgow se for "Não" ou "Narcose Anestésica"
-  glasgowContainer.style.display = (valorSelecionado === "Não" || valorSelecionado === "Narcose Anestésica") ? "block" : "none";
+  const sim = document.querySelector('input[name="sedacao"][value="Sim"]');
+  const container = document.getElementById("opcoesSedacao");
+  container.style.display = sim?.checked ? "block" : "none";
 }
 
 export function mostrarDrogas() {
