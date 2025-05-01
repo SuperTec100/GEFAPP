@@ -60,6 +60,8 @@ async function salvarEvolucao() {
   const docRef = doc(db, "users", currentUser.uid, "pacientes", `${hospital}_${unidade}_${leito}`);
   const dados = coletarCampos();
 
+  console.log("Campos coletados para salvamento:", dados); // depuração
+
   try {
     await setDoc(docRef, {
       hospital, unidade, leito,
@@ -76,29 +78,30 @@ async function salvarEvolucao() {
 function coletarCampos() {
   const data = {};
 
-  // Inputs tipo texto, número, select e range com ID
+  // Todos inputs e textareas com ID
   document.querySelectorAll("input[id], select[id], textarea[id]").forEach(el => {
-    if (el.type === "checkbox" || el.type === "radio") return;
-    data[el.id] = el.value || "";
-  });
-
-  // Radio buttons (por name)
-  document.querySelectorAll("input[type='radio']").forEach(radio => {
-    if (radio.checked) data[radio.name] = radio.value;
-  });
-
-  // Checkbox com name[] agrupado
-  const checkboxesAgrupados = {};
-  document.querySelectorAll("input[type='checkbox']").forEach(cb => {
-    if (cb.name) {
-      if (!checkboxesAgrupados[cb.name]) checkboxesAgrupados[cb.name] = [];
-      if (cb.checked) checkboxesAgrupados[cb.name].push(cb.value);
+    if (el.type !== "radio" && el.type !== "checkbox") {
+      data[el.id] = el.value || "";
     }
   });
 
+  // Radios (por name)
+  const radiosAgrupados = {};
+  document.querySelectorAll("input[type='radio']").forEach(radio => {
+    if (radio.checked) radiosAgrupados[radio.name] = radio.value;
+  });
+  Object.assign(data, radiosAgrupados);
+
+  // Checkboxes (por name)
+  const checkboxesAgrupados = {};
+  document.querySelectorAll("input[type='checkbox']").forEach(cb => {
+    if (!cb.name) return;
+    if (!checkboxesAgrupados[cb.name]) checkboxesAgrupados[cb.name] = [];
+    if (cb.checked) checkboxesAgrupados[cb.name].push(cb.value);
+  });
   Object.assign(data, checkboxesAgrupados);
 
-  // Campos ADM e Amputações com select
+  // Selects com name
   document.querySelectorAll("select[name]").forEach(sel => {
     data[sel.name] = sel.value;
   });
@@ -119,27 +122,27 @@ async function carregarDadosSalvos() {
   if (!snap.exists()) return;
 
   const data = snap.data();
+  console.log("Dados carregados do Firebase:", data); // depuração
 
-  // Inputs, textareas e selects por ID
+  // Campos com ID
   Object.keys(data).forEach(key => {
     const el = document.getElementById(key);
     if (el) {
-      if (el.type === "range" || el.type === "number" || el.tagName === "TEXTAREA" || el.tagName === "SELECT" || el.type === "text") {
-        el.value = data[key];
-        if (el.id === "eva" && document.getElementById("evaValue")) {
-          document.getElementById("evaValue").textContent = el.value;
-        }
+      el.value = data[key];
+      if (el.id === "eva" && document.getElementById("evaValue")) {
+        document.getElementById("evaValue").textContent = el.value;
       }
     }
   });
 
-  // Radios
+  // Radio buttons
   Object.keys(data).forEach(name => {
     const val = data[name];
     const radio = document.querySelector(`input[type="radio"][name="${name}"][value="${val}"]`);
     if (radio) {
       radio.checked = true;
-      radio.dispatchEvent(new Event("click"));
+      // Importante: disparar clique para ativar seções ocultas
+      radio.dispatchEvent(new Event("click", { bubbles: true }));
     }
   });
 
