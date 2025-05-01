@@ -57,3 +57,39 @@ export function aplicarLogicaCondicional() {
   atualizarOpcoesRespiratorias();
   mostrarCamposHGA();
 }
+
+export function mostrarCuffOptions() {
+  const via = document.querySelector('input[name="viaAerea"]:checked');
+  const cuff = document.getElementById("cuffOptions");
+  if (via?.value === "TOT") {
+    cuff.style.display = "block";
+    document.getElementById("opcoesTQT").style.display = "none";
+  } else if (via?.value === "TQT") {
+    document.getElementById("opcoesTQT").style.display = "block";
+    cuff.style.display = "block";
+  } else {
+    cuff.style.display = "none";
+    document.getElementById("opcoesTQT").style.display = "none";
+  }
+}
+
+export function mostrarOpcoesTQT() {
+  document.getElementById("opcoesTQT").style.display = "block";
+  document.getElementById("cuffOptions").style.display = "block";
+}
+
+export function mostrarPressaoCuff() {
+  document.getElementById("pressaoCuff").style.display = "block";
+}
+
+export function esconderPressaoCuff() {
+  document.getElementById("pressaoCuff").style.display = "none";
+}
+
+export function mostrarMecanicaPulmonar() {
+  document.getElementById("detalhesMecanicaPulmonar").style.display = "block";
+}
+
+export function esconderMecanicaPulmonar() {
+  document.getElementById("detalhesMecanicaPulmonar").style.display = "none";
+}

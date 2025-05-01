@@ -1,4 +1,4 @@
-// script-evolucao.js
+
 import {
   getAuth, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
@@ -6,7 +6,16 @@ import {
   getFirestore, doc, setDoc, getDoc
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 import { app } from './firebase-config.js';
-import { aplicarLogicaCondicional } from './exibicao-condicional.js';
+import {
+  aplicarLogicaCondicional,
+  mostrarCuffOptions,
+  mostrarOpcoesTQT,
+  mostrarPressaoCuff,
+  esconderPressaoCuff,
+  mostrarMecanicaPulmonar,
+  esconderMecanicaPulmonar,
+  atualizarOpcoesRespiratorias
+} from './exibicao-condicional.js';
 
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -130,4 +139,33 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btn) {
     btn.addEventListener("click", salvarEvolucao);
   }
+
+  const tipoVentilacao = document.getElementById("sistemaRespiratorio");
+  if (tipoVentilacao) {
+    tipoVentilacao.addEventListener("change", atualizarOpcoesRespiratorias);
+  }
+
+  document.querySelectorAll('input[name="viaAerea"]').forEach(el => {
+    el.addEventListener("change", mostrarCuffOptions);
+  });
+
+  document.querySelectorAll('input[name="cuff"]').forEach(el => {
+    el.addEventListener("change", () => {
+      if (el.value === "Insuflado") {
+        mostrarPressaoCuff();
+      } else {
+        esconderPressaoCuff();
+      }
+    });
+  });
+
+  document.querySelectorAll('input[name="mecanicaPulmonar"]').forEach(el => {
+    el.addEventListener("change", () => {
+      if (el.value === "Sim") {
+        mostrarMecanicaPulmonar();
+      } else {
+        esconderMecanicaPulmonar();
+      }
+    });
+  });
 });
