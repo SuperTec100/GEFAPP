@@ -259,31 +259,26 @@
 </head>
 <body><script>// exibicao-condicional.js
 
-export function mostrarOpcoesContencao() {
   const sim = document.querySelector('input[name="contencao"][value="Sim"]');
   const container = document.getElementById("opcoesContencao");
   container.style.display = sim?.checked ? "block" : "none";
 }
 
-export function mostrarEscalaEVA() {
   const sim = document.querySelector('input[name="avaliacaoDor"][value="Sim"]');
   const container = document.getElementById("escalaEVAContainer");
   container.style.display = sim?.checked ? "block" : "none";
 }
 
-export function mostrarOpcoesSedacao() {
   const sim = document.querySelector('input[name="sedacao"][value="Sim"]');
   const container = document.getElementById("opcoesSedacao");
   container.style.display = sim?.checked ? "block" : "none";
 }
 
-export function mostrarDrogas() {
   const sim = document.querySelector('input[name="drogasVasoativas"][value="com uso de drogas vasoativas"]');
   const container = document.getElementById("opcoesDrogas");
   container.style.display = sim?.checked ? "block" : "none";
 }
 
-export function atualizarOpcoesRespiratorias() {
   const tipo = document.getElementById("sistemaRespiratorio")?.value;
   const viaAerea = document.getElementById("viaAereaOptions");
   const params = document.getElementById("ventilationParams");
@@ -304,13 +299,11 @@ export function atualizarOpcoesRespiratorias() {
   }
 }
 
-export function mostrarCamposHGA() {
   const sim = document.querySelector('input[name="hga"][value="Com HGA"]');
   const container = document.getElementById("camposHGA");
   container.style.display = sim?.checked ? "block" : "none";
 }
 
-export function aplicarLogicaCondicional() {
   mostrarOpcoesContencao();
   mostrarEscalaEVA();
   mostrarOpcoesSedacao();
@@ -319,7 +312,6 @@ export function aplicarLogicaCondicional() {
   mostrarCamposHGA();
 }
 
-export function mostrarCuffOptions() {
   const via = document.querySelector('input[name="viaAerea"]:checked');
   const cuff = document.getElementById("cuffOptions");
   if (via?.value === "TOT") {
@@ -334,24 +326,19 @@ export function mostrarCuffOptions() {
   }
 }
 
-export function mostrarOpcoesTQT() {
   document.getElementById("opcoesTQT").style.display = "block";
   document.getElementById("cuffOptions").style.display = "block";
 }
 
-export function mostrarPressaoCuff() {
   document.getElementById("pressaoCuff").style.display = "block";
 }
 
-export function esconderPressaoCuff() {
   document.getElementById("pressaoCuff").style.display = "none";
 }
 
-export function mostrarMecanicaPulmonar() {
   document.getElementById("detalhesMecanicaPulmonar").style.display = "block";
 }
 
-export function esconderMecanicaPulmonar() {
   document.getElementById("detalhesMecanicaPulmonar").style.display = "none";
 }</script>
 <div class="container">
@@ -1623,7 +1610,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Mostrar afasia só na UTI Neuro
-document.getElementById("uti").addEventListener("change", function() {
+var el = document.getElementById("uti");
+if (el) el.addEventListener("change", function() {
     document.getElementById("afasiaContainer").style.display = 
         this.value === "NEURO" ? "block" : "none";
 });
@@ -2945,13 +2933,15 @@ function atualizarCodigosCobranca() {
 }
 
         // Atualiza os códigos quando UTI ou turno são alterados
-        document.getElementById("uti").addEventListener("change", function() {
+        var el = document.getElementById("uti");
+        if (el) el.addEventListener("change", function() {
             if (document.querySelector('input[name="codigosCobranca"]:checked')?.value === "Sim") {
                 atualizarCodigosCobranca();
             }
         });
 
-        document.getElementById("turno").addEventListener("change", function() {
+        var el = document.getElementById("turno");
+        if (el) el.addEventListener("change", function() {
             if (document.querySelector('input[name="codigosCobranca"]:checked')?.value === "Sim") {
                 atualizarCodigosCobranca();
             }
@@ -3111,16 +3101,24 @@ atualizarComponentesGlasgow(); // Verifica o estado inicial
             document.getElementById("mecanicaPulmonarContainer").style.display = "block";
             
             // Event listeners para cálculo do ROX
-            document.getElementById("spo2").addEventListener("input", calcularROX);
-            document.getElementById("fr").addEventListener("input", calcularROX);
-            document.getElementById("fio2CNAF").addEventListener("input", calcularROX);
+            var el = document.getElementById("spo2");
+            if (el) el.addEventListener("input", calcularROX);
+            var el = document.getElementById("fr");
+            if (el) el.addEventListener("input", calcularROX);
+            var el = document.getElementById("fio2CNAF");
+            if (el) el.addEventListener("input", calcularROX);
             
             // Event listeners para cálculo do HACOR
-            document.getElementById("fc").addEventListener("input", calcularHACOR);
-            document.getElementById("fr").addEventListener("input", calcularHACOR);
-            document.getElementById("glasgow").addEventListener("change", calcularHACOR);
-            document.getElementById("ph").addEventListener("input", calcularHACOR);
-            document.getElementById("pao2").addEventListener("input", calcularHACOR);
+            var el = document.getElementById("fc");
+            if (el) el.addEventListener("input", calcularHACOR);
+            var el = document.getElementById("fr");
+            if (el) el.addEventListener("input", calcularHACOR);
+            var el = document.getElementById("glasgow");
+            if (el) el.addEventListener("change", calcularHACOR);
+            var el = document.getElementById("ph");
+            if (el) el.addEventListener("input", calcularHACOR);
+            var el = document.getElementById("pao2");
+            if (el) el.addEventListener("input", calcularHACOR);
 
 // Função para calcular Volume Minuto automaticamente
 function calcularVolumeMinuto() {
@@ -3136,18 +3134,27 @@ function calcularVolumeMinuto() {
 }
 
 // Adicionar event listeners para os campos de ventilometria
-document.getElementById("vcVentilometria").addEventListener("input", calcularVolumeMinuto);
-document.getElementById("frVentilometria").addEventListener("input", calcularVolumeMinuto);
+var el = document.getElementById("vcVentilometria");
+if (el) el.addEventListener("input", calcularVolumeMinuto);
+var el = document.getElementById("frVentilometria");
+if (el) el.addEventListener("input", calcularVolumeMinuto);
 // Event listeners para cálculo do HACOR
-document.getElementById("fc").addEventListener("input", calcularHACOR);
-document.getElementById("fr").addEventListener("input", calcularHACOR);
-document.getElementById("glasgow").addEventListener("change", calcularHACOR);
-document.getElementById("ph").addEventListener("input", calcularHACOR);
-document.getElementById("pao2").addEventListener("input", calcularHACOR);
-document.getElementById("fio2VNI").addEventListener("input", calcularHACOR);
+var el = document.getElementById("fc");
+if (el) el.addEventListener("input", calcularHACOR);
+var el = document.getElementById("fr");
+if (el) el.addEventListener("input", calcularHACOR);
+var el = document.getElementById("glasgow");
+if (el) el.addEventListener("change", calcularHACOR);
+var el = document.getElementById("ph");
+if (el) el.addEventListener("input", calcularHACOR);
+var el = document.getElementById("pao2");
+if (el) el.addEventListener("input", calcularHACOR);
+var el = document.getElementById("fio2VNI");
+if (el) el.addEventListener("input", calcularHACOR);
 
 // Event listener para o select do Glasgow
-document.getElementById("glasgow").addEventListener("change", function() {
+var el = document.getElementById("glasgow");
+if (el) el.addEventListener("change", function() {
     let sedacao = document.querySelector('input[name="sedacao"]:checked');
     if (sedacao && sedacao.value === "Não") {
         document.getElementById("opcoesGlasgow").style.display = this.value ? "block" : "none";
@@ -3427,9 +3434,7 @@ texto = texto.replace("paciente encontrado", "paciente encontrada");
     </script>
 <button class="primary" id="btnSalvarEvolucao">💾 Salvar Evolução</button><script>
   getAuth, onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
   getFirestore, doc, setDoc, getDoc
-} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
   aplicarLogicaCondicional,
   mostrarCuffOptions,
   mostrarOpcoesTQT,
@@ -3438,7 +3443,6 @@ texto = texto.replace("paciente encontrado", "paciente encontrada");
   mostrarMecanicaPulmonar,
   esconderMecanicaPulmonar,
   atualizarOpcoesRespiratorias
-} from './exibicao-condicional.js';
 
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -3597,7 +3601,6 @@ document.addEventListener("DOMContentLoaded", () => {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail
-} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
   getFirestore,
   doc,
   getDoc,
@@ -3608,7 +3611,6 @@ document.addEventListener("DOMContentLoaded", () => {
   deleteDoc,
   arrayUnion,
   arrayRemove
-} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 // Configuração do Firebase
 const firebaseConfig = {
