@@ -48,12 +48,11 @@ export function atualizarOpcoesRespiratorias() {
       viaAerea.innerHTML = `
         <label>Via Aérea:</label>
         <div class="radio-group">
-          <label><input name="viaAerea" type="radio" value="Fisiológica"/> Fisiológica</label>
-          <label><input name="viaAerea" type="radio" value="TQT" onclick="mostrarOpcoesTQT()"/> TQT (Tubo de Traqueostomia)</label>
+          <label><input name="viaAerea" type="radio" value="Via aérea Fisiológica"/> Via aérea Fisiológica</label>
+          <label><input name="viaAerea" type="radio" value="Via TQT" onclick="mostrarOpcoesTQT()"/> Via TQT</label>
         </div>
       `;
     }
-    if (fluxo) fluxo.style.display = "block";
   } else if (tipo === "vni") {
     if (viaAerea) viaAerea.innerHTML = "";
     if (params) params.style.display = "block";
