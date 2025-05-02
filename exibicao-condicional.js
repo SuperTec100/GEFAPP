@@ -25,6 +25,7 @@ export function mostrarDrogas() {
 export function atualizarOpcoesRespiratorias() {
   const tipo = document.getElementById("sistemaRespiratorio")?.value;
   const viaAerea = document.getElementById("viaAereaOptions");
+  const suporteOxigenio = document.getElementById("suporteOxigenioOptions");
   const opcoesTQT = document.getElementById("opcoesTQT");
   const cuffOptions = document.getElementById("cuffOptions");
   const pressaoCuff = document.getElementById("pressaoCuff");
@@ -36,6 +37,7 @@ export function atualizarOpcoesRespiratorias() {
   if (!tipo) return;
 
   if (viaAerea) viaAerea.style.display = "none";
+  if (suporteOxigenio) suporteOxigenio.style.display = "none";
   if (opcoesTQT) opcoesTQT.style.display = "none";
   if (cuffOptions) cuffOptions.style.display = "none";
   if (pressaoCuff) pressaoCuff.style.display = "none";
@@ -49,7 +51,19 @@ export function atualizarOpcoesRespiratorias() {
         <label>Via Aérea:</label>
         <div class="radio-group">
           <label><input name="viaAerea" type="radio" value="Via aérea Fisiológica"/> Via aérea Fisiológica</label>
-          <label><input name="viaAerea" type="radio" value="Via TQT" onclick="mostrarOpcoesTQT()"/> Via TQT</label>
+          <label><input name="viaAerea" type="radio" value="Via TQT"/> Via TQT</label>
+        </div>
+      `;
+    }
+    if (suporteOxigenio) {
+      suporteOxigenio.style.display = "block";
+      suporteOxigenio.innerHTML = `
+        <label>Suporte de Oxigênio:</label>
+        <div class="radio-group">
+          <label><input name="suporteOxigenio" type="radio" value="Ar ambiente"/> Ar ambiente</label>
+          <label><input name="suporteOxigenio" type="radio" value="Cateter O2"/> Cateter O2</label>
+          <label><input name="suporteOxigenio" type="radio" value="Máscara O2"/> Máscara O2</label>
+          <label><input name="suporteOxigenio" type="radio" value="CNAF"/> CNAF</label>
         </div>
       `;
     }
