@@ -1,95 +1,59 @@
-// exibicao-condicional.js
 
-function mostrarOpcoesContencao() {
-  const sim = document.querySelector('input[name="contencao"][value="Sim"]');
-  const container = document.getElementById("opcoesContencao");
-  container.style.display = sim?.checked ? "block" : "none";
-}
-
-function mostrarEscalaEVA() {
-  const sim = document.querySelector('input[name="avaliacaoDor"][value="Sim"]');
-  const container = document.getElementById("escalaEVAContainer");
-  container.style.display = sim?.checked ? "block" : "none";
-}
-
-function mostrarOpcoesSedacao() {
-  const sim = document.querySelector('input[name="sedacao"][value="Sim"]');
-  const container = document.getElementById("opcoesSedacao");
-  container.style.display = sim?.checked ? "block" : "none";
-}
-
-function mostrarDrogas() {
-  const sim = document.querySelector('input[name="drogasVasoativas"][value="com uso de drogas vasoativas"]');
-  const container = document.getElementById("opcoesDrogas");
-  container.style.display = sim?.checked ? "block" : "none";
-}
-
-function atualizarOpcoesRespiratorias() {
+export function atualizarOpcoesRespiratorias() {
   const tipo = document.getElementById("sistemaRespiratorio")?.value;
-  const viaAerea = document.getElementById("viaAereaOptions");
-  const params = document.getElementById("ventilationParams");
 
-  if (!tipo || !viaAerea || !params) return;
+  const viaAereaOptions = document.getElementById("viaAereaOptions");
+  const opcoesRespiratorias = document.getElementById("opcoesRespiratorias");
+  const ventilationParams = document.getElementById("ventilationParams");
 
-  if (tipo === "VM") {
-    viaAerea.style.display = "block";
-    params.style.display = "block";
-  } else if (tipo === "vni") {
-    viaAerea.style.display = "none";
-    params.style.display = "block";
-  } else {
-    viaAerea.style.display = "none";
-    params.style.display = "none";
+  const opcoesEspontanea = `
+    <div class="sub-section">
+      <label>Via Aérea:</label>
+      <div class="radio-group">
+        <label><input name="viaAereaEsp" type="radio" value="Fisiológica"> Fisiológica</label>
+        <label><input name="viaAereaEsp" type="radio" value="TQT"> TQT</label>
+      </div>
+    </div>`;
+
+  const opcoesVNI = `
+    <div class="sub-section">
+      <label>Modos VNI:</label>
+      <div class="radio-group">
+        <label><input name="modoVNI" type="radio" value="BIPAP"> BIPAP</label>
+        <label><input name="modoVNI" type="radio" value="CPAP"> CPAP</label>
+      </div>
+    </div>`;
+
+  const opcoesVM = `
+    <div class="sub-section">
+      <label>Modos VM:</label>
+      <div class="radio-group">
+        <label><input name="modoVM" type="radio" value="VCV"> VCV</label>
+        <label><input name="modoVM" type="radio" value="PCV"> PCV</label>
+        <label><input name="modoVM" type="radio" value="PSV"> PSV</label>
+        <label><input name="modoVM" type="radio" value="SIMV"> SIMV</label>
+      </div>
+    </div>`;
+
+  viaAereaOptions.style.display = "none";
+  opcoesRespiratorias.innerHTML = "";
+  ventilationParams.style.display = "none";
+
+  switch (tipo) {
+    case "espontanea":
+      opcoesRespiratorias.innerHTML = opcoesEspontanea;
+      viaAereaOptions.style.display = "none";
+      ventilationParams.style.display = "none";
+      break;
+    case "vni":
+      opcoesRespiratorias.innerHTML = opcoesVNI;
+      viaAereaOptions.style.display = "none";
+      ventilationParams.style.display = "block";
+      break;
+    case "VM":
+      opcoesRespiratorias.innerHTML = opcoesVM;
+      viaAereaOptions.style.display = "block";
+      ventilationParams.style.display = "block";
+      break;
   }
-}
-
-function mostrarCamposHGA() {
-  const sim = document.querySelector('input[name="hga"][value="Com HGA"]');
-  const container = document.getElementById("camposHGA");
-  container.style.display = sim?.checked ? "block" : "none";
-}
-
-function aplicarLogicaCondicional() {
-  mostrarOpcoesContencao();
-  mostrarEscalaEVA();
-  mostrarOpcoesSedacao();
-  mostrarDrogas();
-  atualizarOpcoesRespiratorias();
-  mostrarCamposHGA();
-}
-
-function mostrarCuffOptions() {
-  const via = document.querySelector('input[name="viaAerea"]:checked');
-  const cuff = document.getElementById("cuffOptions");
-  if (via?.value === "TOT") {
-    cuff.style.display = "block";
-    document.getElementById("opcoesTQT").style.display = "none";
-  } else if (via?.value === "TQT") {
-    document.getElementById("opcoesTQT").style.display = "block";
-    cuff.style.display = "block";
-  } else {
-    cuff.style.display = "none";
-    document.getElementById("opcoesTQT").style.display = "none";
-  }
-}
-
-function mostrarOpcoesTQT() {
-  document.getElementById("opcoesTQT").style.display = "block";
-  document.getElementById("cuffOptions").style.display = "block";
-}
-
-function mostrarPressaoCuff() {
-  document.getElementById("pressaoCuff").style.display = "block";
-}
-
-function esconderPressaoCuff() {
-  document.getElementById("pressaoCuff").style.display = "none";
-}
-
-function mostrarMecanicaPulmonar() {
-  document.getElementById("detalhesMecanicaPulmonar").style.display = "block";
-}
-
-function esconderMecanicaPulmonar() {
-  document.getElementById("detalhesMecanicaPulmonar").style.display = "none";
 }
