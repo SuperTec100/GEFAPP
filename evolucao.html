@@ -17,6 +17,7 @@
             --danger-color: #e74c3c;
             --border-radius: 6px;
             --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -25,6 +26,7 @@
             background-color: #f5f7fa;
             color: #333;
             line-height: 1.6;
+        }
 
         .container {
             max-width: 1000px;
@@ -33,18 +35,22 @@
             padding: 25px;
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
+        }
 
         h2, h3, h4 {
             color: var(--primary-color);
             margin-top: 0;
+        }
 
         h2 {
             border-bottom: 2px solid var(--secondary-color);
             padding-bottom: 10px;
             margin-bottom: 20px;
+        }
 
         h3 {
             margin: 25px 0 15px 0;
+        }
 
         textarea {
             width: 100%;
@@ -56,6 +62,7 @@
             resize: vertical;
             font-family: 'Courier New', monospace;
             line-height: 1.5;
+        }
 
         select, input[type="text"], input[type="number"] {
             padding: 8px 12px;
@@ -64,11 +71,13 @@
             margin: 5px 0;
             width: 100%;
             max-width: 300px;
+        }
 
         label {
             display: block;
             margin: 8px 0 4px 0;
             font-weight: 500;
+        }
 
         button {
             padding: 10px 20px;
@@ -80,13 +89,16 @@
             cursor: pointer;
             font-size: 14px;
             transition: all 0.3s;
+        }
 
         button:hover {
             background-color: #2980b9;
             transform: translateY(-1px);
+        }
 
         button:active {
             transform: translateY(0);
+        }
 
         /* Estilos para seções expansíveis */
         .expandable-section {
@@ -94,6 +106,7 @@
             border: 1px solid #ddd;
             border-radius: var(--border-radius);
             overflow: hidden;
+        }
 
         .section-header {
             background-color: var(--primary-color);
@@ -104,22 +117,27 @@
             justify-content: space-between;
             align-items: center;
             font-weight: 600;
+        }
 
         .section-header:hover {
             background-color: #34495e;
+        }
 
         .section-header::after {
             content: '+';
             font-size: 18px;
             transition: transform 0.3s;
+        }
 
         .section-header.expanded::after {
             content: '-';
+        }
 
         .section-content {
             padding: 15px;
             display: none;
             background-color: white;
+        }
 
         /* Estilos para grupos de checkboxes/radios */
         .checkbox-group, .radio-group {
@@ -127,16 +145,19 @@
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 10px;
             margin: 10px 0;
+        }
 
         .checkbox-group label, .radio-group label {
             display: flex;
             align-items: center;
             margin: 5px 0;
             cursor: pointer;
+        }
 
         .checkbox-group input, .radio-group input {
             margin-right: 8px;
             width: auto;
+        }
 
         /* Estilos para subseções */
         .sub-section {
@@ -144,6 +165,7 @@
             padding-left: 15px;
             border-left: 2px solid #eee;
             margin-top: 10px;
+        }
 
         /* Estilos para sinais vitais */
         .vital-signs-container {
@@ -151,20 +173,24 @@
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
             margin: 15px 0;
+        }
 
         .vital-sign {
             display: flex;
             flex-direction: column;
+        }
 
         /* Estilos para mensagens de erro */
         .error-message {
             color: var(--danger-color);
             font-size: 0.9em;
             margin-top: 5px;
+        }
 
         /* Estilos para a seção de texto gerado */
         .output-section {
             margin-top: 30px;
+        }
 
         /* Estilos para o crédito do desenvolvedor */
         .developer-credit {
@@ -173,6 +199,7 @@
             font-size: 0.9em;
             color: #7f8c8d;
             font-style: italic;
+        }
 
         /* Estilos para EVA */
         .eva-container {
@@ -180,10 +207,12 @@
             padding: 15px;
             background-color: #f8f9fa;
             border-radius: var(--border-radius);
+        }
 
         .eva-slider {
             width: 100%;
             max-width: 300px;
+        }
 
         .eva-value {
             display: inline-block;
@@ -191,19 +220,24 @@
             text-align: center;
             margin-left: 10px;
             font-weight: bold;
+        }
 
         /* Estilos responsivos */
         @media (max-width: 768px) {
             .checkbox-group, .radio-group {
                 grid-template-columns: 1fr;
+            }
             
             .vital-signs-container {
                 grid-template-columns: 1fr;
+            }
+        }
 
         /* Estilo para campos obrigatórios */
         .required-field::after {
             content: " *";
             color: var(--danger-color);
+        }
 
 /* ESTILOS PARA SUBSECÇÕES (NOVOS) */
 .sub-section {
@@ -214,96 +248,21 @@
     background-color: #f8f9fa;
     border-left: 4px solid var(--secondary-color);
     border-radius: var(--border-radius);
+}
 
 /* Opcional: Destaque para labels dentro de subseções */
 .sub-section label {
     font-weight: 600;
+}
 
     </style>
 </head>
-<body><script>// exibicao-condicional.js
-
-function mostrarOpcoesContencao() {
-  const sim = document.querySelector('input[name="contencao"][value="Sim"]');
-  const container = document.getElementById("opcoesContencao");
-  container.style.display = sim?.checked ? "block" : "none";
-
-function mostrarEscalaEVA() {
-  const sim = document.querySelector('input[name="avaliacaoDor"][value="Sim"]');
-  const container = document.getElementById("escalaEVAContainer");
-  container.style.display = sim?.checked ? "block" : "none";
-
-function mostrarOpcoesSedacao() {
-  const sim = document.querySelector('input[name="sedacao"][value="Sim"]');
-  const container = document.getElementById("opcoesSedacao");
-  container.style.display = sim?.checked ? "block" : "none";
-
-function mostrarDrogas() {
-  const sim = document.querySelector('input[name="drogasVasoativas"][value="com uso de drogas vasoativas"]');
-  const container = document.getElementById("opcoesDrogas");
-  container.style.display = sim?.checked ? "block" : "none";
-
-function atualizarOpcoesRespiratorias() {
-  const tipo = document.getElementById("sistemaRespiratorio")?.value;
-  const viaAerea = document.getElementById("viaAereaOptions");
-  const params = document.getElementById("ventilationParams");
-
-  if (!tipo || !viaAerea || !params) return;
-
-  if (tipo === "VM") {
-    viaAerea.style.display = "block";
-    params.style.display = "block";
-  
-  exibirParametrosModoVM();
-} else if (tipo === "vni") {
-    viaAerea.style.display = "none";
-    params.style.display = "block";
-  } else {
-    viaAerea.style.display = "none";
-    params.style.display = "none";
-
-function mostrarCamposHGA() {
-  const sim = document.querySelector('input[name="hga"][value="Com HGA"]');
-  const container = document.getElementById("camposHGA");
-  container.style.display = sim?.checked ? "block" : "none";
-
-function aplicarLogicaCondicional() {
-  mostrarOpcoesContencao();
-  mostrarEscalaEVA();
-  mostrarOpcoesSedacao();
-  mostrarDrogas();
-  atualizarOpcoesRespiratorias();
-  mostrarCamposHGA();
-
-function mostrarCuffOptions() {
-  const via = document.querySelector('input[name="viaAerea"]:checked');
-  const cuff = document.getElementById("cuffOptions");
-  if (via?.value === "TOT") {
-    cuff.style.display = "block";
-    document.getElementById("opcoesTQT").style.display = "none";
-  } else if (via?.value === "TQT") {
-    document.getElementById("opcoesTQT").style.display = "block";
-    cuff.style.display = "block";
-  } else {
-    cuff.style.display = "none";
-    document.getElementById("opcoesTQT").style.display = "none";
-
-function mostrarOpcoesTQT() {
-  document.getElementById("opcoesTQT").style.display = "block";
-  document.getElementById("cuffOptions").style.display = "block";
-
-function mostrarPressaoCuff() {
-  document.getElementById("pressaoCuff").style.display = "block";
-
-function esconderPressaoCuff() {
-  document.getElementById("pressaoCuff").style.display = "none";
-
-function mostrarMecanicaPulmonar() {
-  document.getElementById("detalhesMecanicaPulmonar").style.display = "block";
-
-function esconderMecanicaPulmonar() {
-  document.getElementById("detalhesMecanicaPulmonar").style.display = "none";
-}</script>
+<body>
+<div id="paciente-info" style="margin-bottom: 20px; padding: 10px; background: #eef2f5; border-radius: 6px;">
+<strong>Hospital:</strong> <span id="hospital"></span> |
+  <strong>Unidade:</strong> <span id="unidade"></span> |
+  <strong>Leito:</strong> <span id="leito"></span>
+</div>
 <div class="container">
 <h2>Gerador de Evolução Fisioterapêutica</h2>
 <!-- Seção de informações básicas -->
@@ -1533,6 +1492,7 @@ function esconderMecanicaPulmonar() {
 <p id="codigosText"></p>
 </div>
 </div>
+
 <!-- Botões de ação -->
 <div style="margin: 20px 0;">
 <button onclick="gerarEvolucao()">Gerar Evolução</button>
@@ -1550,6 +1510,7 @@ function esconderMecanicaPulmonar() {
 <textarea id="textoEvolucao" readonly=""></textarea>
 </div>
 <div class="developer-credit">Desenvolvedor: Daniel Macedo</div>
+
 <script>
         // Funções para expandir/recolher seções
         document.querySelectorAll('.section-header').forEach(header => {
@@ -1573,8 +1534,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Mostrar afasia só na UTI Neuro
-var el = document.getElementById("uti");
-if (el) el.addEventListener("change", function() {
+document.getElementById("uti").addEventListener("change", function() {
     document.getElementById("afasiaContainer").style.display = 
         this.value === "NEURO" ? "block" : "none";
 });
@@ -1583,14 +1543,17 @@ if (el) el.addEventListener("change", function() {
         function mostrarOpcoesContencao() {
             let contencao = document.querySelector('input[name="contencao"]:checked');
             if(contencao) document.getElementById("opcoesContencao").style.display = contencao.value === "Sim" ? "block" : "none";
+        }
 
         function mostrarDrogas() {
             let drogas = document.querySelector('input[name="drogasVasoativas"]:checked');
             if(drogas) document.getElementById("opcoesDrogas").style.display = drogas.value === "com uso de drogas vasoativas" ? "block" : "none";
+        }
 
 function mostrarDetalhesTroca(tipo) {
     document.getElementById("detalhesTrocaFiltro").style.display = tipo === 'filtro' ? "block" : "none";
     document.getElementById("detalhesTrocaTrach").style.display = tipo === 'trach' ? "block" : "none";
+}
 
         function mostrarOpcoesSedacao() {
     let sedacao = document.querySelector('input[name="sedacao"]:checked');
@@ -1611,6 +1574,9 @@ let glasgowVerbal = document.getElementById("glasgowVerbal")?.value || "?";
 let glasgowMotora = document.getElementById("glasgowMotora")?.value || "?";
 estadoMentalTexto += `Escala de Glasgow: ${glasgowTotal} (${glasgowOcular}+${glasgowVerbal}+${glasgowMotora})`;
 // ===== [FIM DO NOVO CÓDIGO] =====
+        }
+    }
+}
 
 function toggleArticulacoes(checkbox, membro, tipo = 'Paralisia') {
     const id = tipo === 'Paralisia' 
@@ -1630,6 +1596,8 @@ function toggleArticulacoes(checkbox, membro, tipo = 'Paralisia') {
         // Desmarca todas as articulações deste membro
         const checkboxes = section.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(cb => cb.checked = false);
+    }
+}
 
         function showLungOptions() { document.getElementById("lungOptions").style.display = "block"; }
         function hideLungOptions() { document.getElementById("lungOptions").style.display = "none"; }
@@ -1638,29 +1606,37 @@ function toggleArticulacoes(checkbox, membro, tipo = 'Paralisia') {
             document.getElementById("opcoesRuidos").style.display = "block";
             let ausculta = document.querySelector('input[name="ausculta"]:checked');
             document.getElementById("sonsReduzidosOptions").style.display = ausculta && ausculta.value === "Sons reduzidos" ? "block" : "none";
+        }
 
         function mostrarTiposRuidos() { 
             document.getElementById("tiposRuidos").style.display = "block"; 
             if (document.querySelector('input[name="tipoRuido"][value="Roncos"]:checked')) {
                 document.getElementById("sonsReduzidosOptions").style.display = "block";
+            }
+        }
         function esconderTiposRuidos() { document.getElementById("tiposRuidos").style.display = "none"; }
         function mostrarCamposHGA() { 
             document.getElementById("camposHGA").style.display = "block";
             if (document.getElementById("sistemaRespiratorio").value === "vni") {
                 document.getElementById("hacorContainer").style.display = "block";
                 calcularHACOR();
+            }
+        }
         function esconderCamposHGA() { 
             document.getElementById("camposHGA").style.display = "none";
             document.getElementById("hacorContainer").style.display = "none";
+        }
         
         // Funções modificadas para TQT e TOT
         function mostrarOpcoesTQT() {
             document.getElementById("opcoesTQT").style.display = "block";
             document.getElementById("cuffOptions").style.display = "none";
+        }
 
         function mostrarCuffOptions() {
             document.getElementById("opcoesTQT").style.display = "none";
             document.getElementById("cuffOptions").style.display = "block";
+        }
         
         function mostrarPressaoCuff() { document.getElementById("pressaoCuff").style.display = "block"; }
         function esconderPressaoCuff() { document.getElementById("pressaoCuff").style.display = "none"; }
@@ -1668,10 +1644,12 @@ function toggleArticulacoes(checkbox, membro, tipo = 'Paralisia') {
         function mostrarOpcoesMRC() {
             document.getElementById("opcoesMRC").style.display = "block";
             document.getElementById("motivosNaoAvaliar").style.display = "none";
+        }
 
         function mostrarMotivosNaoAvaliar() {
             document.getElementById("opcoesMRC").style.display = "none";
             document.getElementById("motivosNaoAvaliar").style.display = "block";
+        }
 
         function atualizarInterpretacaoMRC(total) {
             let interpretation = "";
@@ -1680,6 +1658,7 @@ function toggleArticulacoes(checkbox, membro, tipo = 'Paralisia') {
             else if (total >= 25 && total <= 47) interpretation = "Fraqueza muscular moderada";
             else if (total >= 48) interpretation = "Força muscular preservada";
             document.getElementById("mrcInterpretation").textContent = interpretation;
+        }
 
         function mostrarLocalizacaoADM() { document.getElementById("localizacaoADM").style.display = "block"; }
         function esconderLocalizacaoADM() { document.getElementById("localizacaoADM").style.display = "none"; }
@@ -1776,8 +1755,10 @@ function toggleArticulacoes(checkbox, membro, tipo = 'Paralisia') {
                             <label><input type="radio" name="modoVM" value="SIMV" onclick="mostrarParametrosVentilacao('SIMV')"> SIMV (Ventilação Mandatória Intermitente Sincronizada)</label>
                         </div>
                     </div>`;
+            }
 
             div.innerHTML = html;
+        }
 
         function mostrarParametrosVentilacao(modo) {
             document.getElementById('VCVParams').style.display = 'none';
@@ -1791,6 +1772,7 @@ function toggleArticulacoes(checkbox, membro, tipo = 'Paralisia') {
             else if (modo === 'SIMV') document.getElementById('SIMVParams').style.display = 'block';
             
             document.getElementById('ventilationParams').style.display = 'block';
+        }
 
         function showFluxoField() { document.getElementById("fluxoContainer").style.display = "block"; }
         function hideFluxoField() { document.getElementById("fluxoContainer").style.display = "none"; }
@@ -1799,16 +1781,20 @@ function toggleArticulacoes(checkbox, membro, tipo = 'Paralisia') {
         
         function mostrarFiO2CNAF() {
             document.getElementById("fio2CNAFContainer").style.display = "block";
+        }
 
         function esconderFiO2CNAF() {
             document.getElementById("fio2CNAFContainer").style.display = "none";
+        }
 
         function mostrarROX() {
             document.getElementById("roxContainer").style.display = "block";
             calcularROX();
+        }
 
         function esconderROX() {
             document.getElementById("roxContainer").style.display = "none";
+        }
 
         // Função para mostrar detalhes da secreção
         function mostrarDetalhesSecrecao() {
@@ -1818,11 +1804,13 @@ function toggleArticulacoes(checkbox, membro, tipo = 'Paralisia') {
     // Garante que outros detalhes sejam ocultados
     document.getElementById("detalhesTrocaFiltro").style.display = "none";
     document.getElementById("detalhesTrocaTrach").style.display = "none";
+}
 
         // Função para mostrar detalhes da troca de filtro/trach care
         function mostrarDetalhesTroca(tipo) {
             const checkbox = document.querySelector(`input[name="condutaRespiratoria"][value="Troca de ${tipo === 'filtro' ? 'Filtro' : 'Trach Care'}"]`);
             document.getElementById(`detalhesTroca${tipo === 'filtro' ? 'Filtro' : 'Trach'}`).style.display = checkbox.checked ? "block" : "none";
+        }
 
         // Função para calcular o índice HACOR
       function calcularHACOR() {
@@ -1863,6 +1851,7 @@ function toggleArticulacoes(checkbox, membro, tipo = 'Paralisia') {
         else if (pf <= 175) score += 3;   // 151-175 = +3
         else if (pf <= 200) score += 2;   // 176-200 = +2
         // >200 = 0 pontos
+    }
 
     // 5. Frequência Respiratória (FR)
     if (fr >= 46) score += 4;           // ≥46 = +4
@@ -1882,6 +1871,8 @@ function toggleArticulacoes(checkbox, membro, tipo = 'Paralisia') {
         hacorContainer.style.display = "block";
         document.getElementById("hacorScore").textContent = score;
         document.getElementById("hacorInterpretation").textContent = interpretation;
+    }
+}
 
         function calcularROX() {
             const spo2 = parseFloat(document.getElementById("spo2").value) || 0;
@@ -1906,56 +1897,69 @@ function toggleArticulacoes(checkbox, membro, tipo = 'Paralisia') {
             } else {
                 document.getElementById("roxValue").textContent = "-";
                 document.getElementById("roxInterpretation").textContent = "";
+            }
+        }
 
         // Funções para déficit motor
         function mostrarOpcoesDeficitMotor() {
             document.getElementById("opcoesDeficitMotor").style.display = "block";
+        }
 
         function esconderOpcoesDeficitMotor() {
             document.getElementById("opcoesDeficitMotor").style.display = "none";
             document.getElementById("localizacaoParalisia").style.display = "none";
             document.getElementById("localizacaoFraqueza").style.display = "none";
+        }
 
         function mostrarLocalizacaoParalisia() {
             document.getElementById("localizacaoParalisia").style.display = "block";
             document.getElementById("localizacaoFraqueza").style.display = "none";
+        }
 
         function mostrarLocalizacaoFraqueza() {
             document.getElementById("localizacaoFraqueza").style.display = "block";
             document.getElementById("localizacaoParalisia").style.display = "none";
+        }
 
         // Funções para déficit sensorial
         function mostrarOpcoesDeficitSensorial() {
             document.getElementById("opcoesDeficitSensorial").style.display = "block";
+        }
 
         function esconderOpcoesDeficitSensorial() {
             document.getElementById("opcoesDeficitSensorial").style.display = "none";
             document.getElementById("localizacaoPropriocepcao").style.display = "none";
             document.getElementById("localizacaoCinetesia").style.display = "none";
             document.getElementById("localizacaoBarognosia").style.display = "none";
+        }
 
         function mostrarLocalizacaoPropriocepcao() {
             const checkbox = document.querySelector('input[name="deficitSensorialTipo"][value="Propriocepção alterada"]');
             document.getElementById("localizacaoPropriocepcao").style.display = checkbox.checked ? "block" : "none";
+        }
 
         function mostrarLocalizacaoCinetesia() {
             const checkbox = document.querySelector('input[name="deficitSensorialTipo"][value="Cinetesia prejudicada"]');
             document.getElementById("localizacaoCinetesia").style.display = checkbox.checked ? "block" : "none";
+        }
 
         function mostrarLocalizacaoBarognosia() {
             const checkbox = document.querySelector('input[name="deficitSensorialTipo"][value="Barognosia alterada"]');
             document.getElementById("localizacaoBarognosia").style.display = checkbox.checked ? "block" : "none";
+        }
 
         // Funções para capacidade funcional
         function mostrarEscalaFSS() {
             document.getElementById("opcoesFSS").style.display = "block";
             document.getElementById("motivosNaoAplicarFSS").style.display = "none";
             atualizarInterpretacaoFSS(document.getElementById("fssScore").value);
+        }
 
         function mostrarMotivosNaoAplicarFSS() {
             document.getElementById("opcoesFSS").style.display = "none";
             document.getElementById("motivosNaoAplicarFSS").style.display = "block";
             document.getElementById("fssInterpretation").textContent = "";
+        }
 
         function atualizarInterpretacaoFSS(score) {
             let interpretation = "";
@@ -1964,13 +1968,16 @@ function toggleArticulacoes(checkbox, membro, tipo = 'Paralisia') {
             else if (score >= 21 && score <= 30) interpretation = "Dependência leve";
             else if (score >= 31) interpretation = "Independente";
             document.getElementById("fssInterpretation").textContent = interpretation;
+        }
 
         // Funções para tosse
         function mostrarTipoTosse() {
             document.getElementById("tipoTosse").style.display = "block";
+        }
 
         function esconderTipoTosse() {
             document.getElementById("tipoTosse").style.display = "none";
+        }
 
         // Função para verificar campos não preenchidos
         function verificarCamposNaoPreenchidos() {
@@ -2051,17 +2058,22 @@ function toggleArticulacoes(checkbox, membro, tipo = 'Paralisia') {
                     
                     if (campo.id) {
                         if (!document.getElementById(campo.id).value) {
-                            camposFaltantes.push(campo.nome); }
+                            camposFaltantes.push(campo.nome);
+                        }
+                    } 
                     else if (campo.checks) {
                         campo.checks.forEach(subcampo => {
                             if (subcampo.cond && !subcampo.cond()) return;
                             if (!document.getElementById(subcampo.id)?.value) {
                                 camposFaltantes.push(subcampo.nome);
+                            }
                         });
+                    }
                 });
                 
                 if (camposFaltantes.length > 0) {
                     missingFields.push(`<strong>${categoria}:</strong> ${camposFaltantes.join(", ")}`);
+                }
             });
 
             // Atualizar a exibição dos campos não preenchidos
@@ -2078,11 +2090,14 @@ function toggleArticulacoes(checkbox, membro, tipo = 'Paralisia') {
                 missingFieldsContainer.style.display = "block";
             } else {
                 missingFieldsContainer.style.display = "none";
+            }
             
             return missingFields;
+        }
 
         function validarEvolucao() {
             gerarEvolucao();
+        }
 
         function gerarEvolucao() {
 
@@ -2117,6 +2132,8 @@ const ordemCondutas = [
         let hda = document.getElementById("hdaTexto")?.value.trim();
         if (hda) {
             evolucao += `HDA: ${hda}\n\n`;
+        }
+    }
 
     // Posição e contenção
     let posicao = document.getElementById("posicaoLeito")?.value || "não avaliado";
@@ -2127,6 +2144,7 @@ const ordemCondutas = [
         let MMSS = document.querySelector('input[name="MMSS"]:checked') ? "MMSS" : "";
         let MMII = document.querySelector('input[name="MMII"]:checked') ? "MMII" : "";
         membrosContidos = (MMSS && MMII) ? `${MMSS} e ${MMII}` : (MMSS || MMII);
+    }
     evolucao += `Paciente encontrado em ${posicao}, ${contencaoTexto}${membrosContidos ? `, membros contidos ${membrosContidos}` : ''}. `;
 
     // Avaliação de dor
@@ -2134,6 +2152,7 @@ const ordemCondutas = [
 if (avaliacaoDor && avaliacaoDor.value === "Sim") {
     let evaValue = document.getElementById("evaValue")?.textContent || "não avaliado";
     evolucao += `Avaliação de dor: presente (EVA: ${evaValue}/10). `;
+}
 // Remove a linha que mostra "Avaliação de dor: ausente" quando selecionado "Não"
 
     // Estado mental - ajustado para gênero
@@ -2151,6 +2170,7 @@ if (avaliacaoDor && avaliacaoDor.value === "Sim") {
                         if (el.value === "responsivo") return "responsiva";
                         if (el.value === "não Responsivo") return "não Responsiva";
                         if (el.value === "hipoativo") return "hipoativa";
+                    }
                     return el.value.toLowerCase();
                 }).join(", ") 
                 : "não avaliado";
@@ -2162,6 +2182,8 @@ if (avaliacaoDor && avaliacaoDor.value === "Sim") {
                 const afasia = document.querySelector('input[name="afasia"]:checked');
                 if (afasia && afasia.value !== "Sem") {
                     estadoMentalTexto += `Afasia: ${afasia.value.toLowerCase()}, `;
+                }
+            }
 
             let sedacao = document.querySelector('input[name="sedacao"]:checked');
 if (sedacao) {
@@ -2178,6 +2200,8 @@ if (sedacao) {
     let glasgowVerbal = document.getElementById("glasgowVerbal").value || "?";
     let glasgowMotora = document.getElementById("glasgowMotora").value || "?";
     estadoMentalTexto += `Escala de Glasgow: ${glasgowTotal} (${glasgowOcular}+${glasgowVerbal}+${glasgowMotora})`;
+}
+}
             evolucao += `Estado comportamental: ${estadoComportamental}, ${estadoMentalTexto}, `;
 
     // Sinais vitais e estado hemodinâmico no mesmo parágrafo
@@ -2200,8 +2224,10 @@ if (drogasVasoativas && drogasVasoativas.value === "com uso de drogas vasoativas
         hemodinamicaTexto += ` com uso de ${drogas.join(", ")}`;
     } else {
         hemodinamicaTexto += ` (drogas não especificadas)`;
+    }
 } else if (drogasVasoativas && drogasVasoativas.value === "sem uso de drogas vasoativas") {
     hemodinamicaTexto += ` sem drogas vasoativas`;
+}
 
 evolucao += `Sinais vitais: FC: ${fc}bpm, FR: ${fr}irpm, SpO₂: ${spo2}%, PA: ${paCompleta}mmHg, Temp: ${temp}°C. Estado hemodinâmico: ${hemodinamicaTexto}.\n\n`;
 
@@ -2223,6 +2249,7 @@ evolucao += `Sinais vitais: FC: ${fc}bpm, FR: ${fr}irpm, SpO₂: ${spo2}%, PA: $
         
         if (hacorScore !== "-") {
             evolucao += `, índice HACOR: ${hacorScore} (${hacorInterpretation.toLowerCase()})`;
+        }
     } else if (respiratorio === "espontanea") {
         let tipoEspontanea = document.querySelector('input[name="tipoEspontanea"]:checked');
         let tipoEspontaneaTexto = tipoEspontanea ? tipoEspontanea.value.toLowerCase() : "não avaliado";
@@ -2242,11 +2269,14 @@ evolucao += `Sinais vitais: FC: ${fc}bpm, FR: ${fr}irpm, SpO₂: ${spo2}%, PA: $
                 let roxInterpretation = document.getElementById("roxInterpretation")?.textContent;
                 if (roxValue && roxValue !== "-") {
                     evolucao += `, índice ROX: ${roxValue} ${roxInterpretation.toLowerCase()}`;
+                }
             } else if (opcaoEspontanea.value === "Cateter O2") {
                 let fluxo = document.getElementById("fluxo")?.value || "não avaliado";
                 evolucao += `Ventilação espontânea ${tipoEspontaneaTexto} em cateter nasal de oxigênio (Fluxo: ${fluxo}L/min)`;
             } else {
                 evolucao += `Ventilação espontânea ${tipoEspontaneaTexto} em ${opcaoEspontanea.value.toLowerCase()}`;
+            }
+        }
     } else if (respiratorio === "VM") {
         let modoVM = document.querySelector('input[name="modoVM"]:checked');
         if(modoVM) {
@@ -2276,6 +2306,7 @@ evolucao += `Sinais vitais: FC: ${fc}bpm, FR: ${fr}irpm, SpO₂: ${spo2}%, PA: $
                 let frVent = document.getElementById("frSimv")?.value || "não avaliado";
                 let fio2 = document.getElementById("fio2Simv")?.value || "não avaliado";
                 evolucao += ` (VC: ${vc}ml, Psup: ${psup}cmH2O, PEEP: ${peep}cmH2O, FR: ${frVent}ipm, FiO2: ${fio2}%)`;
+            }
             
             let viaAerea = document.querySelector('input[name="viaAerea"]:checked');
             if (viaAerea) {
@@ -2284,16 +2315,18 @@ evolucao += `Sinais vitais: FC: ${fc}bpm, FR: ${fr}irpm, SpO₂: ${spo2}%, PA: $
                 if (viaAerea.value === "TQT") {
                     let tipoTQT = document.querySelector('input[name="tipoTQT"]:checked');
                     if (tipoTQT) evolucao += ` (${tipoTQT.value.toLowerCase()})`;
+                }
                 
                 if (viaAerea.value === "TOT") {
-  document.querySelectorAll('input[name="cuff"]').forEach(el => {
-    el.addEventListener("change", () => {
-      if (el.value === "Insuflado") {
-        mostrarPressaoCuff();
-      } else {
-        esconderPressaoCuff();
-    });
-  });
+    let cuff = document.querySelector('input[name="cuff"]:checked');
+    if (cuff) {
+        evolucao += `, cuff: ${cuff.value.toLowerCase()}`;
+        
+        if (cuff.value === "Insuflado") {
+            let pcuff = document.getElementById("pcuff")?.value || "não avaliado";
+            evolucao += ` (P.Cuff: ${pcuff}cmH2O`;
+            
+            
             
             // Novos campos
             let rimaLabial = document.getElementById("rimaLabial")?.value;
@@ -2302,6 +2335,9 @@ evolucao += `Sinais vitais: FC: ${fc}bpm, FR: ${fr}irpm, SpO₂: ${spo2}%, PA: $
             if (numeroTubo) evolucao += `, tubo nº ${numeroTubo}`;
             
             evolucao += `)`;
+        }
+    }
+}
 
 // Mecânica Pulmonar
 const mecanicaPulmonar = document.querySelector('input[name="mecanicaPulmonar"]:checked');
@@ -2326,7 +2362,13 @@ if (drivePressure) evolucao += `, Drive Pressure: ${drivePressure}cmH2O`;
         evolucao = evolucao.trim();
         if (!evolucao.endsWith('. ')) {
             evolucao += '. ';
+        }
+    }
+}
 
+            }
+        }
+    }
     
     // Tosse
     let tosse = document.querySelector('input[name="tosse"]:checked');
@@ -2337,8 +2379,11 @@ if (drivePressure) evolucao += `, Drive Pressure: ${drivePressure}cmH2O`;
             let tipoTosse = document.querySelector('input[name="tipoTosse"]:checked');
             if (tipoTosse) {
                 tosseTexto += ` (${tipoTosse.value.toLowerCase()})`;
+            }
+        }
         
         evolucao += `Tosse: ${tosseTexto}. `;
+    }
     
     // Padrão respiratório e ausculta
 let padraoResp = document.querySelector('input[name="respPattern"]:checked');
@@ -2351,6 +2396,7 @@ let pmvSelecionado = document.querySelector('input[name="pmv"]:checked');
    const trabalhoResp = document.querySelector('input[name="trabalhoRespiratorio"]:checked');
    if (trabalhoResp) {
        pmv += ` ${trabalhoResp.value.toLowerCase()}`;
+   }
 
 let expansSelecionada = document.querySelector('input[name="expansibilidade"]:checked');
 let expansibilidade = expansSelecionada ? expansSelecionada.value.toLowerCase() : "não avaliada";
@@ -2376,8 +2422,10 @@ if (auscultaSelecionada) {
             if (auscultaLocation) auscultaTexto += auscultaLocation.value.toLowerCase();
             if (auscultaSide && auscultaLocation) auscultaTexto += " de ";
             if (auscultaSide) auscultaTexto += auscultaSide.value.toLowerCase();
+        }
     } else if (auscultaSelecionada.value === "Sons ausentes") {
         auscultaTexto += "sons pulmonares ausentes";
+    }
     
     // Ruídos adicionais
     let ruidosSelecionado = document.querySelector('input[name="ruidos"]:checked');
@@ -2386,10 +2434,14 @@ if (auscultaSelecionada) {
             let tiposRuidos = Array.from(document.querySelectorAll('input[name="tipoRuido"]:checked')).map(el => el.value.toLowerCase());
             if (tiposRuidos.length > 0) {
                 auscultaTexto += `, com ${tiposRuidos.join(", ")}`;
+            }
         } else {
             auscultaTexto += ", sem ruídos";
+        }
+    }
 } else {
     auscultaTexto += "não avaliada";
+}
 
 evolucao += `Padrão respiratório: ${padraoRespiratorio}, PMV: ${pmv}, expansibilidade torácica: ${expansibilidade}, ${auscultaTexto}.\n`;
 
@@ -2402,6 +2454,7 @@ if (pimax || pemax) {
     if (pimax && pemax) evolucao += `, `;
     if (pemax) evolucao += `PeMax: ${pemax}cmH2O`;
     evolucao += `. `;
+}
 
 const vcVent = document.getElementById("vcVentilometria")?.value;
 const frVent = document.getElementById("frVentilometria")?.value;
@@ -2412,16 +2465,19 @@ if (vcVent || frVent || vm) {
     if (frVent) evolucao += `, FR: ${frVent}irpm`;
     if (vm) evolucao += `, VM: ${vm}L/min`;
     evolucao += `.`;
+}
 
 // Observações adicionais do sistema respiratório
 const obsResp = document.getElementById("obsRespiratorio")?.value.trim();
 if (obsResp) {
     evolucao += `Obs: ${obsResp}\n`;
+}
 
 // Marcos Respiratórios
 const marcosResp = document.getElementById("marcosRespiratorios")?.value.trim();
 if (marcosResp) {
     evolucao += `Marcos Respiratórios: ${marcosResp}\n`;
+}
 
     // Hemogasometria
 let hgaSelecionada = document.querySelector('input[name="hga"]:checked');
@@ -2434,6 +2490,7 @@ if (hgaSelecionada && hgaSelecionada.value === "Com HGA") {
     let pf = document.getElementById("pf")?.value || "não avaliado";
     
     evolucao += `Hemogasometria arterial: pH: ${ph}, PaO₂: ${pao2}mmHg, PCO₂: ${pco2}mmHg, HCO₃: ${hco3}mEq/L, Lac: ${lac}, P/F: ${pf}\n\n`;  // <- \n\n adicionado aqui
+}
 
 // Condição neuro musculoesquelética e aparelho cardiovascular no mesmo parágrafo
 let neuroTexto = `Condição neuro musculoesquelética: `;
@@ -2458,6 +2515,7 @@ let neuroTexto = `Condição neuro musculoesquelética: `;
             neuroTexto += `Amplitudes de movimento reduzidas em ${amplitudes.join(", ")}. `;
         } else {
             neuroTexto += `Amplitudes de movimento preservadas. `;
+        }
 
         // Verificar amputações
         const amputacao = document.querySelector('input[name="amputacao"]:checked');
@@ -2469,6 +2527,8 @@ let neuroTexto = `Condição neuro musculoesquelética: `;
             
             if (locaisAmputacao.length > 0) {
                 neuroTexto += `Amputações presentes: ${locaisAmputacao.join(", ")}. `;
+            }
+        }
         
         if (forcaMuscular.value === "MRC") {
             let totalMRC = document.getElementById("totalMRCInput")?.value || "0";
@@ -2477,6 +2537,7 @@ let neuroTexto = `Condição neuro musculoesquelética: `;
         } else if (forcaMuscular.value === "NaoPossivelAvaliar") {
             const motivos = Array.from(document.querySelectorAll('input[name="motivoNaoAvaliar"]:checked')).map(el => el.value.replace("Nivel", "nível").toLowerCase());
             neuroTexto += `Força muscular não possível avaliar: ${motivos.join(", ")}. `;
+        }
         
         const deficitMotor = document.querySelector('input[name="deficitMotor"]:checked');
         const deficitSensorial = document.querySelector('input[name="deficitSensorial"]:checked');
@@ -2494,6 +2555,7 @@ let neuroTexto = `Condição neuro musculoesquelética: `;
 });
     
     neuroTexto += `Tônus ${alteracaoTonus.value.toLowerCase()}${locaisTonus.length > 0 ? ` em ${locaisTonus.join(", ")}` : ''}. `;
+}
             
             const alteracaoControleMotor = document.querySelector('input[name="alteracaoControleMotor"]:checked');
             if (alteracaoControleMotor && alteracaoControleMotor.value !== "Sem alteração") {
@@ -2510,6 +2572,7 @@ let neuroTexto = `Condição neuro musculoesquelética: `;
                 articulacoes = Array.from(document.querySelectorAll('input[name="articulacaoMID"]:checked')).map(a => a.value);
             } else if (el.value === "MIE") {
                 articulacoes = Array.from(document.querySelectorAll('input[name="articulacaoMIE"]:checked')).map(a => a.value);
+            }
             
             return articulacoes.length > 0 
                 ? `${el.value} (${articulacoes.join(", ")})` 
@@ -2518,6 +2581,7 @@ let neuroTexto = `Condição neuro musculoesquelética: `;
         
         if (localParalisia.length > 0) {
             neuroTexto += ` (localização: ${localParalisia.join(", ")})`;
+        }
     } else if (alteracaoControleMotor.value === "Paresia") {
         const localFraqueza = Array.from(document.querySelectorAll('input[name="localFraqueza"]:checked')).map(el => {
             let articulacoes = [];
@@ -2529,6 +2593,7 @@ let neuroTexto = `Condição neuro musculoesquelética: `;
                 articulacoes = Array.from(document.querySelectorAll('input[name="articulacaoFraquezaMID"]:checked')).map(a => a.value);
             } else if (el.value === "MIE") {
                 articulacoes = Array.from(document.querySelectorAll('input[name="articulacaoFraquezaMIE"]:checked')).map(a => a.value);
+            }
             
             return articulacoes.length > 0 
                 ? `${el.value} (${articulacoes.join(", ")})` 
@@ -2537,8 +2602,12 @@ let neuroTexto = `Condição neuro musculoesquelética: `;
         
         if (localFraqueza.length > 0) {
             neuroTexto += ` (localização: ${localFraqueza.join(", ")})`;
+        }
+    }
     
     neuroTexto += ". ";
+}
+        }
         
         neuroTexto += `Presença de déficit sensorial: ${deficitSensorial ? deficitSensorial.value.toLowerCase() : "não"}.`;
         
@@ -2559,17 +2628,22 @@ let neuroTexto = `Condição neuro musculoesquelética: `;
                     } else if (tipo === "barognosia alterada") {
                         const local = Array.from(document.querySelectorAll('input[name="localBarognosia"]:checked')).map(el => el.value.toLowerCase());
                         if (local.length > 0) neuroTexto += ` (${local.join(", ")})`;
+                    }
                     
                     neuroTexto += "; ";
                 });
                 
                 neuroTexto = neuroTexto.slice(0, -2) + ". ";
+            }
+        }
+    }
     
 
 // Observações adicionais neuro musculoesqueléticas
 const obsNeuro = document.getElementById("obsNeuroMusculo")?.value.trim();
 if (obsNeuro) {
     evolucao += `Obs: ${obsNeuro}\n`;
+}
 
     // Aparelho cardiovascular
 let cardioTexto = `Aparelho cardiovascular: `;
@@ -2590,13 +2664,16 @@ if (edema && edema.value === "Presente") {
         cardioTexto += `Edema ${grauEdema.value}. `;
     } else if (locaisEdema.length > 0) {
         cardioTexto += `Edema em ${locaisEdema.join(" e ")}. `;
+    }
 } else {
     cardioTexto += `Edema ausente. `;
+}
 
 // Outros achados
 const outrosCardio = Array.from(document.querySelectorAll('input[name="outrosCardio"]:checked')).map(el => el.value.toLowerCase());
 if (outrosCardio.length > 0) {
     cardioTexto += `${outrosCardio.join(", ")}.`;
+}
 
 // Juntando neuro e cardio no mesmo parágrafo
 evolucao += "\n" + neuroTexto + " " + cardioTexto + "\n\n";
@@ -2614,12 +2691,14 @@ evolucao += "\n" + neuroTexto + " " + cardioTexto + "\n\n";
     } else {
         let motivos = Array.from(document.querySelectorAll('input[name="motivoNaoAplicarFSS"]:checked')).map(el => el.value.replace("Nivel", "nível").toLowerCase());
         capacidadeFuncionalTexto += `Escala FSS não aplicável: ${motivos.join(", ")}.`;
+    }
     evolucao += capacidadeFuncionalTexto + "\n\n";
 
     // Plano Terapêutico
     let planoTerapeutico = Array.from(document.querySelectorAll('input[name="planoTerapeutico"]:checked')).map(el => el.value.toLowerCase());
     if (planoTerapeutico.length > 0) {
         evolucao += `Plano terapêutico:\n- ${planoTerapeutico.join("\n- ")}\n\n`;
+    }
 
     // Condutas
     // ===== NOVO BLOCO DE CONDUTAS - INÍCIO ===== //
@@ -2642,12 +2721,15 @@ evolucao += "\n" + neuroTexto + " " + cardioTexto + "\n\n";
                                           const quant = document.getElementById("quantidadeSecrecao")?.value || "n/a";
                                           const aspecto = document.getElementById("aspectoSecrecao")?.value || "n/a";
                                           return `${el.value} (${quant}, ${aspecto})`;
+                                      }
                                       if (el.value === "Troca de Filtro") {
                                           const motivo = document.querySelector('input[name="motivoTrocaFiltro"]:checked');
                                           return motivo ? `${el.value} (${motivo.value})` : el.value;
+                                      }
                                       if (el.value === "Troca de Trach Care") {
                                           const motivo = document.querySelector('input[name="motivoTrocaTrach"]:checked');
                                           return motivo ? `${el.value} (${motivo.value})` : el.value;
+                                      }
                                       return el.value;
                                   });
 
@@ -2677,22 +2759,27 @@ evolucao += "\n" + neuroTexto + " " + cardioTexto + "\n\n";
     const marcosMobilizacao = document.getElementById("marcosMobilizacao")?.value.trim();
     if (marcosMobilizacao) {
         evolucao += `Marcos de Mobilização: ${marcosMobilizacao}\n`;
+    }
     
     evolucao += `Atendimento finalizado sem intercorrências.\n\n`;
+}
    
     // Códigos de cobrança
     const codigosCobranca = document.querySelector('input[name="codigosCobranca"]:checked');
     if (codigosCobranca && codigosCobranca.value === "Sim") {
         evolucao += `\nCódigos de cobrança: ${document.getElementById("codigosText")?.textContent.replace("Códigos: ", "") || "não especificados"}\n`;
+    }
 
     // Atualiza o textarea com o texto gerado
     document.getElementById("textoEvolucao").value = ajustarGenero(evolucao);
+}
 
         function calcularPAM(pa) {
             const pamSpan = document.getElementById("pam");
             if (!pa || !pa.includes('/')) {
                 pamSpan.textContent = "";
                 return;
+            }
             
             const partes = pa.split('/');
             const pas = parseInt(partes[0]);
@@ -2701,10 +2788,12 @@ evolucao += "\n" + neuroTexto + " " + cardioTexto + "\n\n";
             if (isNaN(pas) || isNaN(pad)) {
                 pamSpan.textContent = "";
                 return;
+            }
             
             // Fórmula: PAM = PAD + (PAS - PAD)/3
             const pam = Math.round(pad + (pas - pad)/3);
             pamSpan.textContent = `(${pam})`;
+        }
 
         function copiarTexto() {
     const textoEvolucao = document.getElementById("textoEvolucao");
@@ -2716,15 +2805,18 @@ evolucao += "\n" + neuroTexto + " " + cardioTexto + "\n\n";
             console.error("Erro ao copiar: ", err);
             alert("Falha ao copiar o texto.");
         });
+}
 
         // Função para mostrar os códigos
         function mostrarCodigosCobranca() {
             document.getElementById("codigosCobrancaContainer").style.display = "block";
             atualizarCodigosCobranca(); // Atualiza os códigos ao clicar em "Sim"
+        }
 
         // Função para esconder os códigos
         function esconderCodigosCobranca() {
             document.getElementById("codigosCobrancaContainer").style.display = "none";
+        }
 
         // Função para atualizar os códigos conforme UTI
 function atualizarCodigosCobranca() {
@@ -2758,34 +2850,39 @@ function atualizarCodigosCobranca() {
             break;
         default:
             codigos = "03.02.04.001-3/ 03.02.05.003-5/ 03.02.06.002-2/ 03.02.04.003-0/ 03.02.04.004-8/ 03.02.05.001-9";
+    }
     
     document.getElementById("codigosText").textContent = `Códigos: ${codigos}`;
+}
 
         // Atualiza os códigos quando UTI ou turno são alterados
-        var el = document.getElementById("uti");
-        if (el) el.addEventListener("change", function() {
+        document.getElementById("uti").addEventListener("change", function() {
             if (document.querySelector('input[name="codigosCobranca"]:checked')?.value === "Sim") {
                 atualizarCodigosCobranca();
+            }
         });
 
-        var el = document.getElementById("turno");
-        if (el) el.addEventListener("change", function() {
+        document.getElementById("turno").addEventListener("change", function() {
             if (document.querySelector('input[name="codigosCobranca"]:checked')?.value === "Sim") {
                 atualizarCodigosCobranca();
+            }
         });
 
         // Funções para a nova seção cardiovascular
         function mostrarDetalhesEdema() {
             document.getElementById("detalhesEdema").style.display = "block";
+        }
 
         function esconderDetalhesEdema() {
             document.getElementById("detalhesEdema").style.display = "none";
+        }
 
 /* ===== [INÍCIO - CÓDIGO GLASGOW] ===== */
 // Atualizar visibilidade dos componentes
 function atualizarComponentesGlasgow() {
     const semSedacao = document.querySelector('input[name="sedacao"]:checked')?.value === "Não";
     document.getElementById("glasgowComponents").style.display = semSedacao ? "flex" : "none";
+}
 
 // Calcular total automaticamente
 function calcularGlasgowTotal() {
@@ -2793,6 +2890,7 @@ function calcularGlasgowTotal() {
     const verbal = parseInt(document.getElementById("glasgowVerbal").value) || 0;
     const motora = parseInt(document.getElementById("glasgowMotora").value) || 0;
     document.getElementById("glasgow").value = ocular + verbal + motora;
+}
 
 // Configurar eventos
 document.querySelectorAll('input[name="sedacao"]').forEach(radio => {
@@ -2807,23 +2905,29 @@ document.querySelectorAll('input[name="sedacao"]').forEach(radio => {
         // Funções para amputações
         function mostrarOpcoesAmputacao() {
             document.getElementById("opcoesAmputacao").style.display = "block";
+        }
 
         function esconderOpcoesAmputacao() {
             document.getElementById("opcoesAmputacao").style.display = "none";
+        }
 
         function mostrarEscalaEVA() {
             document.getElementById("escalaEVAContainer").style.display = "block";
+        }
 
         function esconderEscalaEVA() {
             document.getElementById("escalaEVAContainer").style.display = "none";
             document.getElementById("eva").value = 0;
             document.getElementById("evaValue").textContent = "0";
+        }
         
         function mostrarMecanicaPulmonar() {
     document.getElementById("detalhesMecanicaPulmonar").style.display = "block";
+}
 
 function esconderMecanicaPulmonar() {
     document.getElementById("detalhesMecanicaPulmonar").style.display = "none";
+}
 
 /* ===== [FUNÇÕES GLASGOW] ===== */
 function calcularGlasgow() {
@@ -2832,6 +2936,7 @@ function calcularGlasgow() {
     const motora = parseInt(document.getElementById("glasgowMotora").value) || 0;
     const total = ocular + verbal + motora;
     document.getElementById("glasgow").value = total > 0 ? total : "";
+}
 
 function atualizarComponentesGlasgow() {
     const semSedacao = document.querySelector('input[name="sedacao"]:checked')?.value === "Não";
@@ -2846,6 +2951,8 @@ function atualizarComponentesGlasgow() {
         calcularGlasgow();
     } else {
         glasgowComponents.style.display = "none";
+    }
+}
 
 // Atualiza a função mostrarOpcoesSedacao existente
 function mostrarOpcoesSedacao() {
@@ -2861,6 +2968,9 @@ function mostrarOpcoesSedacao() {
             document.getElementById("opcoesSedacao").style.display = "none";
             document.getElementById("opcoesGlasgow").style.display = "block";
             atualizarComponentesGlasgow(); // Mostra os componentes
+        }
+    }
+}
         
         // Mostrar códigos automaticamente
 mostrarCodigosCobranca();
@@ -2912,24 +3022,16 @@ atualizarComponentesGlasgow(); // Verifica o estado inicial
             document.getElementById("mecanicaPulmonarContainer").style.display = "block";
             
             // Event listeners para cálculo do ROX
-            var el = document.getElementById("spo2");
-            if (el) el.addEventListener("input", calcularROX);
-            var el = document.getElementById("fr");
-            if (el) el.addEventListener("input", calcularROX);
-            var el = document.getElementById("fio2CNAF");
-            if (el) el.addEventListener("input", calcularROX);
+            document.getElementById("spo2").addEventListener("input", calcularROX);
+            document.getElementById("fr").addEventListener("input", calcularROX);
+            document.getElementById("fio2CNAF").addEventListener("input", calcularROX);
             
             // Event listeners para cálculo do HACOR
-            var el = document.getElementById("fc");
-            if (el) el.addEventListener("input", calcularHACOR);
-            var el = document.getElementById("fr");
-            if (el) el.addEventListener("input", calcularHACOR);
-            var el = document.getElementById("glasgow");
-            if (el) el.addEventListener("change", calcularHACOR);
-            var el = document.getElementById("ph");
-            if (el) el.addEventListener("input", calcularHACOR);
-            var el = document.getElementById("pao2");
-            if (el) el.addEventListener("input", calcularHACOR);
+            document.getElementById("fc").addEventListener("input", calcularHACOR);
+            document.getElementById("fr").addEventListener("input", calcularHACOR);
+            document.getElementById("glasgow").addEventListener("change", calcularHACOR);
+            document.getElementById("ph").addEventListener("input", calcularHACOR);
+            document.getElementById("pao2").addEventListener("input", calcularHACOR);
 
 // Função para calcular Volume Minuto automaticamente
 function calcularVolumeMinuto() {
@@ -2941,32 +3043,26 @@ function calcularVolumeMinuto() {
         document.getElementById("vm").value = vm.toFixed(1);
     } else {
         document.getElementById("vm").value = "";
+    }
+}
 
 // Adicionar event listeners para os campos de ventilometria
-var el = document.getElementById("vcVentilometria");
-if (el) el.addEventListener("input", calcularVolumeMinuto);
-var el = document.getElementById("frVentilometria");
-if (el) el.addEventListener("input", calcularVolumeMinuto);
+document.getElementById("vcVentilometria").addEventListener("input", calcularVolumeMinuto);
+document.getElementById("frVentilometria").addEventListener("input", calcularVolumeMinuto);
 // Event listeners para cálculo do HACOR
-var el = document.getElementById("fc");
-if (el) el.addEventListener("input", calcularHACOR);
-var el = document.getElementById("fr");
-if (el) el.addEventListener("input", calcularHACOR);
-var el = document.getElementById("glasgow");
-if (el) el.addEventListener("change", calcularHACOR);
-var el = document.getElementById("ph");
-if (el) el.addEventListener("input", calcularHACOR);
-var el = document.getElementById("pao2");
-if (el) el.addEventListener("input", calcularHACOR);
-var el = document.getElementById("fio2VNI");
-if (el) el.addEventListener("input", calcularHACOR);
+document.getElementById("fc").addEventListener("input", calcularHACOR);
+document.getElementById("fr").addEventListener("input", calcularHACOR);
+document.getElementById("glasgow").addEventListener("change", calcularHACOR);
+document.getElementById("ph").addEventListener("input", calcularHACOR);
+document.getElementById("pao2").addEventListener("input", calcularHACOR);
+document.getElementById("fio2VNI").addEventListener("input", calcularHACOR);
 
 // Event listener para o select do Glasgow
-var el = document.getElementById("glasgow");
-if (el) el.addEventListener("change", function() {
+document.getElementById("glasgow").addEventListener("change", function() {
     let sedacao = document.querySelector('input[name="sedacao"]:checked');
     if (sedacao && sedacao.value === "Não") {
         document.getElementById("opcoesGlasgow").style.display = this.value ? "block" : "none";
+    }
 });
 
             // Expande a primeira seção por padrão
@@ -2994,10 +3090,12 @@ function gerarMiniEvolucao() {
                 case "responsivo": return "responsivo";
                 case "hipoativo": return "hipoativo";
                 default: return el.value.toLowerCase();
+            }
         });
         estadoMental = termos.join(", ");
     } else {
         estadoMental = "não avaliado";
+    }
 
     // Sedação
     const sedacao = document.querySelector('input[name="sedacao"]:checked');
@@ -3010,8 +3108,10 @@ function gerarMiniEvolucao() {
                 case "Fentanil": return "FENT";
                 case "Precedex": return "DEX";
                 default: return el.value.substring(0, 4);
+            }
         });
         estadoMental = sedativos.length > 0 ? `sedado c/ ${sedativos.join("+")}` : "sedado";
+    }
 
     // Estado Hemodinâmico (com abreviações)
     let hdn = "";
@@ -3020,6 +3120,7 @@ function gerarMiniEvolucao() {
         hdn = hemodinamica.value.includes("estável") ? "HDN estável" :
               hemodinamica.value.includes("compensada") ? "HDN compensada" :
               "HDN instável";
+    }
 
     // Drogas vasoativas (com abreviações)
     const drogasVasoativas = document.querySelector('input[name="drogasVasoativas"]:checked');
@@ -3031,9 +3132,12 @@ function gerarMiniEvolucao() {
                 case "Vasopressina": return "VASO";
                 case "Nipride": return "NIP";
                 default: return el.value.substring(0, 4);
+            }
         });
         if (drogas.length > 0) {
             hdn += ` c/ ${drogas.join("+")}`;
+        }
+    }
 
     // Sistema Respiratório (com abreviações)
 let resp = "";
@@ -3045,20 +3149,27 @@ if (respiratorio === "vni") {
     const ipap = document.getElementById("ipap").value || "?";
     const fio2 = document.getElementById("fio2VNI").value || "?";
     resp = `VNI ${modoVNI?.value || '?'} ${ipap}/${epap} FiO2 ${fio2}%`;
+} 
 else if (respiratorio === "espontanea") {
     const opcaoEspontanea = document.querySelector('input[name="opcaoEspontanea"]:checked');
     if (opcaoEspontanea) {
         if (opcaoEspontanea.value === "Máscara O2") {
             const fluxo = document.getElementById("fluxo").value || "?";
             resp = `VE c/ máscara ${fluxo}L/min`;
+        } 
         else if (opcaoEspontanea.value === "CNAF") {
             const fluxo = document.getElementById("fluxo").value || "?";
             const fio2 = document.getElementById("fio2CNAF").value || "?";
             resp = `CNAF ${fluxo}L/min FiO2 ${fio2}%`;
+        } 
         else if (opcaoEspontanea.value === "Ar ambiente ") {
             resp = "VE ao AA";
+        }
         else {
             resp = `VE c/ ${opcaoEspontanea.value.toLowerCase()}`;
+        }
+    }
+} 
 else if (respiratorio === "VM") {
     const modoVM = document.querySelector('input[name="modoVM"]:checked');
     const viaAerea = document.querySelector('input[name="viaAerea"]:checked');
@@ -3068,6 +3179,9 @@ else if (respiratorio === "VM") {
         if (modoVM.value === "PSV") {
             const psup = document.getElementById("psup").value || "?";
             resp += ` ${psup}`;
+        }
+    }
+}
 
 // CORREÇÃO: Trabalho Respiratório - verifica exatamente o que foi selecionado
 const trabalhoResp = document.querySelector('input[name="trabalhoRespiratorio"]:checked');
@@ -3076,6 +3190,8 @@ if (trabalhoResp) {
         resp += " s/ ↑WOB";
     } else if (trabalhoResp.value.includes("Com aumento")) {
         resp += " c/ ↑WOB";
+    }
+}
     // Ausculta Pulmonar (formatada conforme solicitado)
 let ap = "AP ";
 const auscultaSelecionada = document.querySelector('input[name="ausculta"]:checked');
@@ -3088,8 +3204,10 @@ if (auscultaSelecionada) {
         ap += "sons pulmonares diminuídos";
         if (auscultaSide) {
             ap += ` ${auscultaSide.value.toLowerCase()}`;
+        }
     } else if (auscultaSelecionada.value === "Sons ausentes") {
         ap += "sons pulmonares ausentes";
+    }
 
     // Ruídos adicionais
     const ruidosSelecionado = document.querySelector('input[name="ruidos"]:checked');
@@ -3101,11 +3219,15 @@ if (auscultaSelecionada) {
                 case "Estertores": return "estertores";
                 case "Atrito pleural": return "atrito pleural";
                 default: return el.value.toLowerCase();
+            }
         });
         if (tiposRuidos.length > 0) {
             ap += ` com ${tiposRuidos.join(", ")}`;
+        }
+    }
 } else {
     ap += "não avaliada";
+}
 
     // HGA (se disponível)
     let hga = "";
@@ -3119,6 +3241,7 @@ if (auscultaSelecionada) {
         const pf = document.getElementById("pf").value || "?";
         
         hga = `HGA: pH ${ph}, PaO2 ${pao2}, PCO2 ${pco2}, HCO3 ${hco3}, Lac ${lac}, P/F ${pf}`;
+    }
 
     // Condutas (resumidas)
     let condutas = [];
@@ -3135,12 +3258,15 @@ if (auscultaSelecionada) {
                 if (el.value === "Troca de Filtro") {
     const motivo = document.querySelector('input[name="motivoTrocaFiltro"]:checked');
     return motivo ? `Troca filtro (${motivo.value})` : "Troca filtro";
+}
 if (el.value === "Troca de Trach Care") {
     const motivo = document.querySelector('input[name="motivoTrocaTrach"]:checked');
     return motivo ? `Troca trach care (${motivo.value})` : "Troca trach care";
+}
             case "Gerenciamento de VM": condutas.push("ger VM"); break;
             case "Gerenciamento de oxigenoterapia": condutas.push("ger O2"); break;
             default: condutas.push(el.value.substring(0, 5));
+        }
     });
     
     // Condutas motoras resumidas
@@ -3155,6 +3281,7 @@ case "Diagonais (PNF)": condutas.push("diagonais PNF"); break;
             case "Mobilização no leito": condutas.push("mob leito"); break;
             case "Sedestação na poltrona": condutas.push("sed poltrona"); break;
             default: condutas.push(el.value.substring(0, 5));
+        }
     });
 
     // Montagem do texto final
@@ -3171,11 +3298,13 @@ case "Diagonais (PNF)": condutas.push("diagonais PNF"); break;
         miniEvolucao += `\nObs:`;
         if (obsResp) miniEvolucao += ` ${obsResp.substring(0, 50)}${obsResp.length > 50 ? '...' : ''}`;
         if (obsNeuro) miniEvolucao += ` ${obsNeuro.substring(0, 50)}${obsNeuro.length > 50 ? '...' : ''}`;
+    }
 
 // Marcos Respiratórios (versão resumida)
 const marcosResp = document.getElementById("marcosRespiratorios")?.value.trim();
 if (marcosResp) {
     miniEvolucao += `\nMarcos: ${marcosResp.substring(0, 50)}${marcosResp.length > 50 ? '...' : ''}`;
+}
 
     // Ajuste de gênero e formatação final
     miniEvolucao = ajustarGenero(miniEvolucao)
@@ -3184,6 +3313,7 @@ if (marcosResp) {
         .trim();
 
     document.getElementById("textoEvolucao").value = miniEvolucao;
+}
 
 function ajustarGenero(texto) {
     const sexo = document.querySelector('input[name="sexo"]:checked')?.value;
@@ -3201,203 +3331,59 @@ texto = texto.replace("paciente encontrado", "paciente encontrada");
 
     for (const [masc, fem] of Object.entries(palavras)) {
         texto = texto.replace(new RegExp(`\\b${masc}\\b`, 'gi'), fem);
+    }
     return texto;
+}
 
     </script>
-<button class="primary" id="btnSalvarEvolucao">💾 Salvar Evolução</button><script>
-  getAuth, onAuthStateChanged
-  getFirestore, doc, setDoc, getDoc
-  aplicarLogicaCondicional,
-  mostrarCuffOptions,
-  mostrarOpcoesTQT,
-  mostrarPressaoCuff,
-  esconderPressaoCuff,
-  mostrarMecanicaPulmonar,
-  esconderMecanicaPulmonar,
-  atualizarOpcoesRespiratorias
-
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-function coletarDadosFormulario() {
-  const dados = {};
-  const elementos = document.querySelectorAll("input, select, textarea");
-
-  elementos.forEach(el => {
-    if (!el.id && !el.name) return;
-
-    const key = el.id || el.name;
-
-    if (el.type === "radio") {
-      if (el.checked) dados[key] = el.value;
-    } else if (el.type === "checkbox") {
-      if (!dados[key]) dados[key] = [];
-      if (el.checked) dados[key].push(el.value);
-    } else if (el.type === "range") {
-      dados[key] = el.value;
-    } else {
-      dados[key] = el.value;
+<script>
+  document.getElementById('hospital').textContent = sessionStorage.getItem('evolucao.hospital') || '-';
+  document.getElementById('unidade').textContent = sessionStorage.getItem('evolucao.unidade') || '-';
+  document.getElementById('leito').textContent = sessionStorage.getItem('evolucao.leito') || '-';
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const unidadeTopo = document.getElementById('unidade')?.textContent || "";
+    const uti = unidadeTopo.replace(/^UTI\s+/i, '').trim().toUpperCase();
+    const utiSelect = document.getElementById('uti');
+    if (uti && utiSelect) {
+      for (let i = 0; i < utiSelect.options.length; i++) {
+        if (utiSelect.options[i].value.toUpperCase() === uti) {
+          utiSelect.selectedIndex = i;
+          break;
+        }
+      }
+    }
   });
+</script>
+<div style="margin-top: 30px; text-align: right;">
 
-  return dados;
+</div>
+<script src="script-evolucao.js" type="module"></script>
 
-function preencherFormulario(dados) {
-  const elementos = document.querySelectorAll("input, select, textarea");
+<script src="firebase-config.js" type="module"></script>
+<script src="script-evolucao.js" type="module"></script>
+<div style="margin-top: 30px; text-align: right;"><button class="primary" id="btnSalvarEvolucao">💾 Salvar Evolução</button></div><script src="./script-evolucao.js" type="module"></script>
+<script type="module">
+  import {
+    mostrarOpcoesContencao,
+    mostrarEscalaEVA,
+    mostrarOpcoesSedacao,
+    mostrarDrogas,
+    atualizarOpcoesRespiratorias,
+    mostrarCamposHGA,
+    aplicarLogicaCondicional
+  } from './exibicao-condicional.js';
 
-  elementos.forEach(el => {
-    const key = el.id || el.name;
-    if (!(key in dados)) return;
+  window.mostrarOpcoesContencao = mostrarOpcoesContencao;
+  window.mostrarEscalaEVA = mostrarEscalaEVA;
+  window.mostrarOpcoesSedacao = mostrarOpcoesSedacao;
+  window.mostrarDrogas = mostrarDrogas;
+  window.atualizarOpcoesRespiratorias = atualizarOpcoesRespiratorias;
+  window.mostrarCamposHGA = mostrarCamposHGA;
+</script>
 
-    if (el.type === "radio" || el.type === "checkbox") {
-      if (Array.isArray(dados[key])) {
-        el.checked = dados[key].includes(el.value);
-      } else {
-        el.checked = dados[key] === el.value;
-    } else if (el.type === "range") {
-      el.value = dados[key];
-      const display = document.getElementById(el.id + "Value");
-      if (display) display.textContent = dados[key];
-    } else {
-      el.value = dados[key];
-  });
+<script type="module" src="./script-evolucao.js"></script>
 
-  aplicarLogicaCondicional();
-
-async function salvarEvolucao() {
-  const uid = auth.currentUser?.uid;
-  if (!uid) return alert("Usuário não autenticado.");
-
-  const hospital = sessionStorage.getItem("evolucao.hospital");
-  const unidade = sessionStorage.getItem("evolucao.unidade");
-  const leito = sessionStorage.getItem("evolucao.leito");
-  const data = document.getElementById("dataEvolucao")?.value;
-
-  if (!hospital || !unidade || !leito || !data) {
-    alert("Hospital, unidade, leito ou data da evolução estão ausentes.");
-    return;
-
-  const dados = coletarDadosFormulario();
-  const ref = doc(db, "usuarios", uid, "hospitais", hospital, "unidades", unidade, "leitos", leito, "evolucoes", data);
-
-  try {
-    await setDoc(ref, dados, { merge: true });
-    alert("Evolução salva com sucesso.");
-  } catch (err) {
-    console.error("Erro ao salvar evolução:", err);
-    alert("Erro ao salvar evolução.");
-
-async function carregarEvolucao() {
-  const uid = auth.currentUser?.uid;
-  if (!uid) return;
-
-  const hospital = sessionStorage.getItem("evolucao.hospital");
-  const unidade = sessionStorage.getItem("evolucao.unidade");
-  const leito = sessionStorage.getItem("evolucao.leito");
-  const data = document.getElementById("dataEvolucao")?.value;
-
-  if (!hospital || !unidade || !leito || !data) return;
-
-  const ref = doc(db, "usuarios", uid, "hospitais", hospital, "unidades", unidade, "leitos", leito, "evolucoes", data);
-  const snap = await getDoc(ref);
-
-  if (snap.exists()) {
-    preencherFormulario(snap.data());
-
-document.addEventListener("DOMContentLoaded", () => {
-  const hospital = sessionStorage.getItem("evolucao.hospital");
-  const unidade = sessionStorage.getItem("evolucao.unidade");
-  const leito = sessionStorage.getItem("evolucao.leito");
-
-  if (hospital && unidade && leito) {
-    document.getElementById("hospital").textContent = hospital;
-    document.getElementById("unidade").textContent = unidade;
-    document.getElementById("leito").textContent = leito;
-
-    if (user) {
-      const inputData = document.getElementById("dataEvolucao");
-      if (inputData) {
-        inputData.addEventListener("change", carregarEvolucao);
-        if (inputData.value) await carregarEvolucao();
-  });
-
-  const btn = document.getElementById("btnSalvarEvolucao");
-  if (btn) {
-    btn.addEventListener("click", salvarEvolucao);
-
-  const tipoVentilacao = document.getElementById("sistemaRespiratorio");
-  if (tipoVentilacao) {
-    tipoVentilacao.addEventListener("change", atualizarOpcoesRespiratorias);
-
-  document.querySelectorAll('input[name="viaAerea"]').forEach(el => {
-    el.addEventListener("change", mostrarCuffOptions);
-  });
-
-  document.querySelectorAll('input[name="cuff"]').forEach(el => {
-    el.addEventListener("change", () => {
-      if (el.value === "Insuflado") {
-        mostrarPressaoCuff();
-      } else {
-        esconderPressaoCuff();
-    });
-  });
-
-  document.querySelectorAll('input[name="mecanicaPulmonar"]').forEach(el => {
-    el.addEventListener("change", () => {
-      if (el.value === "Sim") {
-        mostrarMecanicaPulmonar();
-      } else {
-        esconderMecanicaPulmonar();
-      }</script><script>// firebase-config.js
-  getAuth, 
-  setPersistence, 
-  browserSessionPersistence,
-  createUserWithEmailAndPassword,
-  sendPasswordResetEmail
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-  collection,
-  getDocs,
-  deleteDoc,
-  arrayUnion,
-  arrayRemove
-
-// Configuração do Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyC-VBHoQW0b5y0lmxRkIAj-ciAbuwF3YW8",
-  projectId: "gef-app1",
-  storageBucket: "gef-app1.appspot.com",
-  messagingSenderId: "625530882269",
-};
-
-// Inicializa o Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-// Configura persistência de sessão
-setPersistence(auth, browserSessionPersistence)
-  .then(() => console.log("Persistência de sessão configurada com sucesso"))
-  .catch((error) => console.error("Erro ao configurar persistência:", error));
-
-// Exporta todas as funcionalidades necessárias
-  createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
-  // Exportações do Firestore
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-  collection,
-  getDocs,
-  deleteDoc,
-  arrayUnion,
-  arrayRemove
-};</script><script>
-document.addEventListener("DOMContentLoaded", function() {
-  if (typeof aplicarLogicaCondicional === "function") aplicarLogicaCondicional();
-});
-</script></body>
+</body>
 </html>
