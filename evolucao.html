@@ -257,12 +257,103 @@
 
     </style>
 </head>
-<body>
-<div id="paciente-info" style="margin-bottom: 20px; padding: 10px; background: #eef2f5; border-radius: 6px;">
-<strong>Hospital:</strong> <span id="hospital"></span> |
-  <strong>Unidade:</strong> <span id="unidade"></span> |
-  <strong>Leito:</strong> <span id="leito"></span>
-</div>
+<body><script>// exibicao-condicional.js
+
+function mostrarOpcoesContencao() {
+  const sim = document.querySelector('input[name="contencao"][value="Sim"]');
+  const container = document.getElementById("opcoesContencao");
+  container.style.display = sim?.checked ? "block" : "none";
+}
+
+function mostrarEscalaEVA() {
+  const sim = document.querySelector('input[name="avaliacaoDor"][value="Sim"]');
+  const container = document.getElementById("escalaEVAContainer");
+  container.style.display = sim?.checked ? "block" : "none";
+}
+
+function mostrarOpcoesSedacao() {
+  const sim = document.querySelector('input[name="sedacao"][value="Sim"]');
+  const container = document.getElementById("opcoesSedacao");
+  container.style.display = sim?.checked ? "block" : "none";
+}
+
+function mostrarDrogas() {
+  const sim = document.querySelector('input[name="drogasVasoativas"][value="com uso de drogas vasoativas"]');
+  const container = document.getElementById("opcoesDrogas");
+  container.style.display = sim?.checked ? "block" : "none";
+}
+
+function atualizarOpcoesRespiratorias() {
+  const tipo = document.getElementById("sistemaRespiratorio")?.value;
+  const viaAerea = document.getElementById("viaAereaOptions");
+  const params = document.getElementById("ventilationParams");
+
+  if (!tipo || !viaAerea || !params) return;
+
+  if (tipo === "VM") {
+    viaAerea.style.display = "block";
+    params.style.display = "block";
+  
+  exibirParametrosModoVM();
+} else if (tipo === "vni") {
+    viaAerea.style.display = "none";
+    params.style.display = "block";
+  } else {
+    viaAerea.style.display = "none";
+    params.style.display = "none";
+  }
+}
+
+function mostrarCamposHGA() {
+  const sim = document.querySelector('input[name="hga"][value="Com HGA"]');
+  const container = document.getElementById("camposHGA");
+  container.style.display = sim?.checked ? "block" : "none";
+}
+
+function aplicarLogicaCondicional() {
+  mostrarOpcoesContencao();
+  mostrarEscalaEVA();
+  mostrarOpcoesSedacao();
+  mostrarDrogas();
+  atualizarOpcoesRespiratorias();
+  mostrarCamposHGA();
+}
+
+function mostrarCuffOptions() {
+  const via = document.querySelector('input[name="viaAerea"]:checked');
+  const cuff = document.getElementById("cuffOptions");
+  if (via?.value === "TOT") {
+    cuff.style.display = "block";
+    document.getElementById("opcoesTQT").style.display = "none";
+  } else if (via?.value === "TQT") {
+    document.getElementById("opcoesTQT").style.display = "block";
+    cuff.style.display = "block";
+  } else {
+    cuff.style.display = "none";
+    document.getElementById("opcoesTQT").style.display = "none";
+  }
+}
+
+function mostrarOpcoesTQT() {
+  document.getElementById("opcoesTQT").style.display = "block";
+  document.getElementById("cuffOptions").style.display = "block";
+}
+
+function mostrarPressaoCuff() {
+  document.getElementById("pressaoCuff").style.display = "block";
+}
+
+function esconderPressaoCuff() {
+  document.getElementById("pressaoCuff").style.display = "none";
+}
+
+function mostrarMecanicaPulmonar() {
+  document.getElementById("detalhesMecanicaPulmonar").style.display = "block";
+}
+
+function esconderMecanicaPulmonar() {
+  document.getElementById("detalhesMecanicaPulmonar").style.display = "none";
+}</script>
 <div class="container">
 <h2>Gerador de Evolução Fisioterapêutica</h2>
 <!-- Seção de informações básicas -->
@@ -1492,7 +1583,6 @@
 <p id="codigosText"></p>
 </div>
 </div>
-
 <!-- Botões de ação -->
 <div style="margin: 20px 0;">
 <button onclick="gerarEvolucao()">Gerar Evolução</button>
@@ -1510,7 +1600,6 @@
 <textarea id="textoEvolucao" readonly=""></textarea>
 </div>
 <div class="developer-credit">Desenvolvedor: Daniel Macedo</div>
-
 <script>
         // Funções para expandir/recolher seções
         document.querySelectorAll('.section-header').forEach(header => {
@@ -1534,7 +1623,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Mostrar afasia só na UTI Neuro
-document.getElementById("uti").addEventListener("change", function() {
+var el = document.getElementById("uti");
+if (el) el.addEventListener("change", function() {
     document.getElementById("afasiaContainer").style.display = 
         this.value === "NEURO" ? "block" : "none";
 });
@@ -2856,13 +2946,15 @@ function atualizarCodigosCobranca() {
 }
 
         // Atualiza os códigos quando UTI ou turno são alterados
-        document.getElementById("uti").addEventListener("change", function() {
+        var el = document.getElementById("uti");
+        if (el) el.addEventListener("change", function() {
             if (document.querySelector('input[name="codigosCobranca"]:checked')?.value === "Sim") {
                 atualizarCodigosCobranca();
             }
         });
 
-        document.getElementById("turno").addEventListener("change", function() {
+        var el = document.getElementById("turno");
+        if (el) el.addEventListener("change", function() {
             if (document.querySelector('input[name="codigosCobranca"]:checked')?.value === "Sim") {
                 atualizarCodigosCobranca();
             }
@@ -3022,16 +3114,24 @@ atualizarComponentesGlasgow(); // Verifica o estado inicial
             document.getElementById("mecanicaPulmonarContainer").style.display = "block";
             
             // Event listeners para cálculo do ROX
-            document.getElementById("spo2").addEventListener("input", calcularROX);
-            document.getElementById("fr").addEventListener("input", calcularROX);
-            document.getElementById("fio2CNAF").addEventListener("input", calcularROX);
+            var el = document.getElementById("spo2");
+            if (el) el.addEventListener("input", calcularROX);
+            var el = document.getElementById("fr");
+            if (el) el.addEventListener("input", calcularROX);
+            var el = document.getElementById("fio2CNAF");
+            if (el) el.addEventListener("input", calcularROX);
             
             // Event listeners para cálculo do HACOR
-            document.getElementById("fc").addEventListener("input", calcularHACOR);
-            document.getElementById("fr").addEventListener("input", calcularHACOR);
-            document.getElementById("glasgow").addEventListener("change", calcularHACOR);
-            document.getElementById("ph").addEventListener("input", calcularHACOR);
-            document.getElementById("pao2").addEventListener("input", calcularHACOR);
+            var el = document.getElementById("fc");
+            if (el) el.addEventListener("input", calcularHACOR);
+            var el = document.getElementById("fr");
+            if (el) el.addEventListener("input", calcularHACOR);
+            var el = document.getElementById("glasgow");
+            if (el) el.addEventListener("change", calcularHACOR);
+            var el = document.getElementById("ph");
+            if (el) el.addEventListener("input", calcularHACOR);
+            var el = document.getElementById("pao2");
+            if (el) el.addEventListener("input", calcularHACOR);
 
 // Função para calcular Volume Minuto automaticamente
 function calcularVolumeMinuto() {
@@ -3047,18 +3147,27 @@ function calcularVolumeMinuto() {
 }
 
 // Adicionar event listeners para os campos de ventilometria
-document.getElementById("vcVentilometria").addEventListener("input", calcularVolumeMinuto);
-document.getElementById("frVentilometria").addEventListener("input", calcularVolumeMinuto);
+var el = document.getElementById("vcVentilometria");
+if (el) el.addEventListener("input", calcularVolumeMinuto);
+var el = document.getElementById("frVentilometria");
+if (el) el.addEventListener("input", calcularVolumeMinuto);
 // Event listeners para cálculo do HACOR
-document.getElementById("fc").addEventListener("input", calcularHACOR);
-document.getElementById("fr").addEventListener("input", calcularHACOR);
-document.getElementById("glasgow").addEventListener("change", calcularHACOR);
-document.getElementById("ph").addEventListener("input", calcularHACOR);
-document.getElementById("pao2").addEventListener("input", calcularHACOR);
-document.getElementById("fio2VNI").addEventListener("input", calcularHACOR);
+var el = document.getElementById("fc");
+if (el) el.addEventListener("input", calcularHACOR);
+var el = document.getElementById("fr");
+if (el) el.addEventListener("input", calcularHACOR);
+var el = document.getElementById("glasgow");
+if (el) el.addEventListener("change", calcularHACOR);
+var el = document.getElementById("ph");
+if (el) el.addEventListener("input", calcularHACOR);
+var el = document.getElementById("pao2");
+if (el) el.addEventListener("input", calcularHACOR);
+var el = document.getElementById("fio2VNI");
+if (el) el.addEventListener("input", calcularHACOR);
 
 // Event listener para o select do Glasgow
-document.getElementById("glasgow").addEventListener("change", function() {
+var el = document.getElementById("glasgow");
+if (el) el.addEventListener("change", function() {
     let sedacao = document.querySelector('input[name="sedacao"]:checked');
     if (sedacao && sedacao.value === "Não") {
         document.getElementById("opcoesGlasgow").style.display = this.value ? "block" : "none";
@@ -3336,54 +3445,233 @@ texto = texto.replace("paciente encontrado", "paciente encontrada");
 }
 
     </script>
-<script>
-  document.getElementById('hospital').textContent = sessionStorage.getItem('evolucao.hospital') || '-';
-  document.getElementById('unidade').textContent = sessionStorage.getItem('evolucao.unidade') || '-';
-  document.getElementById('leito').textContent = sessionStorage.getItem('evolucao.leito') || '-';
-</script>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const unidadeTopo = document.getElementById('unidade')?.textContent || "";
-    const uti = unidadeTopo.replace(/^UTI\s+/i, '').trim().toUpperCase();
-    const utiSelect = document.getElementById('uti');
-    if (uti && utiSelect) {
-      for (let i = 0; i < utiSelect.options.length; i++) {
-        if (utiSelect.options[i].value.toUpperCase() === uti) {
-          utiSelect.selectedIndex = i;
-          break;
-        }
+<button class="primary" id="btnSalvarEvolucao">💾 Salvar Evolução</button><script>
+  getAuth, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+  getFirestore, doc, setDoc, getDoc
+} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+  aplicarLogicaCondicional,
+  mostrarCuffOptions,
+  mostrarOpcoesTQT,
+  mostrarPressaoCuff,
+  esconderPressaoCuff,
+  mostrarMecanicaPulmonar,
+  esconderMecanicaPulmonar,
+  atualizarOpcoesRespiratorias
+} from './exibicao-condicional.js';
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+function coletarDadosFormulario() {
+  const dados = {};
+  const elementos = document.querySelectorAll("input, select, textarea");
+
+  elementos.forEach(el => {
+    if (!el.id && !el.name) return;
+
+    const key = el.id || el.name;
+
+    if (el.type === "radio") {
+      if (el.checked) dados[key] = el.value;
+    } else if (el.type === "checkbox") {
+      if (!dados[key]) dados[key] = [];
+      if (el.checked) dados[key].push(el.value);
+    } else if (el.type === "range") {
+      dados[key] = el.value;
+    } else {
+      dados[key] = el.value;
+    }
+  });
+
+  return dados;
+}
+
+function preencherFormulario(dados) {
+  const elementos = document.querySelectorAll("input, select, textarea");
+
+  elementos.forEach(el => {
+    const key = el.id || el.name;
+    if (!(key in dados)) return;
+
+    if (el.type === "radio" || el.type === "checkbox") {
+      if (Array.isArray(dados[key])) {
+        el.checked = dados[key].includes(el.value);
+      } else {
+        el.checked = dados[key] === el.value;
+      }
+    } else if (el.type === "range") {
+      el.value = dados[key];
+      const display = document.getElementById(el.id + "Value");
+      if (display) display.textContent = dados[key];
+    } else {
+      el.value = dados[key];
+    }
+  });
+
+  aplicarLogicaCondicional();
+}
+
+async function salvarEvolucao() {
+  const uid = auth.currentUser?.uid;
+  if (!uid) return alert("Usuário não autenticado.");
+
+  const hospital = sessionStorage.getItem("evolucao.hospital");
+  const unidade = sessionStorage.getItem("evolucao.unidade");
+  const leito = sessionStorage.getItem("evolucao.leito");
+  const data = document.getElementById("dataEvolucao")?.value;
+
+  if (!hospital || !unidade || !leito || !data) {
+    alert("Hospital, unidade, leito ou data da evolução estão ausentes.");
+    return;
+  }
+
+  const dados = coletarDadosFormulario();
+  const ref = doc(db, "usuarios", uid, "hospitais", hospital, "unidades", unidade, "leitos", leito, "evolucoes", data);
+
+  try {
+    await setDoc(ref, dados, { merge: true });
+    alert("Evolução salva com sucesso.");
+  } catch (err) {
+    console.error("Erro ao salvar evolução:", err);
+    alert("Erro ao salvar evolução.");
+  }
+}
+
+async function carregarEvolucao() {
+  const uid = auth.currentUser?.uid;
+  if (!uid) return;
+
+  const hospital = sessionStorage.getItem("evolucao.hospital");
+  const unidade = sessionStorage.getItem("evolucao.unidade");
+  const leito = sessionStorage.getItem("evolucao.leito");
+  const data = document.getElementById("dataEvolucao")?.value;
+
+  if (!hospital || !unidade || !leito || !data) return;
+
+  const ref = doc(db, "usuarios", uid, "hospitais", hospital, "unidades", unidade, "leitos", leito, "evolucoes", data);
+  const snap = await getDoc(ref);
+
+  if (snap.exists()) {
+    preencherFormulario(snap.data());
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const hospital = sessionStorage.getItem("evolucao.hospital");
+  const unidade = sessionStorage.getItem("evolucao.unidade");
+  const leito = sessionStorage.getItem("evolucao.leito");
+
+  if (hospital && unidade && leito) {
+    document.getElementById("hospital").textContent = hospital;
+    document.getElementById("unidade").textContent = unidade;
+    document.getElementById("leito").textContent = leito;
+  }
+
+  onAuthStateChanged(auth, async user => {
+    if (user) {
+      const inputData = document.getElementById("dataEvolucao");
+      if (inputData) {
+        inputData.addEventListener("change", carregarEvolucao);
+        if (inputData.value) await carregarEvolucao();
       }
     }
   });
-</script>
-<div style="margin-top: 30px; text-align: right;">
 
-</div>
-<script src="script-evolucao.js" type="module"></script>
+  const btn = document.getElementById("btnSalvarEvolucao");
+  if (btn) {
+    btn.addEventListener("click", salvarEvolucao);
+  }
 
-<script src="firebase-config.js" type="module"></script>
-<script src="script-evolucao.js" type="module"></script>
-<div style="margin-top: 30px; text-align: right;"><button class="primary" id="btnSalvarEvolucao">💾 Salvar Evolução</button></div><script src="./script-evolucao.js" type="module"></script>
-<script type="module">
-  import {
-    mostrarOpcoesContencao,
-    mostrarEscalaEVA,
-    mostrarOpcoesSedacao,
-    mostrarDrogas,
-    atualizarOpcoesRespiratorias,
-    mostrarCamposHGA,
-    aplicarLogicaCondicional
-  } from './exibicao-condicional.js';
+  const tipoVentilacao = document.getElementById("sistemaRespiratorio");
+  if (tipoVentilacao) {
+    tipoVentilacao.addEventListener("change", atualizarOpcoesRespiratorias);
+  }
 
-  window.mostrarOpcoesContencao = mostrarOpcoesContencao;
-  window.mostrarEscalaEVA = mostrarEscalaEVA;
-  window.mostrarOpcoesSedacao = mostrarOpcoesSedacao;
-  window.mostrarDrogas = mostrarDrogas;
-  window.atualizarOpcoesRespiratorias = atualizarOpcoesRespiratorias;
-  window.mostrarCamposHGA = mostrarCamposHGA;
-</script>
+  document.querySelectorAll('input[name="viaAerea"]').forEach(el => {
+    el.addEventListener("change", mostrarCuffOptions);
+  });
 
-<script type="module" src="./script-evolucao.js"></script>
+  document.querySelectorAll('input[name="cuff"]').forEach(el => {
+    el.addEventListener("change", () => {
+      if (el.value === "Insuflado") {
+        mostrarPressaoCuff();
+      } else {
+        esconderPressaoCuff();
+      }
+    });
+  });
 
-</body>
+  document.querySelectorAll('input[name="mecanicaPulmonar"]').forEach(el => {
+    el.addEventListener("change", () => {
+      if (el.value === "Sim") {
+        mostrarMecanicaPulmonar();
+      } else {
+        esconderMecanicaPulmonar();
+      }</script><script>// firebase-config.js
+  getAuth, 
+  setPersistence, 
+  browserSessionPersistence,
+  signOut,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  collection,
+  getDocs,
+  deleteDoc,
+  arrayUnion,
+  arrayRemove
+} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+// Configuração do Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyC-VBHoQW0b5y0lmxRkIAj-ciAbuwF3YW8",
+  authDomain: "gef-app1.firebaseapp.com",
+  projectId: "gef-app1",
+  storageBucket: "gef-app1.appspot.com",
+  messagingSenderId: "625530882269",
+  appId: "1:625530882269:web:c47d79aa16508cb855b334"
+};
+
+// Inicializa o Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// Configura persistência de sessão
+setPersistence(auth, browserSessionPersistence)
+  .then(() => console.log("Persistência de sessão configurada com sucesso"))
+  .catch((error) => console.error("Erro ao configurar persistência:", error));
+
+// Exporta todas as funcionalidades necessárias
+  app,
+  auth,
+  db,
+  signOut,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+  // Exportações do Firestore
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  collection,
+  getDocs,
+  deleteDoc,
+  arrayUnion,
+  arrayRemove
+};</script><script>
+document.addEventListener("DOMContentLoaded", function() {
+  if (typeof aplicarLogicaCondicional === "function") aplicarLogicaCondicional();
+});
+</script></body>
 </html>
