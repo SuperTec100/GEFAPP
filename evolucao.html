@@ -2051,7 +2051,7 @@ function toggleArticulacoes(checkbox, membro, tipo = 'Paralisia') {
                     
                     if (campo.id) {
                         if (!document.getElementById(campo.id).value) {
-                            camposFaltantes.push(campo.nome);
+                            camposFaltantes.push(campo.nome); }
                     else if (campo.checks) {
                         campo.checks.forEach(subcampo => {
                             if (subcampo.cond && !subcampo.cond()) return;
@@ -3206,9 +3206,7 @@ texto = texto.replace("paciente encontrado", "paciente encontrada");
     </script>
 <button class="primary" id="btnSalvarEvolucao">💾 Salvar Evolução</button><script>
   getAuth, onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
   getFirestore, doc, setDoc, getDoc
-} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
   aplicarLogicaCondicional,
   mostrarCuffOptions,
   mostrarOpcoesTQT,
@@ -3217,7 +3215,6 @@ texto = texto.replace("paciente encontrado", "paciente encontrada");
   mostrarMecanicaPulmonar,
   esconderMecanicaPulmonar,
   atualizarOpcoesRespiratorias
-} from './exibicao-condicional.js';
 
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -3356,7 +3353,6 @@ document.addEventListener("DOMContentLoaded", () => {
   browserSessionPersistence,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail
-} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
   getFirestore,
   doc,
   getDoc,
@@ -3367,7 +3363,6 @@ document.addEventListener("DOMContentLoaded", () => {
   deleteDoc,
   arrayUnion,
   arrayRemove
-} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 // Configuração do Firebase
 const firebaseConfig = {
