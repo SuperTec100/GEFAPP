@@ -1,5 +1,3 @@
-// exibicao-condicional.js
-
 export function mostrarOpcoesContencao() {
   const sim = document.querySelector('input[name="contencao"][value="Sim"]');
   const container = document.getElementById("opcoesContencao");
@@ -37,7 +35,6 @@ export function atualizarOpcoesRespiratorias() {
 
   if (!tipo) return;
 
-  // Resetar todos
   if (viaAerea) viaAerea.style.display = "none";
   if (opcoesTQT) opcoesTQT.style.display = "none";
   if (cuffOptions) cuffOptions.style.display = "none";
@@ -45,15 +42,33 @@ export function atualizarOpcoesRespiratorias() {
   if (params) params.style.display = "none";
   if (fluxo) fluxo.style.display = "none";
 
-  // Aplicar lógica
   if (tipo === "espontanea") {
-    if (viaAerea) viaAerea.style.display = "block"; // Fisiológica/TQT
-    if (fluxo) fluxo.style.display = "block"; // CNAF
+    if (viaAerea) {
+      viaAerea.style.display = "block";
+      viaAerea.innerHTML = `
+        <label>Via Aérea:</label>
+        <div class="radio-group">
+          <label><input name="viaAerea" type="radio" value="Fisiológica"/> Fisiológica</label>
+          <label><input name="viaAerea" type="radio" value="TQT" onclick="mostrarOpcoesTQT()"/> TQT (Tubo de Traqueostomia)</label>
+        </div>
+      `;
+    }
+    if (fluxo) fluxo.style.display = "block";
   } else if (tipo === "vni") {
-    if (params) params.style.display = "block"; // Parâmetros ventilatórios
+    if (viaAerea) viaAerea.innerHTML = "";
+    if (params) params.style.display = "block";
   } else if (tipo === "VM") {
-    if (viaAerea) viaAerea.style.display = "block"; // TOT/TQT
-    if (params) params.style.display = "block"; // Modos e parâmetros
+    if (viaAerea) {
+      viaAerea.style.display = "block";
+      viaAerea.innerHTML = `
+        <label>Via Aérea:</label>
+        <div class="radio-group">
+          <label><input name="viaAerea" onclick="mostrarCuffOptions()" type="radio" value="TOT"/> TOT (Tubo Orotraqueal)</label>
+          <label><input name="viaAerea" onclick="mostrarOpcoesTQT()" type="radio" value="TQT"/> TQT (Tubo Traqueal)</label>
+        </div>
+      `;
+    }
+    if (params) params.style.display = "block";
   }
 }
 
