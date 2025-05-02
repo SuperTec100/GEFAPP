@@ -1,3 +1,26 @@
+export function mostrarOpcoesContencao() {
+  const sim = document.querySelector('input[name="contencao"][value="Sim"]');
+  const container = document.getElementById("opcoesContencao");
+  container.style.display = sim?.checked ? "block" : "none";
+}
+
+export function mostrarEscalaEVA() {
+  const sim = document.querySelector('input[name="avaliacaoDor"][value="Sim"]');
+  const container = document.getElementById("escalaEVAContainer");
+  container.style.display = sim?.checked ? "block" : "none";
+}
+
+export function mostrarOpcoesSedacao() {
+  const sim = document.querySelector('input[name="sedacao"][value="Sim"]');
+  const container = document.getElementById("opcoesSedacao");
+  container.style.display = sim?.checked ? "block" : "none";
+}
+
+export function mostrarDrogas() {
+  const sim = document.querySelector('input[name="drogasVasoativas"][value="com uso de drogas vasoativas"]');
+  const container = document.getElementById("opcoesDrogas");
+  container.style.display = sim?.checked ? "block" : "none";
+}
 
 export function atualizarOpcoesRespiratorias() {
   const tipo = document.getElementById("sistemaRespiratorio")?.value;
@@ -56,4 +79,19 @@ export function atualizarOpcoesRespiratorias() {
       ventilationParams.style.display = "block";
       break;
   }
+}
+
+export function mostrarCamposHGA() {
+  const sim = document.querySelector('input[name="hga"][value="Com HGA"]');
+  const container = document.getElementById("camposHGA");
+  container.style.display = sim?.checked ? "block" : "none";
+}
+
+export function aplicarLogicaCondicional() {
+  mostrarOpcoesContencao();
+  mostrarEscalaEVA();
+  mostrarOpcoesSedacao();
+  mostrarDrogas();
+  atualizarOpcoesRespiratorias();
+  mostrarCamposHGA();
 }
