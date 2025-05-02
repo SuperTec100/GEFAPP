@@ -27,19 +27,33 @@ export function mostrarDrogas() {
 export function atualizarOpcoesRespiratorias() {
   const tipo = document.getElementById("sistemaRespiratorio")?.value;
   const viaAerea = document.getElementById("viaAereaOptions");
+  const opcoesTQT = document.getElementById("opcoesTQT");
+  const cuffOptions = document.getElementById("cuffOptions");
+  const pressaoCuff = document.getElementById("pressaoCuff");
+  const rimaLabial = document.getElementById("rimaLabial");
+  const numeroTubo = document.getElementById("numeroTubo");
   const params = document.getElementById("ventilationParams");
+  const fluxo = document.getElementById("fluxoContainer");
 
-  if (!tipo || !viaAerea || !params) return;
+  if (!tipo) return;
 
-  if (tipo === "VM") {
-    viaAerea.style.display = "block";
-    params.style.display = "block";
+  // Resetar todos
+  if (viaAerea) viaAerea.style.display = "none";
+  if (opcoesTQT) opcoesTQT.style.display = "none";
+  if (cuffOptions) cuffOptions.style.display = "none";
+  if (pressaoCuff) pressaoCuff.style.display = "none";
+  if (params) params.style.display = "none";
+  if (fluxo) fluxo.style.display = "none";
+
+  // Aplicar lógica
+  if (tipo === "espontanea") {
+    if (viaAerea) viaAerea.style.display = "block"; // Fisiológica/TQT
+    if (fluxo) fluxo.style.display = "block"; // CNAF
   } else if (tipo === "vni") {
-    viaAerea.style.display = "none";
-    params.style.display = "block";
-  } else {
-    viaAerea.style.display = "none";
-    params.style.display = "none";
+    if (params) params.style.display = "block"; // Parâmetros ventilatórios
+  } else if (tipo === "VM") {
+    if (viaAerea) viaAerea.style.display = "block"; // TOT/TQT
+    if (params) params.style.display = "block"; // Modos e parâmetros
   }
 }
 
