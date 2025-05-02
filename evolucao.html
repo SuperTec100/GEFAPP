@@ -259,31 +259,31 @@
 </head>
 <body><script>// exibicao-condicional.js
 
-function mostrarOpcoesContencao() {
+export function mostrarOpcoesContencao() {
   const sim = document.querySelector('input[name="contencao"][value="Sim"]');
   const container = document.getElementById("opcoesContencao");
   container.style.display = sim?.checked ? "block" : "none";
 }
 
-function mostrarEscalaEVA() {
+export function mostrarEscalaEVA() {
   const sim = document.querySelector('input[name="avaliacaoDor"][value="Sim"]');
   const container = document.getElementById("escalaEVAContainer");
   container.style.display = sim?.checked ? "block" : "none";
 }
 
-function mostrarOpcoesSedacao() {
+export function mostrarOpcoesSedacao() {
   const sim = document.querySelector('input[name="sedacao"][value="Sim"]');
   const container = document.getElementById("opcoesSedacao");
   container.style.display = sim?.checked ? "block" : "none";
 }
 
-function mostrarDrogas() {
+export function mostrarDrogas() {
   const sim = document.querySelector('input[name="drogasVasoativas"][value="com uso de drogas vasoativas"]');
   const container = document.getElementById("opcoesDrogas");
   container.style.display = sim?.checked ? "block" : "none";
 }
 
-function atualizarOpcoesRespiratorias() {
+export function atualizarOpcoesRespiratorias() {
   const tipo = document.getElementById("sistemaRespiratorio")?.value;
   const viaAerea = document.getElementById("viaAereaOptions");
   const params = document.getElementById("ventilationParams");
@@ -293,7 +293,9 @@ function atualizarOpcoesRespiratorias() {
   if (tipo === "VM") {
     viaAerea.style.display = "block";
     params.style.display = "block";
-  } else if (tipo === "vni") {
+  
+  exibirParametrosModoVM();
+} else if (tipo === "vni") {
     viaAerea.style.display = "none";
     params.style.display = "block";
   } else {
@@ -302,13 +304,13 @@ function atualizarOpcoesRespiratorias() {
   }
 }
 
-function mostrarCamposHGA() {
+export function mostrarCamposHGA() {
   const sim = document.querySelector('input[name="hga"][value="Com HGA"]');
   const container = document.getElementById("camposHGA");
   container.style.display = sim?.checked ? "block" : "none";
 }
 
-function aplicarLogicaCondicional() {
+export function aplicarLogicaCondicional() {
   mostrarOpcoesContencao();
   mostrarEscalaEVA();
   mostrarOpcoesSedacao();
@@ -317,7 +319,7 @@ function aplicarLogicaCondicional() {
   mostrarCamposHGA();
 }
 
-function mostrarCuffOptions() {
+export function mostrarCuffOptions() {
   const via = document.querySelector('input[name="viaAerea"]:checked');
   const cuff = document.getElementById("cuffOptions");
   if (via?.value === "TOT") {
@@ -332,24 +334,24 @@ function mostrarCuffOptions() {
   }
 }
 
-function mostrarOpcoesTQT() {
+export function mostrarOpcoesTQT() {
   document.getElementById("opcoesTQT").style.display = "block";
   document.getElementById("cuffOptions").style.display = "block";
 }
 
-function mostrarPressaoCuff() {
+export function mostrarPressaoCuff() {
   document.getElementById("pressaoCuff").style.display = "block";
 }
 
-function esconderPressaoCuff() {
+export function esconderPressaoCuff() {
   document.getElementById("pressaoCuff").style.display = "none";
 }
 
-function mostrarMecanicaPulmonar() {
+export function mostrarMecanicaPulmonar() {
   document.getElementById("detalhesMecanicaPulmonar").style.display = "block";
 }
 
-function esconderMecanicaPulmonar() {
+export function esconderMecanicaPulmonar() {
   document.getElementById("detalhesMecanicaPulmonar").style.display = "none";
 }</script>
 <div class="container">
