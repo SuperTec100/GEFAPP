@@ -8,15 +8,15 @@ export function mostrarOpcoesSedacao() { const sim = document.querySelector('inp
 
 export function mostrarDrogas() { const sim = document.querySelector('input[name="drogasVasoativas"][value="com uso de drogas vasoativas"]'); const container = document.getElementById("opcoesDrogas"); container.style.display = sim?.checked ? "block" : "none"; }
 
-export function atualizarOpcoesRespiratorias() { const tipo = document.getElementById("sistemaRespiratorio")?.value; const viaAerea = document.getElementById("viaAereaOptions"); const params = document.getElementById("ventilationParams"); const modoVMContainer = document.getElementById("modoVMContainer");
+export function atualizarOpcoesRespiratorias() { const tipo = document.getElementById("sistemaRespiratorio")?.value; const viaAerea = document.getElementById("viaAereaOptions"); const modoVMContainer = document.getElementById("modoVMContainer"); const params = document.getElementById("ventilationParams");
 
-if (!tipo || !viaAerea || !params) return;
+viaAerea.style.display = "none"; modoVMContainer.style.display = "none"; params.style.display = "none"; esconderTodosModos();
 
-// Oculta tudo inicialmente viaAerea.style.display = "none"; params.style.display = "none"; modoVMContainer.style.display = "none"; esconderTodosModos();
+if (tipo === "espontanea") { viaAerea.style.display = "block"; // mostrar via aérea fisiológica e TQT } else if (tipo === "vni") { modoVMContainer.style.display = "block"; params.style.display = "block"; document.getElementById("PSVParams").style.display = "block"; // padrão para VNI } else if (tipo === "VM") { viaAerea.style.display = "block"; modoVMContainer.style.display = "block"; params.style.display = "block"; } }
 
-if (tipo === "VM") { viaAerea.style.display = "block"; params.style.display = "block"; modoVMContainer.style.display = "block"; } else if (tipo === "vni") { params.style.display = "block"; document.getElementById("PSVParams").style.display = "block"; } }
+export function exibirParametrosModoVM() { esconderTodosModos(); const tipo = document.getElementById("sistemaRespiratorio")?.value; const modo = document.getElementById("modoVM")?.value; if (!modo) return;
 
-export function exibirParametrosModoVM() { esconderTodosModos(); const modo = document.getElementById("modoVM")?.value; if (!modo) return; const id = ${modo}Params; const el = document.getElementById(id); if (el) el.style.display = "block"; }
+if (tipo === "VM" || tipo === "vni") { const id = ${modo}Params; const el = document.getElementById(id); if (el) el.style.display = "block"; } }
 
 function esconderTodosModos() { ["VCVParams", "PCVParams", "PSVParams", "SIMVParams"].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = "none"; }); }
 
