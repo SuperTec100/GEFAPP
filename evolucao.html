@@ -520,285 +520,308 @@
 </div>
 <!-- Seção de sistema respiratório -->
 <div class="expandable-section">
-<div class="section-header">🌬️ Sistema Respiratório</div>
-<div class="section-content">
-<label class="required-field">Tipo de ventilação:</label>
-<select id="sistemaRespiratorio" onchange="atualizarOpcoesRespiratorias()">
-<option disabled="" selected="" value="">Selecione</option>
-<option value="espontanea">Ventilação Espontânea</option>
-<option value="vni">Ventilação Não Invasiva (VNI)</option>
-<option value="VM">Ventilação Mecânica (VM)</option>
-</select>
-<!-- Via Aérea (só aparece para VM) -->
-<div class="sub-section" id="viaAereaOptions" style="display:none;">
-<label>Via Aérea:</label>
-<div class="radio-group">
-<label><input name="viaAerea" onclick="mostrarCuffOptions()" type="radio" value="TOT"/> TOT (Tubo Orotraqueal)</label>
-<label><input name="viaAerea" onclick="mostrarOpcoesTQT()" type="radio" value="TQT"/> TQT (Tubo Traqueal)</label>
-</div>
-<div class="sub-section" id="opcoesTQT" style="display:none;">
-<label>Tipo de Cânula:</label>
-<div class="radio-group">
-<label><input name="tipoTQT" type="radio" value="Cânula Plástica Simples"/> Cânula Plástica Simples</label>
-<label><input name="tipoTQT" type="radio" value="Cânula Plástica Blue Line"/> Cânula Plástica Blue Line</label>
-<label><input name="tipoTQT" type="radio" value="Cânula Metálica"/> Cânula Metálica</label>
-</div>
-</div>
-<div class="sub-section" id="cuffOptions" style="display:none;">
-<label>Cuff:</label>
-<div class="radio-group">
-<label><input name="cuff" onclick="mostrarPressaoCuff()" type="radio" value="Insuflado"/> Insuflado</label>
-<label><input name="cuff" onclick="esconderPressaoCuff()" type="radio" value="Desinsuflado"/> Desinsuflado</label>
-</div>
-<div class="sub-section" id="pressaoCuff" style="display:none;">
-<label>P.Cuff (cmH2O):</label>
-<input id="pcuff" max="50" min="0" step="0.1" type="number"/>
-<div style="margin-top: 10px;">
-<label>Fixado em Rima Labial (cm):</label>
-<input id="rimaLabial" max="30" min="0" step="0.1" type="number"/>
-</div>
-<div style="margin-top: 10px;">
-<label>Número do Tubo:</label>
-<input id="numeroTubo" max="10" min="0" step="0.5" type="number"/>
-</div>
-</div>
-</div>
-</div>
-<!-- Modos Ventilatórios (só aparece para VM/VNI) -->
-<div id="opcoesRespiratorias"></div>
-<!-- Parâmetros de Ventilação (agora antes da mecânica pulmonar) -->
-<div class="sub-section" id="ventilationParams" style="display:none;">
-<div id="VCVParams">
-<div class="vital-sign">
-<label>VC (ml):</label>
-<input id="vc" min="0" type="number"/>
-</div>
-<div class="vital-sign">
-<label>PEEP (cmH2O):</label>
-<input id="peep" min="0" step="0.1" type="number"/>
-</div>
-<div class="vital-sign">
-<label>FiO2 (%):</label>
-<input id="fio2" max="100" min="21" type="number"/>
-</div>
-<div class="vital-sign">
-<label>FR (ipm):</label>
-<input id="frVent" pattern="\d{1,2}\/\d{1,2}" placeholder="Ex: 24/20" type="text"/>
-</div>
-</div>
-<div id="PCVParams">
-<div class="vital-sign">
-<label>Pinsp (cmH2O):</label>
-<input id="pinsp" min="0" step="0.1" type="number"/>
-</div>
-<div class="vital-sign">
-<label>PEEP (cmH2O):</label>
-<input id="peepPcv" min="0" step="0.1" type="number"/>
-</div>
-<div class="vital-sign">
-<label>FiO2 (%):</label>
-<input id="fio2Pcv" max="100" min="21" type="number"/>
-</div>
-<div class="vital-sign">
-<label>FR (ipm):</label>
-<input id="frPcv" pattern="\d{1,2}\/\d{1,2}" placeholder="Ex: 24/20" type="text"/>
-</div>
-</div>
-<div id="PSVParams">
-<div class="vital-sign">
-<label>Psup (cmH2O):</label>
-<input id="psup" min="0" step="0.1" type="number"/>
-</div>
-<div class="vital-sign">
-<label>PEEP (cmH2O):</label>
-<input id="peepPsv" min="0" step="0.1" type="number"/>
-</div>
-<div class="vital-sign">
-<label>FiO2 (%):</label>
-<input id="fio2Psv" max="100" min="21" type="number"/>
-</div>
-</div>
-<div id="SIMVParams">
-<div class="vital-sign">
-<label>VC (ml):</label>
-<input id="vcSimv" min="0" type="number"/>
-</div>
-<div class="vital-sign">
-<label>Psup (cmH2O):</label>
-<input id="psupSimv" min="0" step="0.1" type="number"/>
-</div>
-<div class="vital-sign">
-<label>PEEP (cmH2O):</label>
-<input id="peepSimv" min="0" step="0.1" type="number"/>
-</div>
-<div class="vital-sign">
-<label>FR (ipm):</label>
-<input id="frSimv" min="0" type="number"/>
-</div>
-<div class="vital-sign">
-<label>FiO2 (%):</label>
-<input id="fio2Simv" max="100" min="21" type="number"/>
-</div>
-</div>
-</div>
-<!-- Mecânica Pulmonar (agora depois dos parâmetros) -->
-<div class="sub-section" id="mecanicaPulmonarContainer" style="display:none;">
-<label>Mecânica Pulmonar:</label>
-<div class="radio-group">
-<label><input name="mecanicaPulmonar" onclick="mostrarMecanicaPulmonar()" type="radio" value="Sim"/> Sim</label>
-<label><input checked="" name="mecanicaPulmonar" onclick="esconderMecanicaPulmonar()" type="radio" value="Não"/> Não</label>
-</div>
-<div id="detalhesMecanicaPulmonar" style="display:none; margin-top:10px;">
-<div class="vital-signs-container">
-<div class="vital-sign">
-<label>Complacência (ml/cmH2O):</label>
-<input id="Complacência" min="0" step="0.1" type="number"/>
-</div>
-<div class="vital-sign">
-<label>Resistência (cmH2O/L/s):</label>
-<input id="resistencia" min="0" step="0.1" type="number"/>
-</div>
-<div class="vital-sign">
-<label>Pressão de Platô (cmH2O):</label>
-<input id="pressaoPlato" min="0" step="0.1" type="number"/>
-</div>
-<div class="vital-sign">
-<label>Pressão de Pico (cmH2O):</label>
-<input id="pressaoPico" min="0" step="0.1" type="number"/>
-</div>
-<div class="vital-sign">
-<label>Auto-PEEP (cmH2O):</label>
-<input id="autoPEEP" min="0" step="0.1" type="number"/>
-</div>
-<div class="vital-sign">
-<label>Drive Pressure (cmH2O):</label>
-<input id="drivePressure" min="0" step="0.1" type="number"/>
-</div>
-</div>
-</div>
-</div>
-<div class="sub-section" id="fluxoContainer" style="display:none;">
-<label>Fluxo (L/min):</label>
-<input id="fluxo" max="60" min="1" type="number"/>
-<div id="fio2CNAFContainer" style="display:none; margin-top:10px;">
-<label>FiO₂ (%):</label>
-<input id="fio2CNAF" max="100" min="21" type="number" value="21"/>
-</div>
-<div id="roxContainer" style="display:none; margin-top:10px;">
-<label>Índice ROX:</label>
-<span id="roxValue">-</span>
-<span id="roxInterpretation"></span>
-</div>
-</div>
-<div class="sub-section">
-<label>Padrão Respiratório:</label>
-<div class="radio-group">
-<label><input checked="" name="respPattern" type="radio" value="Eupneia"/> Eupneia</label>
-<label><input name="respPattern" type="radio" value="Taquipneia"/> Taquipneia</label>
-<label><input name="respPattern" type="radio" value="Bradipneia"/> Bradipneia</label>
-<label><input name="respPattern" type="radio" value="Dispneia"/> Dispneia</label>
-<label><input name="respPattern" type="radio" value="Apneia"/> Apneia</label>
-<label><input name="respPattern" type="radio" value="Cheyne-Stokes"/> Cheyne-Stokes</label>
-<label><input name="respPattern" type="radio" value="Biot"/> Biot</label>
-<label><input name="respPattern" type="radio" value="Kussmaul"/> Kussmaul</label>
-</div>
-</div>
-<div class="sub-section">
-<label>Tosse:</label>
-<div class="radio-group">
-<label><input checked="" name="tosse" onclick="mostrarTipoTosse()" type="radio" value="Eficaz"/> Eficaz</label>
-<label><input name="tosse" onclick="mostrarTipoTosse()" type="radio" value="Débil"/> Débil</label>
-<label><input name="tosse" onclick="esconderTipoTosse()" type="radio" value="Ineficaz"/> Ineficaz</label>
-<label><input name="tosse" onclick="esconderTipoTosse()" type="radio" value="Ausente"/> Ausente</label>
-</div>
-<div class="sub-section" id="tipoTosse" style="display: block;">
-<label>Tipo:</label>
-<div class="radio-group">
-<label><input checked="" name="tipoTosse" type="radio" value="Produtiva"/> Produtiva</label>
-<label><input name="tipoTosse" type="radio" value="Úmida"/> Úmida</label>
-<label><input name="tipoTosse" type="radio" value="Seca"/> Seca</label>
-</div>
-</div>
-</div>
-<div class="sub-section">
-<label>Padrão Muscular Ventilatório (PMV):</label>
-<div class="radio-group">
-<label><input name="pmv" type="radio" value="Diafragmático"/> Diafragmático</label>
-<label><input name="pmv" type="radio" value="Abdominal"/> Abdominal</label>
-<label><input checked="" name="pmv" type="radio" value="Costodiafragmático"/> Costodiafragmático</label>
-<label><input name="pmv" type="radio" value="Paradoxal"/> Paradoxal</label>
-<label><input name="pmv" type="radio" value="Acessório"/> Acessório</label>
-</div>
-<div class="sub-section" id="trabalhoRespiratorioContainer" style="display:block;">
-<label>Trabalho Respiratório:</label>
-<div class="radio-group">
-<label><input name="trabalhoRespiratorio" type="radio" value="Com aumento de trabalho respiratório"/> Com aumento</label>
-<label><input checked="" name="trabalhoRespiratorio" type="radio" value="Sem sinais de aumento de trabalho respiratório"/> Sem aumento</label>
-</div>
-</div>
-</div>
-<div class="sub-section">
-<label>Expansibilidade Torácica:</label>
-<div class="radio-group">
-<label><input checked="" name="expansibilidade" onclick="hideLungOptions()" type="radio" value="Simétrica"/> Simétrica</label>
-<label><input name="expansibilidade" onclick="showLungOptions()" type="radio" value="Diminuída"/> Diminuída</label>
-<label><input name="expansibilidade" onclick="showLungOptions()" type="radio" value="Assimétrica"/> Assimétrica</label>
-<label><input name="expansibilidade" onclick="hideLungOptions()" type="radio" value="Ausente"/> Ausente</label>
-</div>
-<div class="sub-section" id="lungOptions" style="display:none;">
-<label>Local:</label>
-<div class="radio-group">
-<label><input name="lungSide" type="radio" value="Direito"/> Direito</label>
-<label><input name="lungSide" type="radio" value="Esquerdo"/> Esquerdo</label>
-<label><input name="lungSide" type="radio" value="Bilateral"/> Bilateral</label>
-</div>
-</div>
-</div>
-<div class="sub-section">
-<label>Ausculta Pulmonar:</label>
-<div class="radio-group">
-<label><input checked="" name="ausculta" onclick="mostrarOpcoesRuidos()" type="radio" value="Sons audíveis"/> Sons audíveis</label>
-<label><input name="ausculta" onclick="mostrarOpcoesRuidos()" type="radio" value="Sons reduzidos"/> Sons reduzidos</label>
-<label><input name="ausculta" onclick="mostrarOpcoesRuidos()" type="radio" value="Sons ausentes"/> Sons ausentes</label>
-</div>
-<div id="opcoesRuidos" style="margin-top:10px;">
-<div class="sub-section" id="sonsReduzidosOptions" style="display:none;">
-<label>Localização:</label>
-<div class="radio-group">
-<label><input checked="" name="auscultaSide" type="radio" value="Bilateralmente"/> Bilateralmente</label>
-<label><input name="auscultaSide" type="radio" value="Pulmão Direito"/> Pulmão Direito</label>
-<label><input name="auscultaSide" type="radio" value="Pulmão Esquerdo"/> Pulmão Esquerdo</label>
-<label><input name="auscultaSide" type="radio" value="Ápice"/> Ápice</label>
-<label><input name="auscultaSide" type="radio" value="Base"/> Base</label>
-</div>
-</div>
-<label>Ruídos:</label>
-<div class="radio-group">
-<label><input name="ruidos" onclick="mostrarTiposRuidos()" type="radio" value="com ruídos"/> Com ruídos</label>
-<label><input name="ruidos" onclick="esconderTiposRuidos()" type="radio" value="sem ruídos"/> Sem ruídos</label>
-</div>
-<div class="sub-section" id="tiposRuidos" style="display:none;">
-<div class="checkbox-group">
-<label><input name="tipoRuido" onclick="mostrarOpcoesRuidos()" type="checkbox" value="Roncos"/> Roncos</label>
-<label><input name="tipoRuido" type="checkbox" value="Sibilos"/> Sibilos</label>
-<label><input name="tipoRuido" type="checkbox" value="Estridores"/> Estridores</label>
-<label><input name="tipoRuido" type="checkbox" value="Estertores"/> Estertores</label>
-<label><input name="tipoRuido" type="checkbox" value="Atrito pleural"/> Atrito pleural</label>
-</div>
-</div>
-</div>
-<div class="sub-section">
-<label>Observações Adicionais (Respiratório):</label>
-<textarea id="obsRespiratorio" placeholder="Adicione observações sobre o sistema respiratório..." style="height: 80px;"></textarea>
-</div>
-</div>
+    <div class="section-header">🌬️ Sistema Respiratório</div>
+    <div class="section-content">
+        <label class="required-field">Tipo de ventilação:</label>
+        <select id="sistemaRespiratorio" onchange="atualizarOpcoesRespiratorias()">
+            <option value="" selected disabled>Selecione</option>
+            <option value="espontanea">Ventilação Espontânea</option>
+            <option value="vni">Ventilação Não Invasiva (VNI)</option>
+            <option value="VM">Ventilação Mecânica (VM)</option>
+        </select>
+
+        <!-- Via Aérea (só aparece para VM) -->
+        <div id="viaAereaOptions" class="sub-section" style="display:none;">
+            <label>Via Aérea:</label>
+            <div class="radio-group">
+                <label><input type="radio" name="viaAerea" value="TOT" onclick="mostrarCuffOptions()"> TOT (Tubo Orotraqueal)</label>
+                <label><input type="radio" name="viaAerea" value="TQT" onclick="mostrarOpcoesTQT()"> TQT (Tubo Traqueal)</label>
+            </div>
+            
+            <div id="opcoesTQT" class="sub-section" style="display:none;">
+                <label>Tipo de Cânula:</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="tipoTQT" value="Cânula Plástica Simples"> Cânula Plástica Simples</label>
+                    <label><input type="radio" name="tipoTQT" value="Cânula Plástica Blue Line"> Cânula Plástica Blue Line</label>
+                    <label><input type="radio" name="tipoTQT" value="Cânula Metálica"> Cânula Metálica</label>
+                </div>
+            </div>
+            
+            <div id="cuffOptions" class="sub-section" style="display:none;">
+                <label>Cuff:</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="cuff" value="Insuflado" onclick="mostrarPressaoCuff()"> Insuflado</label>
+                    <label><input type="radio" name="cuff" value="Desinsuflado" onclick="esconderPressaoCuff()"> Desinsuflado</label>
+                </div>
+                
+                <div id="pressaoCuff" class="sub-section" style="display:none;">
+                    <label>P.Cuff (cmH2O):</label>
+                    <input type="number" id="pcuff" min="0" max="50" step="0.1">
+                    
+                    <div style="margin-top: 10px;">
+                        <label>Fixado em Rima Labial (cm):</label>
+                        <input type="number" id="rimaLabial" min="0" max="30" step="0.1">
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <label>Número do Tubo:</label>
+                        <input type="number" id="numeroTubo" min="0" max="10" step="0.5">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modos Ventilatórios (só aparece para VM/VNI) -->
+        <div id="opcoesRespiratorias"></div>
+        
+        <!-- Parâmetros de Ventilação (agora antes da mecânica pulmonar) -->
+        <div id="ventilationParams" class="sub-section" style="display:none;">
+            <div id="VCVParams">
+                <div class="vital-sign">
+                    <label>VC (ml):</label>
+                    <input type="number" id="vc" min="0">
+                </div>
+                <div class="vital-sign">
+                    <label>PEEP (cmH2O):</label>
+                    <input type="number" id="peep" min="0" step="0.1">
+                </div>
+                <div class="vital-sign">
+                    <label>FiO2 (%):</label>
+                    <input type="number" id="fio2" min="21" max="100">
+                </div>
+                <div class="vital-sign">
+                    <label>FR (ipm):</label>
+                    <input type="text" id="frVent" placeholder="Ex: 24/20" pattern="\d{1,2}\/\d{1,2}">
+                </div>
+            </div>
+            <div id="PCVParams">
+                <div class="vital-sign">
+                    <label>Pinsp (cmH2O):</label>
+                    <input type="number" id="pinsp" min="0" step="0.1">
+                </div>
+                <div class="vital-sign">
+                    <label>PEEP (cmH2O):</label>
+                    <input type="number" id="peepPcv" min="0" step="0.1">
+                </div>
+                <div class="vital-sign">
+                    <label>FiO2 (%):</label>
+                    <input type="number" id="fio2Pcv" min="21" max="100">
+                </div>
+                <div class="vital-sign">
+                    <label>FR (ipm):</label>
+                    <input type="text" id="frPcv" placeholder="Ex: 24/20" pattern="\d{1,2}\/\d{1,2}">
+                </div>
+            </div>
+            <div id="PSVParams">
+                <div class="vital-sign">
+                    <label>Psup (cmH2O):</label>
+                    <input type="number" id="psup" min="0" step="0.1">
+                </div>
+                <div class="vital-sign">
+                    <label>PEEP (cmH2O):</label>
+                    <input type="number" id="peepPsv" min="0" step="0.1">
+                </div>
+                <div class="vital-sign">
+                    <label>FiO2 (%):</label>
+                    <input type="number" id="fio2Psv" min="21" max="100">
+                </div>
+            </div>
+            <div id="SIMVParams">
+                <div class="vital-sign">
+                    <label>VC (ml):</label>
+                    <input type="number" id="vcSimv" min="0">
+                </div>
+                <div class="vital-sign">
+                    <label>Psup (cmH2O):</label>
+                    <input type="number" id="psupSimv" min="0" step="0.1">
+                </div>
+                <div class="vital-sign">
+                    <label>PEEP (cmH2O):</label>
+                    <input type="number" id="peepSimv" min="0" step="0.1">
+                </div>
+                <div class="vital-sign">
+                    <label>FR (ipm):</label>
+                    <input type="number" id="frSimv" min="0">
+                </div>
+                <div class="vital-sign">
+                    <label>FiO2 (%):</label>
+                    <input type="number" id="fio2Simv" min="21" max="100">
+                </div>
+            </div>
+        </div>
+
+        <!-- Mecânica Pulmonar (agora depois dos parâmetros) -->
+        <div id="mecanicaPulmonarContainer" class="sub-section" style="display:none;">
+            <label>Mecânica Pulmonar:</label>
+            <div class="radio-group">
+                <label><input type="radio" name="mecanicaPulmonar" value="Sim" onclick="mostrarMecanicaPulmonar()"> Sim</label>
+                <label><input type="radio" name="mecanicaPulmonar" value="Não" onclick="esconderMecanicaPulmonar()" checked> Não</label>
+            </div>
+            
+            <div id="detalhesMecanicaPulmonar" style="display:none; margin-top:10px;">
+                <div class="vital-signs-container">
+                    <div class="vital-sign">
+                        <label>Complacência (ml/cmH2O):</label>
+                        <input type="number" id="Complacência" min="0" step="0.1">
+                    </div>
+                    <div class="vital-sign">
+                        <label>Resistência (cmH2O/L/s):</label>
+                        <input type="number" id="resistencia" min="0" step="0.1">
+                    </div>
+                    <div class="vital-sign">
+                        <label>Pressão de Platô (cmH2O):</label>
+                        <input type="number" id="pressaoPlato" min="0" step="0.1">
+                    </div>
+                    <div class="vital-sign">
+                        <label>Pressão de Pico (cmH2O):</label>
+                        <input type="number" id="pressaoPico" min="0" step="0.1">
+                    </div>
+                    <div class="vital-sign">
+                        <label>Auto-PEEP (cmH2O):</label>
+                        <input type="number" id="autoPEEP" min="0" step="0.1">
+                    </div>
+                    <div class="vital-sign">
+    <label>Drive Pressure (cmH2O):</label>
+    <input type="number" id="drivePressure" min="0" step="0.1">
+</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="fluxoContainer" class="sub-section" style="display:none;">
+            <label>Fluxo (L/min):</label>
+            <input type="number" id="fluxo" min="1" max="60">
+            <div id="fio2CNAFContainer" style="display:none; margin-top:10px;">
+                <label>FiO₂ (%):</label>
+                <input type="number" id="fio2CNAF" min="21" max="100" value="21">
+            </div>
+            <div id="roxContainer" style="display:none; margin-top:10px;">
+                <label>Índice ROX:</label>
+                <span id="roxValue">-</span>
+                <span id="roxInterpretation"></span>
+            </div>
+        </div>
+
+        <div class="sub-section">
+            <label>Padrão Respiratório:</label>
+            <div class="radio-group">
+                <label><input type="radio" name="respPattern" value="Eupneia" checked> Eupneia</label>
+                <label><input type="radio" name="respPattern" value="Taquipneia"> Taquipneia</label>
+                <label><input type="radio" name="respPattern" value="Bradipneia"> Bradipneia</label>
+                <label><input type="radio" name="respPattern" value="Dispneia"> Dispneia</label>
+                <label><input type="radio" name="respPattern" value="Apneia"> Apneia</label>
+                <label><input type="radio" name="respPattern" value="Cheyne-Stokes"> Cheyne-Stokes</label>
+                <label><input type="radio" name="respPattern" value="Biot"> Biot</label>
+                <label><input type="radio" name="respPattern" value="Kussmaul"> Kussmaul</label>
+            </div>
+        </div>
+
+        <div class="sub-section">
+            <label>Tosse:</label>
+            <div class="radio-group">
+                <label><input type="radio" name="tosse" value="Eficaz" onclick="mostrarTipoTosse()" checked> Eficaz</label>
+                <label><input type="radio" name="tosse" value="Débil" onclick="mostrarTipoTosse()"> Débil</label>
+                <label><input type="radio" name="tosse" value="Ineficaz" onclick="esconderTipoTosse()"> Ineficaz</label>
+                <label><input type="radio" name="tosse" value="Ausente" onclick="esconderTipoTosse()"> Ausente</label>
+            </div>
+            
+            <div id="tipoTosse" class="sub-section" style="display: block;">
+                <label>Tipo:</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="tipoTosse" value="Produtiva" checked> Produtiva</label>
+                    <label><input type="radio" name="tipoTosse" value="Úmida"> Úmida</label>
+                    
+                    <label><input type="radio" name="tipoTosse" value="Seca"> Seca</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="sub-section">
+    <label>Padrão Muscular Ventilatório (PMV):</label>
+    <div class="radio-group">
+        <label><input type="radio" name="pmv" value="Diafragmático"> Diafragmático</label>
+        <label><input type="radio" name="pmv" value="Abdominal"> Abdominal</label>
+        <label><input type="radio" name="pmv" value="Costodiafragmático" checked> Costodiafragmático</label>
+        <label><input type="radio" name="pmv" value="Paradoxal"> Paradoxal</label>
+        <label><input type="radio" name="pmv" value="Acessório"> Acessório</label>
+    </div>
+    <div id="trabalhoRespiratorioContainer" class="sub-section" style="display:block;">
+        <label>Trabalho Respiratório:</label>
+        <div class="radio-group">
+            <label><input type="radio" name="trabalhoRespiratorio" value="Com aumento de trabalho respiratório"> Com aumento</label>
+            <label><input type="radio" name="trabalhoRespiratorio" value="Sem sinais de aumento de trabalho respiratório" checked> Sem aumento</label>
+        </div>
+    </div>
+</div>
+
+        <div class="sub-section">
+            <label>Expansibilidade Torácica:</label>
+            <div class="radio-group">
+                <label><input type="radio" name="expansibilidade" value="Simétrica" onclick="hideLungOptions()" checked> Simétrica</label>
+                <label><input type="radio" name="expansibilidade" value="Diminuída" onclick="showLungOptions()"> Diminuída</label>
+                <label><input type="radio" name="expansibilidade" value="Assimétrica" onclick="showLungOptions()"> Assimétrica</label>
+                <label><input type="radio" name="expansibilidade" value="Ausente" onclick="hideLungOptions()"> Ausente</label>
+            </div>
+            <div id="lungOptions" class="sub-section" style="display:none;">
+                <label>Local:</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="lungSide" value="Direito"> Direito</label>
+                    <label><input type="radio" name="lungSide" value="Esquerdo"> Esquerdo</label>
+                    <label><input type="radio" name="lungSide" value="Bilateral"> Bilateral</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="sub-section">
+            <label>Ausculta Pulmonar:</label>
+            <div class="radio-group">
+                <label><input type="radio" name="ausculta" value="Sons audíveis" onclick="mostrarOpcoesRuidos()" checked> Sons audíveis</label>
+                <label><input type="radio" name="ausculta" value="Sons reduzidos" onclick="mostrarOpcoesRuidos()"> Sons reduzidos</label>
+                <label><input type="radio" name="ausculta" value="Sons ausentes" onclick="mostrarOpcoesRuidos()"> Sons ausentes</label>
+            </div>
+            
+            <div id="opcoesRuidos" style="margin-top:10px;">
+                <div id="sonsReduzidosOptions" class="sub-section" style="display:none;">
+                    <label>Localização:</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="auscultaSide" value="Bilateralmente" checked> Bilateralmente</label>
+                        <label><input type="radio" name="auscultaSide" value="Pulmão Direito"> Pulmão Direito</label>
+                        <label><input type="radio" name="auscultaSide" value="Pulmão Esquerdo"> Pulmão Esquerdo</label>
+                        <label><input type="radio" name="auscultaSide" value="Ápice"> Ápice</label>
+                        <label><input type="radio" name="auscultaSide" value="Base"> Base</label>
+                    </div>
+                </div>
+                
+                <label>Ruídos:</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="ruidos" value="com ruídos" onclick="mostrarTiposRuidos()"> Com ruídos</label>
+                    <label><input type="radio" name="ruidos" value="sem ruídos" onclick="esconderTiposRuidos()"> Sem ruídos</label>
+                </div>
+                
+                <div id="tiposRuidos" class="sub-section" style="display:none;">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="tipoRuido" value="Roncos" onclick="mostrarOpcoesRuidos()"> Roncos</label>
+                        <label><input type="checkbox" name="tipoRuido" value="Sibilos"> Sibilos</label>
+                        <label><input type="checkbox" name="tipoRuido" value="Estridores"> Estridores</label>
+                        <label><input type="checkbox" name="tipoRuido" value="Estertores"> Estertores</label>
+                        <label><input type="checkbox" name="tipoRuido" value="Atrito pleural"> Atrito pleural</label>
+                    </div>
+                    </div>
+            </div>
+                    <div class="sub-section">
+    <label>Observações Adicionais (Respiratório):</label>
+    <textarea id="obsRespiratorio" placeholder="Adicione observações sobre o sistema respiratório..." style="height: 80px;"></textarea>
+</div>
+        </div>
+
 <!-- Marcos Respiratórios -->
 <div class="sub-section">
-<label>Marcos Respiratórios:</label>
-<textarea id="marcosRespiratorios" placeholder="Ex: IOT(21/03), TQT (28/03), Data de Extubação..." style="height: 80px;"></textarea>
+    <label>Marcos Respiratórios:</label>
+    <textarea id="marcosRespiratorios" placeholder="Ex: IOT(21/03), TQT (28/03), Data de Extubação..." style="height: 80px;"></textarea>
 </div>
+
+    </div>
 </div>
-</div>
+
 <!-- Seção de mecânica ventilatória -->
 <div class="expandable-section">
 <div class="section-header">📊 Avaliação da Função Respiratória</div>
